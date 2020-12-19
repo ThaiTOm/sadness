@@ -1,0 +1,855 @@
+body{
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+}
+#root{
+    height: 100%;
+}
+.App{
+    height: 100%;
+}
+.homepage{
+    height: 100%;
+}
+.header_notAuth{
+    background-image: url("../image/homepage.jpg");
+    height: 100%;
+}
+.navbar{
+    margin-bottom: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.navbar a{
+    margin-left: 50px;
+    text-decoration: none;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.navbar span{
+    margin-top: 20px;
+    color: white;
+    font-size: 1.7rem;
+    margin-right: 50px;
+    font-weight: 600;
+    cursor: pointer
+}
+ /******************************** For text navbar  *******************/
+.text-navbar{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    color: white;
+}
+.text-navbar-first{
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.text-navbar-second{
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+/************** For button navbar *************/
+.button-navbar{
+    width: 500px;
+    margin-left: 36%;
+    text-align: center; 
+}
+.treat-button {
+  margin-left: 40px;
+  margin-top: 30px;
+  font-size: 2.6vmin;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+  background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
+  border: none;
+  color: black;
+  border-radius: 2em;
+  padding: 0.6em 1.5em;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
+  -webkit-transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+}
+.treat-button:hover {
+  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3);
+}
+.treat-button:active {
+  -webkit-transform: scale(0.8) translateY(10%);
+          transform: scale(0.8) translateY(10%);
+  -webkit-transition-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+          transition-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+}
+
+button{
+    border-style: none
+}
+
+/************* Menu Navbar ***********/
+.MuiMenu-list li a:hover{
+    color: #00aefd
+}
+.MuiMenu-list li:hover{
+    background-color: rgb(230, 220, 220);
+}
+.MuiMenu-list li a{
+    display:flex;
+    padding: 2px 10px;
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+.MuiMenu-list li{
+    width: 100%;
+    height: 100%;
+}
+.MuiSvgIcon-root{
+    margin-top: 15px;
+
+}
+/******************** Sign in button *************/
+.inputField{
+    margin-top: 20px;
+    width: 100%;
+}
+.form_signIn{
+    width: 700px
+}
+.MuiFormControl-root{
+    width: 100%;
+}
+.sign_in_title{
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+.divider {
+  width: 2px;
+  display: block;
+  height: 100%;
+  background-color: white;
+}
+.google_login{
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 10px !important;
+    width: 80%;
+    height: 50px;
+    margin-left: 20px;
+      -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+  background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
+  border: none;
+  color: black;
+  border-radius: 2em;
+  padding: 0.6em 1.5em;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
+  -webkit-transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+}
+.google_login:hover{
+      box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important
+}
+.facebook_login{
+    box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
+  -webkit-transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 10px !important;
+    width: 80%;
+    height: 50px;
+    margin-left: 20px;
+    background-color: rgb(96, 135, 221)
+}
+.facebook_login:hover{
+    box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important
+}
+.facebook_login i{
+    font-size: 1rem;
+    margin-left: -40px;
+    margin-right: 20px;
+}
+.makeStyles-paper-2{
+    background-color: 	#131343 !important
+}
+
+/* button and forget link */
+.button-sign{
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.button-sign a{
+    margin-top:30px;
+    height: 100%;
+    color: white;
+    padding:0;
+}
+.button-sign a:hover{
+  color: rgba(238,174,202,100)
+}
+.container_register{
+    width: 100%;
+}
+.MuiInputBase-input{
+    color: white !important;
+}
+.forget_container{
+    width: 100%;
+    height: 100%;
+    padding: 70px 0;
+}
+.forget_container > form{
+    position: relative;
+    background-color:#131343;
+    width: 40%;
+    height: 100%;
+    margin: auto;
+    padding: 5%;
+    padding-top: 5%;
+}
+.forget_container p{
+    text-align: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10%;
+}
+#forget_button{
+    margin-top: 10%;
+    position: absolute;
+    right: 50px;
+}
+.MuiFormLabel-root {
+    color: white !important
+}
+
+.MuiPaper-root{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.5rem;
+    background-color: white;
+    margin: auto;
+    height: 400px;
+}
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 70%;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.1rem;
+  color:#131343;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 500;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #11998e;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+.changePassword_input_div{
+    margin-bottom: 50px;
+}
+
+.href_link{
+    font-size: 1rem;
+    color: black;
+    position: absolute;
+    left: 0;
+    margin-top: 50px;
+}
+#button_change_password{
+    margin-top: 0px;
+    position: absolute;
+    right: 0 ;
+    background: #B1D4E0;
+}
+#simple-menu .MuiMenu-list{
+    width: 100%;
+    height: 30%
+}
+/* *********************************************************************** */
+/* ********************  Navbar for page that auth ******************* */
+/* *********************************************************************** */
+.main_page_auth{
+    height: 100%;
+}
+.navbar_auth{
+    top:0;
+    width: 100%;
+    position: fixed;
+    color: white;
+    background-color: #000033;
+    display: flex;
+    padding: 0 40px;     
+}
+.navbar_auth p{
+    font-size: 1.3rem;
+}
+.container{
+    display: flex;
+    width: 100%;
+    padding-top: 68px;
+    height: 90%;
+    background-color: white
+}
+.navbar_right{
+    transition: 0.5s;
+    height: 100%;
+}
+.navbar_right ul{
+    margin:0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #0b0b31;
+}
+
+.navbar_right ul li{
+    padding: 15px 10px;
+    cursor: pointer
+}
+.navbar_right ul li a{
+    color: white;
+    padding-left: 15px;
+    transition: 0.1s;
+    font-size:20px;
+    line-height:24px;
+    text-decoration: none;
+}
+.MuiSvgIcon-root{
+    color: white;
+    vertical-align: bottom;
+    font-size: 25px ;
+}
+.navbar_right ul li:hover{
+    background-color: #bdbdbd
+}
+ #triangle-right {
+     z-index:999;
+    /* padding-top: 100px; */
+    position: fixed;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 20px solid yellow;
+    /* border-left: 20px solid yellow; */
+    border-bottom: 10px solid transparent;
+    top: 50%;
+    left: 250px;
+    cursor: pointer;
+    transition: 0.5s
+}
+.message_container{
+    position: relative;
+    width: 65%;
+    height: 100%;
+    background-color: #020207;
+    text-align: center;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.container_button{
+    text-align: center;
+    margin: 50% 0;
+}
+
+#button_find_partner {
+  outline: none;
+  height: 40px;
+  text-align: center;
+  width: 200px;
+  border-radius: 40px;
+  background: #fff;
+  border: 2px solid #1ECD97;
+  color: #1ECD97;
+  letter-spacing: 1px;
+  text-shadow: 0;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+#button_find_partner:hover {
+  color: white;
+  background: #1ECD97;
+}
+#button_find_partner:active {
+  letter-spacing: 2px;
+}
+#button_find_partner:after {
+  content: "SUBMIT";
+}
+
+.onclic {
+  width: 40px;
+  border-color: #bbbbbb;
+  border-width: 3px;
+  font-size: 0;
+  border-left-color: #1ECD97;
+  -webkit-animation: rotating 2s 0.25s linear infinite;
+          animation: rotating 2s 0.25s linear infinite;
+}
+.onclic:after {
+  content: "";
+}
+.onclic:hover {
+  color: #1ECD97;
+  background: white;
+}
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+/******************************** Custom message output ***************************/
+.message_container ul{
+    position: absolute;
+    top: 10px;
+    height:83%;
+    width: 94%;
+    overflow-y: scroll;
+    margin: 2px 0;
+    border-bottom: 1px solid black;
+}
+.message_container ul::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey !important;
+  border-radius: 10px !important;
+}
+ 
+/* Handle */
+.message_container ul::-webkit-scrollbar-thumb {
+  background-color: #8EC5FC !important;
+  background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)!important; 
+  border-radius: 10px !important;
+}
+.message_container ul::-webkit-scrollbar {
+  width: 20px;
+}
+.messageLiOwn{
+    transition: 0.4;
+    position: relative;
+    list-style: none;
+    margin-bottom: 10px;
+    height: 25px;
+    width: 100%;
+}
+.messageLiOwn div{
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    background-color: rgb(232, 232, 243);
+    border-radius: 4px;
+    padding-top: 4px;
+
+}
+.messageLiOwn div span{
+    padding: 0 20px
+}
+/****************************** Message input  *************************/
+.input {
+    width: 80%;
+  position: relative;
+  font-size: 1.5em;
+  background: linear-gradient(21deg, #10abff, #1beabd);
+  padding: 1.2px;
+  display: inline-block;
+  border-radius: 9999em;
+}
+.input *:not(span) {
+  position: relative;
+  display: inherit;
+  border-radius: inherit;
+  margin: 0;
+  border: none;
+  outline: none;
+  padding: 0 .325em;
+  z-index: 1;
+}
+.input *:not(span):focus + span {
+  opacity: 1;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+.input span {
+  -webkit-transform: scale(0.993, 0.94);
+          transform: scale(0.993, 0.94);
+  -webkit-transition: opacity .25s, -webkit-transform .5s;
+  transition: opacity .25s, -webkit-transform .5s;
+  transition: transform .5s, opacity .25s;
+  transition: transform .5s, opacity .25s, -webkit-transform .5s;
+  opacity: 0;
+  position: absolute;
+  z-index: 0;
+  margin: 4px;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #fff, 3px -3px 30px #1beabd,  -3px 3px 30px #10abff;
+}
+
+.input input {
+   height: 36px;
+   padding-left: 15px;
+   font-family: inherit;
+   line-height: inherit;
+   color: #2e3750;
+   width:96.7%;
+}
+/****************************** Message input  *************************/
+.formMessage .MuiSvgIcon-root {
+    margin: 0;
+    color: blue;
+    width: 1.3em;
+    font-size: 3em;
+    padding-left:5px;
+}
+.formMessage p{
+    margin:0;
+}
+.formMessage{
+    height: 7%;
+    position: absolute;
+    bottom:10px;
+    left:15%;
+    width: 80%;
+}
+.formMessage button{
+     background: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    line-height: 3
+}
+
+/* Custom recive message */
+.messageLiOther{
+    width: 100%;
+    position: relative;
+    list-style: none;
+    margin-bottom: 10px;
+    height: 25px;
+}
+.messageLiOther div{
+    position: absolute;
+    left: 10px;
+    height: 100%;
+    background-color: rgb(112, 112, 243);
+    border-radius: 4px;
+    padding-top: 4px;
+
+}
+.messageLiOther div span{
+    padding: 0 20px
+}
+.contact{
+    width: 10%;
+}
+
+
+.menuMessage {
+    padding-top: 10px;
+    margin-left: -40px;
+    padding-right: 10px;
+}
+.menuMessage button{
+    padding: 0;
+    color: white;
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+.menuMessage button:hover{
+    background-color: white;
+    box-shadow: 0px 15px 20px rgba(255, 255, 255,0.5);
+    color: #fff;
+}
+
+.menuMessage .MuiButton-label{
+    font-size: 1.9em;
+}
+.menuMessage .MuiButton-root{
+    min-width: 50px;
+    line-height: 1.5;
+}
+#menuContainerMessage .MuiPaper-root{
+    height: 250px;
+    width: 200px;
+    top: 70px;
+}
+#menuContainerMessage .MuiPaper-root li{
+    padding: 0 75px;
+}
+
+ /* thiet ke phan danh ba */
+.contact{
+    width: 20%;
+    height: 100%;
+    background-color: hsl(0, 0%, 100%)
+}
+.contact_container{
+    height: 60px;
+    cursor: pointer;
+    background-color:rgba(150, 232, 247, 0.9);
+    margin: 10px;
+    border-radius: 10px;
+}
+.contact_contain_text{
+    margin: 0px 15px;
+    padding-top: 5px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+.contact_contain_text p{
+    margin:0;
+    color:rgba(0, 0, 0, 0.9);
+    padding-top: 10px;
+}
+.contact_contain_text img{
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+}
+.send_container{
+    width: 65%;
+    height: 100%;
+}
+
+ /* custom button to load more */
+.button_load_more{
+    width: 100%;
+    height: 30px;
+    padding-bottom: 5px;
+}
+.button_load_more button{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    
+}
+.button_load_more button:hover{
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+}
+
+:root {
+	--yellow: #feb60a;
+	--red: #ff0062;
+	--blue: #00dbf9;
+	--violet: #da00f7;
+}
+div.loaderBalls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+div.loaderBalls > div {
+	width: 2vw;
+	height: 2vw;
+	border-radius: 100%;
+	margin:  0 1vw;
+	background-image: linear-gradient(
+		145deg,
+		rgba(255, 255, 255, 0.5) 0%,
+		rgba(0, 0, 0, 0) 100%
+	);
+	animation: bounce 1.5s 0.5s linear infinite;
+}
+.yellow {
+	background-color: var(--yellow);
+}
+
+.red {
+	background-color: var(--red);
+	animation-delay: 0.1s;
+}
+
+.blue {
+	background-color: var(--blue);
+	animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+	0%,
+	50%,
+	100% {
+		transform: scale(1);
+		filter: blur(0px);
+	}
+	25% {
+		transform: scale(0.6);
+		filter: blur(3px);
+	}
+	75% {
+		filter: blur(3px);
+		transform: scale(1);
+	}
+}
+
+.contain_block{
+    position: absolute;
+    width: 500px;
+    height:400px;
+    background-color:#0b0b31 ;
+    top: 20%;
+    left: 35%;
+}
+.contain_block .head{
+    width:100%;
+    height: 20%;
+}
+.contain_block .head button{
+    position: absolute;
+    right: 10px;
+    top:10px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 50px;
+    font-size: 1.3rem
+}
+.contain_block .head button:hover{
+     box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+}
+.contain_block .middle{
+    height: 40%;
+    width: 80%;
+    text-align: center;
+    display:flex;
+	align-items: center;
+    justify-content: center;
+    padding: 0 10%;
+}
+.contain_block .middle p{
+    font-size: 1.2rem;
+    word-spacing: 2px;
+    color:hsl(0, 0%, 100%)
+}
+.contain_block .bottom {
+    display: flex;
+    justify-content: space-between;
+    height:10%;
+    width: 60%;
+    padding: 0 20%;
+}
+.contain_block .bottom button{
+    padding: 10px 30px;
+    color: white;
+    background-color: #15c981;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem
+}
+.contain_block .bottom .cancel{
+    background-color: #c42424;
+    box-shadow: 0px 15px 20px rgba(199, 70, 70, 0.4);
+}
