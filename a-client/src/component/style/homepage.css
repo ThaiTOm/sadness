@@ -524,25 +524,12 @@ button{
 .message_container ul::-webkit-scrollbar {
   width: 20px;
 }
-.messageLiOwn{
-    transition: 0.4;
-    position: relative;
-    list-style: none;
-    margin-bottom: 10px;
-    height: 25px;
-    width: 100%;
-}
-.messageLiOwn div{
-    position: absolute;
-    right: 10px;
-    height: 100%;
-    background-color: rgb(232, 232, 243);
-    border-radius: 4px;
-    padding-top: 4px;
 
-}
-.messageLiOwn div span{
-    padding: 0 20px
+
+.messageLiOwn{
+    background-color: white;
+    margin-bottom: 10px;
+    
 }
 /****************************** Message input  *************************/
 .input {
@@ -681,7 +668,8 @@ button{
     top: 70px;
 }
 #menuContainerMessage .MuiPaper-root li{
-    padding: 0 75px;
+    padding: 0px;
+    height: auto
 }
 
  /* thiet ke phan danh ba */
@@ -852,4 +840,7 @@ div.loaderBalls > div {
 .contain_block .bottom .cancel{
     background-color: #c42424;
     box-shadow: 0px 15px 20px rgba(199, 70, 70, 0.4);
+}
+.simple_menu_span{
+    padding: 20px 70px;
 }

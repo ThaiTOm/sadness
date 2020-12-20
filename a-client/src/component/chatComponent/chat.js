@@ -13,7 +13,7 @@ function Chat() {
     const [value, setValue] = useState([]);
     const [len, SetLen] = useState(0);
     //This id room contain every id of the message that they have
-    const [idRooms, setIdRooms] = useState([])
+
     const [message, setMessage] = useState("");
     const [idRoom, setidRoom] = useState("");
     const [wait, setWait] = useState(false);
@@ -23,7 +23,6 @@ function Chat() {
         try {
             myRef.current.scrollIntoView()
         } catch (error) {
-
         }
     }
 
@@ -67,13 +66,21 @@ function Chat() {
 
     //Fetch data to recive the idRoom
     useEffect(() => {
-        axios.post("http://localhost:2704/api/msgC/getIdRoom", { id })
-            .then(res => {
-                SetLen(res.data.len)
-                setIdRooms(res.data.idRooms)
-            }).catch(err => {
-                console.log(err)
-            })
+        const source = axios.CancelToken.source()
+        const fetchData = async () => {
+            try {
+                await axios.post("http://localhost:2704/api/msgC/getIdRoom", { id })
+                    .then(res => {
+                        SetLen(res.data.len)
+                    })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData()
+        return () => {
+            source.cancel()
+        }
     }, [])
     //load message
     useEffect(() => {
@@ -82,7 +89,7 @@ function Chat() {
                 // If we have a couple together than we start to chat
                 setWait(false)
                 setFinish(true)
-                setidRoom(msg.roomId)
+
             }
             if (msg.text) {
                 let msgText = decryptWithAES(msg.text)

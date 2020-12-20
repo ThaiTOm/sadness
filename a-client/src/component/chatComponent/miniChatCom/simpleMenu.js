@@ -18,7 +18,10 @@ export default function SimpleMenu({ id, onClick }) {
     };
 
     const handleClickBlock = () => {
-        setOpen(true)
+        if (id.length > 2) {
+            setOpen(true)
+        }
+
     }
     const handleCloseBlock = () => {
         setOpen(false)
@@ -52,16 +55,17 @@ export default function SimpleMenu({ id, onClick }) {
                     Gửi lời mời kết bạn
                 </MenuItem> */}
                 <MenuItem onClick={handleClose}>
-                    <Link
-                        style={{ padding: "0" }}
+                    <span
+                        className="simple_menu_span"
                         onClick={() => onClick("")}
                         to="/"
                     >
                         Quay về
-                    </Link>
+                    </span>
                 </MenuItem>
                 <MenuItem>
                     <span
+                        className="simple_menu_span"
                         onClick={handleClickBlock}>
                         Chặn
                     </span>
@@ -85,7 +89,13 @@ export default function SimpleMenu({ id, onClick }) {
                         </div>
                     </Modal>
                 </MenuItem>
-                <MenuItem >Báo cáo </MenuItem>
+                <MenuItem >
+                    <span
+                        className="simple_menu_span"
+                    >
+                        Báo cáo
+                    </span>
+                </MenuItem>
                 {/* <MenuItem onClick={}>Logout</MenuItem> */}
             </Menu>
         </div>

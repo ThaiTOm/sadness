@@ -91,14 +91,14 @@ function SendContact(props) {
                             let arr = item.split(",")
                             let msgs = arr[0]
                             if (arr[1] === userId) {
-                                return <li
-                                    key={i}
-                                    ref={myRef}
-                                    className="messageLiOwn row">
-                                    <div >
+                                return (
+                                    <div
+                                        className="messageLiOwn"
+                                        key={i}
+                                        ref={myRef}>
                                         <span>{decryptWithAES(msgs)}</span>
                                     </div>
-                                </li>
+                                )
                             } else {
                                 return <li
                                     key={i}
@@ -131,7 +131,7 @@ function SendContact(props) {
                     </button>
                 </p>
             </form>
-        </div>
+        </div >
     )
 
 
