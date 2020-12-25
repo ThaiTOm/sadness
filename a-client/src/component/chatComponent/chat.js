@@ -98,8 +98,6 @@ function Chat() {
                 // inputRef.current.focus();
                 setValue(msgs => [...msgs, value])
                 executeScroll()
-                
-                
             }
         })
     }, [])
