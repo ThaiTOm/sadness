@@ -26,7 +26,6 @@ module.exports = {
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
-
             io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage });
 
             callback();

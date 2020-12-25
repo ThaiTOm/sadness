@@ -1,6 +1,8 @@
 const redis = require("redis");
 const clientRedis = redis.createClient();
 const promisify = require('util').promisify;
+
+
 exports.getIdRooms = (req, res) => {
     const { id } = req.body;
     clientRedis.llen(id, (err, result) => {

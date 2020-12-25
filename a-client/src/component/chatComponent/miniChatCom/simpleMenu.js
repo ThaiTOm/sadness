@@ -4,6 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
+import { signOut } from '../../../helpers/auth';
 
 export default function SimpleMenu({ id, onClick }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,6 +26,10 @@ export default function SimpleMenu({ id, onClick }) {
     }
     const handleCloseBlock = () => {
         setOpen(false)
+    }
+    const handleLogOut = () =>{
+        signOut();
+        window.location.reload(false);
     }
     // const handleAddF = () => {
     //     if (id) {
@@ -94,6 +99,11 @@ export default function SimpleMenu({ id, onClick }) {
                         className="simple_menu_span"
                     >
                         Báo cáo
+                    </span>
+                </MenuItem>
+                <MenuItem onClick={handleLogOut}>
+                    <span className="simple_menu_span">
+                       Đăng xuất
                     </span>
                 </MenuItem>
                 {/* <MenuItem onClick={}>Logout</MenuItem> */}

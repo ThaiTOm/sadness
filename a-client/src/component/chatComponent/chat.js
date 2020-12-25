@@ -85,11 +85,12 @@ function Chat() {
     //load message
     useEffect(() => {
         socket.on("message", msg => {
+
             if (msg.roomId) {
                 // If we have a couple together than we start to chat
                 setWait(false)
                 setFinish(true)
-
+                setidRoom(msg.roomId)
             }
             if (msg.text) {
                 let msgText = decryptWithAES(msg.text)
@@ -97,6 +98,8 @@ function Chat() {
                 // inputRef.current.focus();
                 setValue(msgs => [...msgs, value])
                 executeScroll()
+                
+                
             }
         })
     }, [])
