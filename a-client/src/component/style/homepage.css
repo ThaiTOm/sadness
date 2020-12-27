@@ -614,7 +614,7 @@ button{
 .own_message_same_div {
     background-color: white;
     width: 60%;
-    padding: 2.3px 10px;
+    padding: 8px 10px;
     border-radius: 10px;
     margin-left: auto;
     margin-right: 10px;
@@ -633,7 +633,7 @@ button{
 }
  /* same style when span is 60 or more than 60 letter */
 .other_message_same_div {
-    padding: 2.3px 10px;
+    padding:  8px 10px;
     background-color: #00dbf9;
     border-radius: 10px;
 }
@@ -857,4 +857,47 @@ div.loaderBalls > div {
 }
 .simple_menu_span{
     padding: 20px 70px;
+}
+
+
+.block_page{
+    display:flex;
+	align-items: center;
+    justify-content: center;
+    margin: 10% 0;
+    height: 50%;
+}
+.block_page .paper{
+    width: 40%;
+    background-color: #f7f7f8;
+    height: 100%;
+    box-shadow: 5px 5px 15px 5px #807878;
+}
+.block_page .paper .header{
+    width: 100%;
+    height: 15%;
+    background-color: #f7f7f8;
+    border-bottom: 1px solid gray
+}
+.block_page .paper .body{
+    height: 70%;
+    margin: 0 10%;
+
+    font-size: 1.2rem;
+
+}
+.block_page .paper .end{
+    border-top: 1px solid gray;
+    height: 15%;
+    background-color: #f7f7f8;
+}
+.block_page .paper .end button{
+    float: right;
+    margin-right: 10px;
+    margin-top: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgba(46, 229, 157, 0.4);
+    border-radius: 10px;
+
 }
