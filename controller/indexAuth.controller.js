@@ -1,4 +1,3 @@
-
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
 const fetch = require("node-fetch");
@@ -86,13 +85,7 @@ exports.activationController = (req, res) => {
                         })
                     }
                 })
-                const token_send = jwt.sign(
-                    {
-                        token
-                    }, process.env.JWT_SECRET, {
-                    expiresIn: "7d"
-                }
-                )
+                const token_send = user._id
                 return res.json({
                     token: token_send,
                     user: user.name,
@@ -130,18 +123,13 @@ exports.loginController = (req, res) => {
                     error: "Emaail or password was wrong. Please try again"
                 })
             }
-            const token = jwt.sign(
-                {
-                    _id: user._id
-                }, process.env.JWT_SECRET, {
-                expiresIn: "7d"
-            }
-            )
-            const { email, name } = user;
+            const token = user._id            
+            const { email, name , blockN} = user;
             return res.json({
                 token,
                 user_email: email,
                 user: name,
+                blockN,
                 message: "Signin succes"
             })
         })
@@ -247,9 +235,7 @@ exports.googleController = (req, res) => {
             if (email_verified) {
                 User.findOne({ email }).exec((err, user) => {
                     if (user) {
-                        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-                            expiresIn: "30d"
-                        })
+                        const token = user._id
                         const { _id, email, name } = user;
                         return res.json({
                             token,
@@ -266,7 +252,7 @@ exports.googleController = (req, res) => {
                                     error: errorHandler(err)
                                 })
                             }
-                            const token = jwt.sign({ _id: data._id }, process.env.JWT_SECRET, { expiresIn: "7d" })
+                            const token = user._id
                             const { email, name, _id } = data;
                             return res.json({
                                 token,
@@ -277,7 +263,6 @@ exports.googleController = (req, res) => {
                     }
                 })
             } else {
-                console.log("nono")
                 res.status(400).message({
                     error: "Login with Google Failed"
                 })
@@ -299,11 +284,7 @@ exports.facebookController = (req, res) => {
                 // }
                 User.findOne({ email }).exec((err, user) => {
                     if (user) {
-                        const token = jwt.sign({
-                            _id: user._id
-                        }, process.env.JWT_SECRET, {
-                            expiresIn: "7d"
-                        })
+                        const token = user._id
                         const { _id, name, email } = user;
                         return res.json({
                             token,
@@ -323,9 +304,7 @@ exports.facebookController = (req, res) => {
                                     error: "Try again please"
                                 })
                             }
-                            const token = jwt.sign({ _id: data._id }, process.env.JWT_SECRET, {
-                                expiresIn: "30d"
-                            })
+                            const token = user._id
                             const { name, email } = data;
                             return res.json({
                                 token,

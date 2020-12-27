@@ -40,7 +40,6 @@ export const authenicate = (res, next) => {
         userName = replaceTelex(res.data.user.name)
     } else {
         userName = replaceTelex(res.data.user)
-
     }
     setCookie("token", res.data.token);
     setLocalStorage("user", userName);

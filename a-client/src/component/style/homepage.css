@@ -423,7 +423,6 @@ button{
     width: 65%;
     height: 100%;
     background-color: #020207;
-    text-align: center;
 	display:flex;
 	align-items: center;
 	justify-content: center;
@@ -526,11 +525,7 @@ button{
 }
 
 
-.messageLiOwn{
-    background-color: white;
-    margin-bottom: 10px;
-    
-}
+
 /****************************** Message input  *************************/
 .input {
     width: 80%;
@@ -611,25 +606,44 @@ button{
 }
 
 /* Custom recive message */
-.messageLiOther{
-    width: 100%;
-    position: relative;
-    list-style: none;
-    margin-bottom: 10px;
-    height: 25px;
+.messageLiOwn{
+    margin-bottom: 5px;
+    display: flex;
+    height:max-content
 }
-.messageLiOther div{
-    position: absolute;
-    left: 10px;
-    height: 100%;
-    background-color: rgb(112, 112, 243);
-    border-radius: 4px;
-    padding-top: 4px;
+.own_message_same_div {
+    background-color: white;
+    width: 60%;
+    padding: 2.3px 10px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+.messageLiOwnl60{
+    width: max-content;
+}
+.messageLiOwnm60{
+    width: 60%;
+}
 
+.messageLiOther{
+    display: flex;
+    list-style: none;
+    margin-bottom: 5px;    
 }
-.messageLiOther div span{
-    padding: 0 20px
+ /* same style when span is 60 or more than 60 letter */
+.other_message_same_div {
+    padding: 2.3px 10px;
+    background-color: #00dbf9;
+    border-radius: 10px;
 }
+.messageLiOtherl60{
+    width: max-content;
+}
+.messageLiOtherm60{
+    width: 60%
+}
+
 .contact{
     width: 10%;
 }

@@ -6,6 +6,7 @@ import ChangePassword from './component/loginComponent/changePassword';
 import HomePage from './component/HomePage';
 import Chat from './component/chatComponent/chat';
 import NewsMain from './component/newsComponents/newsMain';
+import Main_block from './component/blockComponent/main.block';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/users/password/forget/:token" exact render={props => <ChangePassword {...props} />} />
         <Route path="/chat" component={Chat} />
         <Route path="/news" component={NewsMain} />
+        <Route path="/report" component={Main_block}/>
       </Switch>
     </Router>
   );

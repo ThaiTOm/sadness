@@ -6,7 +6,6 @@ import HomepageNotAuth from "./loginComponent/PageNotAuth"
 
 
 function HomePage() {
-
     return (
         <div className="main_page">
             { isAuth() ? < Main_page /> :

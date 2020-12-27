@@ -40,6 +40,7 @@ function Chat() {
     const HanldeClickFind = (e) => {
         if (wait !== true) {
             socket.emit("join", { id, len, ipOfUser }, (error) => {
+                console.log(error)
                 if (error === "error") {
                     setWait(true)
                 } else {
@@ -124,26 +125,39 @@ function Chat() {
                 style={finish === false ? { display: "none" } : {}}>
                 {
                     Object.values(value).map(function (item, i) {
+                        const msgs = item.text
                         if (item.user === id) {
-                            return <li
-                                ref={myRef}
+                            return (
+                                <li className="messageLiOwn"
                                 key={i}
-                                className="messageLiOwn row">
-                                <div >
-                                    <span>{item.text}</span>
-                                </div>
-                            </li>
+                                ref={myRef}>
+                                {msgs.length > 60 ?
+                                  <div className="own_message_same_div messageLiOwnm60">
+                                    <span>{msgs}</span>
+                                  </div>:
+                                  <div className="own_message_same_div messageLiOwnl60">
+                                    <span>{msgs}</span>
+                                  </div>
+
+                        })
+                                </li>
+                            )
                         } else {
-                            return <li
-                                ref={myRef}
+                            return (
+                                <li className="messageLiOther"
                                 key={i}
-                                className="messageLiOther"
-                            >
-                                <div>
-                                    <span>{item.text}</span>
-                                </div>
-                            </li>
-                        }
+                                ref={myRef}>
+                                {msgs.length > 60 ?
+                                  <div className="other_message_same_div messageLiOtherm60">
+                                    <span>{msgs}</span>
+                                  </div>:
+                                  <div className="other_message_same_div messageLiOtherl60">
+                                    <span>{msgs}</span>
+                                  </div>
+
+                        })
+                        </li>
+                        )}
                     }
                     )
                 }

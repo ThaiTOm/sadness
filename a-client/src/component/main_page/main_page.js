@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Chat from '../chatComponent/chat.js';
 import SimpleMenu from '../chatComponent/miniChatCom/simpleMenu.js';
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
 import MessageIcon from '@material-ui/icons/Message';
 import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
@@ -11,6 +11,7 @@ import axios from "axios"
 import SendContact from '../chatComponent/sendContact.js';
 
 function Main_page() {
+    const history = useHistory()
     const [room, setRoom] = useState("");
     const [open, setOpen] = useState(true);
     const closeNavbar = (e) => {
@@ -27,7 +28,12 @@ function Main_page() {
     useEffect(() => {
         axios.post("http://localhost:2704/api/msgC/contactL?start=" + start + "&end=" + end, { id })
             .then(res => {
-                setValue(val => [...val, res.data])
+                if(res.data.message){
+                    history.push("/report")
+                }else{
+                    setValue(val => [...val, res.data])
+                }
+                
             }).catch(err => {
             })
     }, [start])

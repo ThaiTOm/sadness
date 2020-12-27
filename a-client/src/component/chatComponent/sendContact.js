@@ -89,27 +89,40 @@ function SendContact(props) {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
                             let arr = item.split(",")
-                            let msgs = arr[0]
+                            let msgs = decryptWithAES(arr[0])
+
                             if (arr[1] === userId) {
                                 return (
-                                    <div
-                                        className="messageLiOwn"
-                                        key={i}
-                                        ref={myRef}>
-                                        <span>{decryptWithAES(msgs)}</span>
-                                    </div>
+                                    <li className="messageLiOwn"
+                                    key={i}
+                                    ref={myRef}>
+                                    {msgs.length > 60 ?
+                                      <div className="own_message_same_div messageLiOwnm60">
+                                        <span>{msgs}</span>
+                                      </div>:
+                                      <div className="own_message_same_div messageLiOwnl60">
+                                        <span>{msgs}</span>
+                                      </div>
+
+                            })
+                                    </li>
                                 )
                             } else {
-                                return <li
+                                return (
+                                    <li className="messageLiOther"
                                     key={i}
-                                    ref={myRef}
-                                    className="messageLiOther"
-                                >
-                                    <div>
-                                        <span>{decryptWithAES(msgs)}</span>
-                                    </div>
-                                </li>
-                            }
+                                    ref={myRef}>
+                                    {msgs.length > 60 ?
+                                      <div className="other_message_same_div messageLiOtherm60">
+                                        <span>{msgs}</span>
+                                      </div>:
+                                      <div className="other_message_same_div messageLiOtherl60">
+                                        <span>{msgs}</span>
+                                      </div>
+
+                            })
+                            </li>
+                            )}
                         }) : console.log()
                 }
             </ul>

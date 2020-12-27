@@ -2,8 +2,8 @@ const { addUser, sendMessage, sendMessageOff } = require("./messageControll");
 
 module.exports = {
     index: function (io, socket) {
-        socket.on('join', ({ id, len, ipOfUser }, callback) => {
-            const { yet, have, idRoom } = addUser({ id, len, ipOfUser });
+        socket.on('join', async ({ id, len, ipOfUser }, callback) => {
+            const { yet, have, idRoom } = await addUser({ id, len, ipOfUser });
             if (yet) {
                 callback("error")
             }
@@ -26,7 +26,7 @@ module.exports = {
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
-            io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage });
+            io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage,idRoom:roomMessage });
 
             callback();
         });

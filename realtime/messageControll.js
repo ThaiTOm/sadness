@@ -2,15 +2,13 @@ const { arrOfRegion } = require("../region");
 const { cutSpaceInString } = require("../a-client/src/algorithm/algorithm");
 const redis = require("redis");
 const client = redis.createClient();
-const date = require('date-and-time');
+const promisify = require('util').promisify;
 
-const addUser = ({ id, ipOfUser, len }) => {
+const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
     ipOfUser = cutSpaceInString(ipOfUser);
-
     for (let i = 0; i < arrOfRegion[ipOfUser].length; i++) {
         if (arrOfRegion[ipOfUser][i].room === id + len) {
-            // arrOfRegion[ipOfUser].splice(i, 1)
             return { have: "have" }
         }
     }
@@ -29,6 +27,11 @@ const addUser = ({ id, ipOfUser, len }) => {
                 // If that region has more than 1 people than we get that out
                 if (arrOfRegion[ipOfUser].length % 2 === 0) {
                     let a = arrOfRegion[ipOfUser].slice(0, 2);
+                    let getLrange = promisify(client.lrange).bind(client)
+                    let arr = await getLrange(a[0].id + "blackList",0,-1)
+                    if(arr.includes(a[1].id) === true){
+                        return { idRoom: user.room } 
+                    }
                     let name1 = a[0].id
                     let name2 = a[1].id
 
@@ -56,7 +59,7 @@ const addUser = ({ id, ipOfUser, len }) => {
                     // updateMessage(roomChat.name2, roomChat.room)
                     return { idRoom: roomChatId }
                 }
-                return { idRoom: roomChatId }
+                return { idRoom: user.room }
             } else {
                 if (arrOfRegion[i].length > 0) {
                     arrOfRegion[i].push(user)

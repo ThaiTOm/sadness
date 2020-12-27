@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { authenicate, isAuth } from "../../helpers/auth";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     floatingLabelFocusStyle: {
@@ -16,10 +16,12 @@ const useStyles = makeStyles((theme) => ({
 
 function LoginForm() {
     const classes = useStyles();
+    const history = useHistory();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
+    // const [redirect, setRedirect] = useStae(false)
     const { email, password } = formData;
     const handleChange = text => e => {
         setFormData({ ...formData, [text]: e.target.value })
@@ -30,13 +32,15 @@ function LoginForm() {
             axios.post(`http://localhost:2704/api/login`, {
                 email, password
             }).then(res => {
-                console.log(res.data)
                 setFormData({
                     ...formData,
                     email: "",
                     password: ""
-                })
-                toast.success(res.data.message)
+                });
+                toast.success(res.data.message);
+                if(res.data.blockN > 3){
+                    history.push("/report")
+                }
                 authenicate(res);
                 window.location.reload(false);
             }).catch(err => {
@@ -65,7 +69,6 @@ function LoginForm() {
             authenicate(res)
             window.location.reload(false);
         }).catch(err => {
-
             toast.error("Login with Facebook failed")
         })
     }

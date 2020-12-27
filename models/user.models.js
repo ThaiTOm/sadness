@@ -22,6 +22,11 @@ const UserSchema = new mongoose.Schema({
     resetPasswordLink: {
         data: String,
         default: ""
+    },
+    // so lan block
+    blockN:{
+        default: 0,
+        type: Number
     }
 }, { timeStamp: true })
 
