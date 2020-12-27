@@ -25,39 +25,46 @@ const addUser = async ({ id, ipOfUser, len }) => {
                 // If user of this region have more than 0 then push new user in
                 arrOfRegion[ipOfUser].push(user);
                 // If that region has more than 1 people than we get that out
-                if (arrOfRegion[ipOfUser].length % 2 === 0) {
-                    let a = arrOfRegion[ipOfUser].slice(0, 2);
-                    let getLrange = promisify(client.lrange).bind(client)
-                    let arr = await getLrange(a[0].id + "blackList",0,-1)
-                    if(arr.includes(a[1].id) === true){
-                        return { idRoom: user.room } 
+                if (arrOfRegion[ipOfUser].length >= 2) {
+                    // Use login here
+                    const createRoom = (a) => {
+                        let name1 = a[0].id
+                        let name2 = a[1].id
+                        let roomChatId = a[0].room
+                        // we get first id in the room and set that id to id room
+                        // get 2 items first in the array
+                        arrOfRegion[ipOfUser].splice(0, 2)
+                        // First we need to add Room Id to their account to find faster
+                        client.rpush(name1, roomChatId)
+                        client.rpush(name2, roomChatId)
+                        // Expire when we will delete the value
+                        client.expire(name1, 36600)
+                        client.expire(name2, 36600)
+                        // then move it to messSave
+                        client.lpush(roomChatId, name1, name2, (err, res) => {
+                            if (err) {
+                                console.log(err)
+                            }
+                        })
+                        client.expire(roomChatId, 36600)
+                        // updateMessage(roomChat.name1, roomChat.room)
+                        // updateMessage(roomChat.name2, roomChat.room)
+                        return { idRoom: roomChatId }
                     }
-                    let name1 = a[0].id
-                    let name2 = a[1].id
+                    let a = arrOfRegion[ipOfUser];
+                    // Check if 2 people here not block each other
+                    let getLrange = promisify(client.lrange).bind(client);
+                    let arr = await getLrange(a[0].id + "blackList", 0, -1);
 
-                    let roomChatId = a[0].room
-
-                    // we get first id in the room and set that id to id room
-                    // get 2 items first in the array
-                    arrOfRegion[ipOfUser].splice(0, 2)
-
-                    // First we need to add Room Id to their account to find faster
-                    client.rpush(name1, roomChatId)
-                    client.rpush(name2, roomChatId)
-                    // Expire when we will delete the value
-                    client.expire(name1, 36600)
-                    client.expire(name2, 36600)
-                    // then move it to messSave
-                    client.lpush(roomChatId, name1, name2, (err, res) => {
-                        if (err) {
-                            console.log(err)
+                    for (let i = 1; i < a.length; i++) {
+                        //check if that one is not from the list
+                        if (arr.includes(a[i].id) === false) {
+                            let arg = [a[0], a[i]]
+                            //pass data to createRoom function and return that
+                            return createRoom(arg)
                         }
-                    })
-                    client.expire(roomChatId, 36600)
-
-                    // updateMessage(roomChat.name1, roomChat.room)
-                    // updateMessage(roomChat.name2, roomChat.room)
-                    return { idRoom: roomChatId }
+                    }
+                    return { idRoom: user.room, yet: "yet" }
                 }
                 return { idRoom: user.room }
             } else {
