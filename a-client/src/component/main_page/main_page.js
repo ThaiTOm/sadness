@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Chat from '../chatComponent/chat.js';
 import SimpleMenu from '../chatComponent/miniChatCom/simpleMenu.js';
-import { Link,useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import MessageIcon from '@material-ui/icons/Message';
 import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
@@ -28,12 +28,12 @@ function Main_page() {
     useEffect(() => {
         axios.post("http://localhost:2704/api/msgC/contactL?start=" + start + "&end=" + end, { id })
             .then(res => {
-                if(res.data.message){
+                if (res.data.message) {
                     history.push("/report")
-                }else{
+                } else {
                     setValue(val => [...val, res.data])
                 }
-                
+
             }).catch(err => {
             })
     }, [start])
@@ -103,7 +103,7 @@ function Main_page() {
                     {
                         // if value have then we can use this 
                         value.length > 0 ?
-                            value[0].map((val, i) => <div key={i}><ContactContain onClick={(value) => hanldeSetRoom(value)} message={val[2]} user1={val[0]} user2={val[1]} idRoom={val[3]} /></div>)
+                            value[0].map((val, i) => <div key={i}><ContactContain onClick={(value) => hanldeSetRoom(value)} message={val[2]} user1={val[0]} user2={val[1]} idRoom={val[3]} target={room} /></div>)
                             : console.log()
                     }
                 </div>

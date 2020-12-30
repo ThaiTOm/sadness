@@ -29,15 +29,15 @@ exports.getIdRooms = (req, res) => {
 exports.listContact = (req, res) => {
     //id is idRoom
     const { id } = req.body
-    User.findById(id,async(err,result)=>{
-        if(err){
+    User.findById(id, async (err, result) => {
+        if (err) {
             console.log(err)
         }
-        else{
-            const {blockN} = result;
-            if (blockN>3){
-                res.json({message: "Ban da bi block"})
-            }else{
+        else {
+            const { blockN } = result;
+            if (blockN > 3) {
+                res.json({ message: "Ban da bi block" })
+            } else {
                 const { start, end } = req.query
                 let getLast = promisify(clientRedis.lrange).bind(clientRedis)
                 let alrange = promisify(clientRedis.lrange).bind(clientRedis)
@@ -53,47 +53,48 @@ exports.listContact = (req, res) => {
             }
         }
     })
-   
 }
+
 exports.sendContactRoom = async (req, res) => {
     const { id, start, end } = req.query
     let lenMsg = promisify(clientRedis.llen).bind(clientRedis)
     // sfl === start from list
-    let sfl = await lenMsg(id) - start
+    // let sfl = await lenMsg(id) - start
     let getMsg = promisify(clientRedis.lrange).bind(clientRedis)
     const msg = await getMsg(id, start, end)
     res.json(msg)
 }
-exports.setBlock = async (req,res)=>{
+
+exports.setBlock = async (req, res) => {
     // const u1 = req.userBlock;
     // const u2 = req.userBBlock
     const { idSend } = req.body
     const arr = req.body.id.split(";")
     console.log(arr[2], arr[1])
     //check 2 id send from client what is id want to block another
-    if(arr[1] === idSend){
+    if (arr[1] === idSend) {
         clientRedis.lpush(idSend + "blackList", arr[2])
         clientRedis.lpush(arr[2] + "blackList", idSend)
-        User.findOneAndUpdate({_id :arr[2]}, {$inc : {'blockN' : 1}}).exec((err,result)=>{
-            if(err){
+        User.findOneAndUpdate({ _id: arr[2] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
+            if (err) {
                 return res.json({
                     error: "Đã có lỗi xảy ra bạn vui lòng thử lại"
                 })
-            }else{
+            } else {
                 return res.json({
                     message: "."
                 })
             }
         })
-    }else{
+    } else {
         clientRedis.lpush(idSend + "blackList", arr[1])
-        clientRedis.lpush(arr[1] + "blackList",idSend)
-        User.findOneAndUpdate({_id :arr[1]}, {$inc : {'blockN' : 1}}).exec((err,result)=>{
-            if(err){
+        clientRedis.lpush(arr[1] + "blackList", idSend)
+        User.findOneAndUpdate({ _id: arr[1] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
+            if (err) {
                 return res.json({
                     error: "Đã có lỗi xảy ra bạn vui lòng thử lại"
                 })
-            }else{
+            } else {
                 return res.json({
                     message: "."
                 })

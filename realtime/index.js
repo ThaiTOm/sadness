@@ -1,4 +1,4 @@
-const { addUser, sendMessage, sendMessageOff } = require("./messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage } = require("./messageControll");
 
 module.exports = {
     index: function (io, socket) {
@@ -34,6 +34,9 @@ module.exports = {
             const { roomMessage, messageMessage, memberMessage } = sendMessageOff({ room, message, id: userId })
             io.to(roomMessage).emit("message", { user: memberMessage, text: messageMessage, idRoom: room })
         });
+        socket.on("seenMessage", ({id,user1,user2})=>{
+             seenMessage({id,user1,user2})
+        })
         // socket.on("addF", ({ id }, callback) => {
         //     const { room, req, res, time } = addFriend({ id })
         //     io.to(room).emit("receive", { time: time })

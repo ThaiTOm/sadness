@@ -39,6 +39,13 @@ body{
     font-weight: 600;
     cursor: pointer
 }
+.active_contact{
+    background-color: #b8b8c5 !important;
+}
+.not_read_contact{
+    color: black;
+    font-size: 1.2rem;
+}
  /******************************** For text navbar  *******************/
 .text-navbar{
     margin: auto;
@@ -646,9 +653,15 @@ button{
 
 .contact{
     width: 10%;
+    overflow-y:scroll;
 }
 
-
+.contact::-webkit-scrollbar-thumb{
+    border-radius: 10px !important
+}
+.contact::-webkit-scrollbar-track{
+    border-radius: 10px !important
+}
 .menuMessage {
     padding-top: 10px;
     margin-left: -40px;

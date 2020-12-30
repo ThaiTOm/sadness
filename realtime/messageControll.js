@@ -110,7 +110,7 @@ const addUser = async ({ id, ipOfUser, len }) => {
 
 const sendMessage = ({ room, message, id }) => {
     //mess contain message and id 
-    let mess = message + "," + id
+    let mess = message + "," + id + "," + "false"
     client.lpush(room, mess, (err, result) => {
         if (err) {
         }
@@ -120,7 +120,7 @@ const sendMessage = ({ room, message, id }) => {
 }
 
 const sendMessageOff = ({ room, message, id }) => {
-    let mess = message + "," + id
+    let mess = message + "," + id + "," + "false"
     client.lpush(room, mess, (err, result) => {
     })
     return { roomMessage: room, messageMessage: message, memberMessage: id }
@@ -141,5 +141,12 @@ const sendMessageOff = ({ room, message, id }) => {
 //         return { room: arr[0], req, res, time }
 //     }
 // }
-
-module.exports = { addUser, sendMessage, sendMessageOff };
+const seenMessage =  async ({ id, user1, user2 }) => {
+    let getm = promisify(client.lrange).bind(client)
+    const lastM = await getm(id,0,0)
+    const arr = await lastM[0].split(",")
+    arr[2] = "true"
+    client.lset(id, 0, arr.join(","))
+    // return lastM
+}
+module.exports = { addUser, sendMessage, sendMessageOff, seenMessage };
