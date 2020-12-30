@@ -147,6 +147,6 @@ const seenMessage =  async ({ id, user1, user2 }) => {
     const arr = await lastM[0].split(",")
     arr[2] = "true"
     client.lset(id, 0, arr.join(","))
-    // return lastM
+    
 }
 module.exports = { addUser, sendMessage, sendMessageOff, seenMessage };

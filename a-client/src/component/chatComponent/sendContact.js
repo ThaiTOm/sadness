@@ -3,14 +3,15 @@ import axios from "axios"
 import CryptoJS from 'crypto-js';
 import { getCookie } from '../../helpers/auth';
 import SendIcon from '@material-ui/icons/Send';
-import { useScrollPosition, useScrollXPosition, useScrollYPosition } from 'react-use-scroll-position';
 import socketApp from '../../socket';
+import ImageIcon from '@material-ui/icons/Image';
+import IconButton from '@material-ui/core/IconButton';
 
 // This function is use for send and view message
 function SendContact(props) {
     const userId = getCookie().token;
     let socket = socketApp.getSocket();
-    const { id, name } = props;
+    const { id } = props;
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
     //msg contain all message before
@@ -18,8 +19,9 @@ function SendContact(props) {
     // about message is contain new message typing
     const [message, setMessage] = useState("")
     const myRef = useRef(null)
+    const fileRef = useRef(null)
     const [load, setLoad] = useState(false);
-
+    const [file, setFile] = useState([])
     const executeScroll = () => {
         try {
             myRef.current.scrollIntoView()
@@ -54,6 +56,12 @@ function SendContact(props) {
         setLoad(true);
         let a = end + 10
         setEnd(a)
+    }
+    const handleFileUpload = (e) => {
+        setFile(e.target.files)
+    }
+    const useRefTrigger = () => {
+        fileRef.current.click()
     }
     useEffect(() => {
         axios.post("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
@@ -94,35 +102,36 @@ function SendContact(props) {
                             if (arr[1] === userId) {
                                 return (
                                     <li className="messageLiOwn"
-                                    key={i}
-                                    ref={myRef}>
-                                    {msgs.length > 60 ?
-                                      <div className="own_message_same_div messageLiOwnm60">
-                                        <span>{msgs}</span>
-                                      </div>:
-                                      <div className="own_message_same_div messageLiOwnl60">
-                                        <span>{msgs}</span>
-                                      </div>
+                                        key={i}
+                                        ref={myRef}>
+                                        {msgs.length > 60 ?
+                                            <div className="own_message_same_div messageLiOwnm60">
+                                                <span>{msgs}</span>
+                                            </div> :
+                                            <div className="own_message_same_div messageLiOwnl60">
+                                                <span>{msgs}</span>
+                                            </div>
 
-                            })
+                                        })
                                     </li>
                                 )
                             } else {
                                 return (
                                     <li className="messageLiOther"
-                                    key={i}
-                                    ref={myRef}>
-                                    {msgs.length > 60 ?
-                                      <div className="other_message_same_div messageLiOtherm60">
-                                        <span>{msgs}</span>
-                                      </div>:
-                                      <div className="other_message_same_div messageLiOtherl60">
-                                        <span>{msgs}</span>
-                                      </div>
+                                        key={i}
+                                        ref={myRef}>
+                                        {msgs.length > 60 ?
+                                            <div className="other_message_same_div messageLiOtherm60">
+                                                <span>{msgs}</span>
+                                            </div> :
+                                            <div className="other_message_same_div messageLiOtherl60">
+                                                <span>{msgs}</span>
+                                            </div>
 
-                            })
-                            </li>
-                            )}
+                                        })
+                                    </li>
+                                )
+                            }
                         }) : console.log()
                 }
             </ul>
@@ -130,19 +139,31 @@ function SendContact(props) {
                 className="formMessage"
                 onSubmit={handleSubmit}>
                 {/* <input value={message} type="text" onChange={handleChange}></input> */}
-                <p>
-                    <span className="input">
-                        <input
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            type="text"
-                            placeholder="Enter text" />
-                        <span></span>
-                    </span>
-                    <button type="submit">
-                        <SendIcon />
-                    </button>
-                </p>
+                <span className="input">
+                    <input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        type="text"
+                        placeholder="Enter text" >
+                    </input>
+                    <span></span>
+                </span>
+                <div className="extension_input">
+                    <input
+                        multiple
+                        id="icon_button_file"
+                        type="file"
+                        onChange={handleFileUpload}
+                        ref={fileRef}
+                    />
+                    <IconButton onClick={useRefTrigger}>
+                        <ImageIcon />
+                    </IconButton>
+                </div>
+                <button type="submit">
+                    <SendIcon />
+                </button>
+
             </form>
         </div >
     )
