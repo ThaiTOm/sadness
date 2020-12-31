@@ -43,7 +43,6 @@ const addUser = async ({ id, ipOfUser, len }) => {
                         // then move it to messSave
                         client.lpush(roomChatId, name1, name2, (err, res) => {
                             if (err) {
-                                console.log(err)
                             }
                         })
                         client.expire(roomChatId, 36600)
@@ -125,6 +124,10 @@ const sendMessageOff = ({ room, message, id }) => {
     })
     return { roomMessage: room, messageMessage: message, memberMessage: id }
 }
+const sendImageOff = ({ room, image, userId }) => {
+    client.lpush(room, "image," + image + ";" + userId)
+    return { roomMessage: room, message: "image," + image, member: userId }
+}
 // const addFriend = ({ id }) => {
 //     const arr = id.split(";")
 //     const add = (req, res) => {
@@ -141,12 +144,14 @@ const sendMessageOff = ({ room, message, id }) => {
 //         return { room: arr[0], req, res, time }
 //     }
 // }
-const seenMessage =  async ({ id, user1, user2 }) => {
+const seenMessage = async ({ id, user1, user2 }) => {
     let getm = promisify(client.lrange).bind(client)
-    const lastM = await getm(id,0,0)
+    const lastM = await getm(id, 0, 0)
     const arr = await lastM[0].split(",")
-    arr[2] = "true"
-    client.lset(id, 0, arr.join(","))
-    
+    if (arr[2] === "false") {
+        arr[2] = "true"
+        client.lset(id, 0, arr.join(","))
+    }
 }
-module.exports = { addUser, sendMessage, sendMessageOff, seenMessage };
+
+module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff };

@@ -662,6 +662,15 @@ button {
     color: #2e3750;
     width: 96.5%;
 }
+.input button{
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background-color: rgba(46, 229, 157, 0.4);
+}
 #icon_button_file{
     display:none
 }
@@ -758,6 +767,22 @@ button {
 
 .messageLiOtherm60 {
     width: 60%
+}
+.messageImage{
+    width: 100%;
+    height: max-content;
+    display:flex;
+    margin: 10px 0;
+}
+.messageImage img{
+    width: 300px;
+    height: 400px;
+
+}
+/* message image own */
+.mIOwn img{
+    margin-left:auto;
+    margin-right: 15px;
 }
 
 .contact {

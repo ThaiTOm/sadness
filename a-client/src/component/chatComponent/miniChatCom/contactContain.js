@@ -16,7 +16,6 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
     const id = getCookie().token;
     //this message is last message when not online
     let arr = message.split(",");
-
     const decryptWithAES = ciphertext => {
         const passphrase = '123nguyenduythaise1';
         const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
@@ -36,43 +35,57 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
         //message contain when another not sending and that is the last time when message send
         socket.emit("joinBack", { idRoom })
         if (arr[1] === id) {
-            try {
-                let a = decryptWithAES(arr[0])
+            let a = decryptWithAES(arr[0])
+            if (a.length > 0) {
                 let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                 setValue("Bạn:  " + mess)
-            } catch (error) { }
+            }
+            else {
+                setValue("Bạn:  " + "da gui hinh anh")
+            }
         } else {
-            try {
-                let a = decryptWithAES(arr[0])
+            let a = decryptWithAES(arr[0])
+            if (a.length > 0) {
                 let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                 setValue("Đằng ấy:  " + mess)
-                // arr[2] contain true or false read
-                if(arr[2] === "false"){
-                    setRead(true)
-                }
-            } catch (error) { }
+            }
+            else {
+                setValue("Đằng ấy:  " + "da gui hinh anh")
+            }
+            // arr[2] contain true or false read
+            if (arr[2] === "false") {
+                setRead(true)
+            }
         }
-
     }, [])
     // and this is when socket on 
     useEffect(() => {
         socket.on("message", msgs => {
             if (msgs.idRoom === idRoom) {
                 lu = msgs.user
-                let a = msgs.text.split(",")
+                // let a = msgs.text.split(",")
                 if (lu === id) {
-                    try {
-                        let mess = decryptWithAES(a[0])
-                        mess = mess.length > 12 ? mess.slice(0, 12) + "......." : mess
+                    let a = decryptWithAES(arr[0])
+                    if (a.length > 0) {
+                        let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                         setValue("Bạn:  " + mess)
-                    } catch (error) { }
+                    }
+                    else {
+                        setValue("Bạn:  " + "da gui hinh anh")
+                    }
                 } else {
-                    try {
-                        let mess = decryptWithAES(a[0])
-                        mess = mess.length > 12 ? mess.slice(0, 12) + "......." : mess
+                    let a = decryptWithAES(arr[0])
+                    if (a.length > 0) {
+                        let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                         setValue("Đằng ấy:  " + mess)
+                    }
+                    else {
+                        setValue("Đằng ấy:  " + "da gui hinh anh")
+                    }
+                    // arr[2] contain true or false read
+                    if (arr[2] === "false") {
                         setRead(true)
-                    } catch (error) { }
+                    }
                 }
             }
         })
@@ -81,7 +94,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
         if (target === idRoom) {
             setActive(true)
             setRead(false)
-            socket.emit("seenMessage", {id: idRoom, user1, user2})
+            socket.emit("seenMessage", { id: idRoom, user1, user2 })
         }
         else {
             setActive(false)

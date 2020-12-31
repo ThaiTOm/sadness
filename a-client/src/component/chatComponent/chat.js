@@ -5,6 +5,8 @@ import { getCookie } from '../../helpers/auth';
 import SendIcon from '@material-ui/icons/Send';
 import axios from "axios"
 import socketApp from '../../socket';
+import ImageIcon from '@material-ui/icons/Image';
+import IconButton from '@material-ui/core/IconButton';
 
 function Chat() {
     let socket = socketApp.getSocket();
@@ -12,6 +14,7 @@ function Chat() {
     const ipOfUser = "Dong nai";
     const [value, setValue] = useState([]);
     const [len, SetLen] = useState(0);
+    const fileRef = useRef(null)
     //This id room contain every id of the message that they have
 
     const [message, setMessage] = useState("");
@@ -36,11 +39,22 @@ function Chat() {
         const originalText = bytes.toString(CryptoJS.enc.Utf8);
         return originalText;
     };
-
+    const handleFileUpload = (e) => {
+        let file = e.target.files;
+        let reader = new FileReader()
+        for (let i = 0; i < file.length; i++) {
+            reader.readAsDataURL(file[i])
+            reader.onloadend = () => {
+                socket.emit("sendImageOff", { room: idRoom, image: reader.result, userId:id })
+            }
+        }
+    }
+    const useRefTrigger = () => {
+        fileRef.current.click()
+    }
     const HanldeClickFind = (e) => {
         if (wait !== true) {
             socket.emit("join", { id, len, ipOfUser }, (error) => {
-                console.log(error)
                 if (error === "error") {
                     setWait(true)
                 } else {
@@ -60,11 +74,6 @@ function Chat() {
             socket.emit('sendMessage', { room: idRoom, message: value, id }, () => setMessage(""));
         }
     }
-
-    const handleChange = (e) => {
-        setMessage(e.target.value)
-    }
-
     //Fetch data to recive the idRoom
     useEffect(() => {
         const source = axios.CancelToken.source()
@@ -75,7 +84,6 @@ function Chat() {
                         SetLen(res.data.len)
                     })
             } catch (error) {
-                console.log(error)
             }
         }
         fetchData()
@@ -86,18 +94,17 @@ function Chat() {
     //load message
     useEffect(() => {
         socket.on("message", msg => {
-
             if (msg.roomId) {
                 // If we have a couple together than we start to chat
                 setWait(false)
                 setFinish(true)
                 setidRoom(msg.roomId)
             }
-            if (msg.text) {
-                let msgText = decryptWithAES(msg.text)
-                let value = { text: msgText, user: msg.user }
-                // inputRef.current.focus();
-                setValue(msgs => [...msgs, value])
+            if(msg.image){
+                setValue(img => [...img, msg.image + ";" + msg.user])
+            }
+            else if (msg.text) {
+                setValue(msgs => [...msgs, msg.text + "," + msg.user])
                 executeScroll()
             }
         })
@@ -125,41 +132,59 @@ function Chat() {
                 style={finish === false ? { display: "none" } : {}}>
                 {
                     Object.values(value).map(function (item, i) {
-                        const msgs = item.text
-                        if (item.user === id) {
-                            return (
-                                <li className="messageLiOwn"
-                                key={i}
-                                ref={myRef}>
-                                {msgs.length > 60 ?
-                                  <div className="own_message_same_div messageLiOwnm60">
-                                    <span>{msgs}</span>
-                                  </div>:
-                                  <div className="own_message_same_div messageLiOwnl60">
-                                    <span>{msgs}</span>
-                                  </div>
-
-                        })
-                                </li>
-                            )
+                        let arr = item.split(",")
+                        if (arr[0] === "image") {
+                            let imgUrl = arr[1] + "," + arr[2].split(";")[0]
+                            if (arr[2].split(";")[1] === id) {
+                                return (
+                                    <li className="messageImageOwn">
+                                        <img key={i} src={imgUrl}></img>
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li className="messageImageOther">
+                                        <img key={i} src={imgUrl}></img>
+                                    </li>
+                                )
+                            }
                         } else {
-                            return (
-                                <li className="messageLiOther"
-                                key={i}
-                                ref={myRef}>
-                                {msgs.length > 60 ?
-                                  <div className="other_message_same_div messageLiOtherm60">
-                                    <span>{msgs}</span>
-                                  </div>:
-                                  <div className="other_message_same_div messageLiOtherl60">
-                                    <span>{msgs}</span>
-                                  </div>
+                            let msgs = decryptWithAES(arr[0])
+                            if (arr[1] === id) {
+                                return (
+                                    <li className="messageLiOwn"
+                                        key={i}
+                                        ref={myRef}>
+                                        {msgs.length > 60 ?
+                                            <div className="own_message_same_div messageLiOwnm60">
+                                                <span>{msgs}</span>
+                                            </div> :
+                                            <div className="own_message_same_div messageLiOwnl60">
+                                                <span>{msgs}</span>
+                                            </div>
 
-                        })
-                        </li>
-                        )}
-                    }
-                    )
+                                        })
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li className="messageLiOther"
+                                        key={i}
+                                        ref={myRef}>
+                                        {msgs.length > 60 ?
+                                            <div className="other_message_same_div messageLiOtherm60">
+                                                <span>{msgs}</span>
+                                            </div> :
+                                            <div className="other_message_same_div messageLiOtherl60">
+                                                <span>{msgs}</span>
+                                            </div>
+
+                                        })
+                                    </li>
+                                )
+                            }
+                        }
+                    })
                 }
             </ul>
             <form
@@ -167,19 +192,30 @@ function Chat() {
                 style={finish === false ? { display: "none" } : {}}
                 onSubmit={handleSubmit}>
                 {/* <input value={message} type="text" onChange={handleChange}></input> */}
-                <p>
-                    <span className="input">
-                        <input
-                            value={message}
-                            onChange={handleChange}
-                            type="text"
-                            placeholder="Enter text" />
-                        <span></span>
-                    </span>
-                    <button type="submit">
-                        <SendIcon />
-                    </button>
-                </p>
+                <span className="input">
+                    <input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        type="text"
+                        placeholder="Enter text" >
+                    </input>
+                    <span></span>
+                </span>
+                <div className="extension_input">
+                    <input
+                        multiple
+                        id="icon_button_file"
+                        type="file"
+                        onChange={handleFileUpload}
+                        ref={fileRef}
+                    />
+                    <IconButton onClick={useRefTrigger}>
+                        <ImageIcon />
+                    </IconButton>
+                </div>
+                <button type="submit">
+                    <SendIcon />
+                </button>
             </form>
         </div>
     )

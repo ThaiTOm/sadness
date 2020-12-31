@@ -21,7 +21,6 @@ function SendContact(props) {
     const myRef = useRef(null)
     const fileRef = useRef(null)
     const [load, setLoad] = useState(false);
-    const [file, setFile] = useState([])
     const executeScroll = () => {
         try {
             myRef.current.scrollIntoView()
@@ -58,7 +57,15 @@ function SendContact(props) {
         setEnd(a)
     }
     const handleFileUpload = (e) => {
-        setFile(e.target.files)
+        let file = e.target.files;
+        let reader = new FileReader()
+        for (let i = 0; i < file.length; i++) {
+            reader.readAsDataURL(file[i])
+            reader.onloadend = () => {
+                socket.emit("sendImageOff", { room: id, image: reader.result, userId })
+            }
+        }
+
     }
     const useRefTrigger = () => {
         fileRef.current.click()
@@ -67,7 +74,6 @@ function SendContact(props) {
         axios.post("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
             .then(res => {
                 setMsg(res.data.reverse().slice(2, res.data.length))
-                // executeScroll()
                 setLoad(false)
             }).catch(err => { })
     }, [id, start, end])
@@ -75,7 +81,11 @@ function SendContact(props) {
     // get message 
     useEffect(() => {
         socket.on("message", msg => {
-            setMsg(msgs => [...msgs, msg.text + "," + msg.user])
+            if (msg.image) {
+                setMsg(img => [...img, msg.image + ";" + msg.user])
+            } else {
+                setMsg(msgs => [...msgs, msg.text + "," + msg.user])
+            }
             executeScroll()
         })
     }, [])
@@ -96,41 +106,59 @@ function SendContact(props) {
                 {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
+ 
                             let arr = item.split(",")
-                            let msgs = decryptWithAES(arr[0])
-
-                            if (arr[1] === userId) {
-                                return (
-                                    <li className="messageLiOwn"
-                                        key={i}
-                                        ref={myRef}>
-                                        {msgs.length > 60 ?
-                                            <div className="own_message_same_div messageLiOwnm60">
-                                                <span>{msgs}</span>
-                                            </div> :
-                                            <div className="own_message_same_div messageLiOwnl60">
-                                                <span>{msgs}</span>
-                                            </div>
-
-                                        })
-                                    </li>
-                                )
+                            if (arr[0] === "image") {
+                                let imgUrl = arr[1] + "," + arr[2].split(";")[0]
+                                if (arr[2].split(";")[1] === userId) {
+                                    return (
+                                        // message image own
+                                        <li key={i} className="messageImage mIOwn ">
+                                            <img  src={imgUrl}></img>
+                                        </li>
+                                    )
+                                } else {
+                                    return (
+                                        //message image other
+                                        <li key={i} className="messageImage mIOther">
+                                            <img  src={imgUrl}></img>
+                                        </li>
+                                    )
+                                }
                             } else {
-                                return (
-                                    <li className="messageLiOther"
-                                        key={i}
-                                        ref={myRef}>
-                                        {msgs.length > 60 ?
-                                            <div className="other_message_same_div messageLiOtherm60">
-                                                <span>{msgs}</span>
-                                            </div> :
-                                            <div className="other_message_same_div messageLiOtherl60">
-                                                <span>{msgs}</span>
-                                            </div>
+                                let msgs = decryptWithAES(arr[0])
+                                if (arr[1] === userId) {
+                                    return (
+                                        <li className="messageLiOwn"
+                                            key={i}
+                                            ref={myRef}>
+                                            {msgs.length > 60 ?
+                                                <div className="own_message_same_div messageLiOwnm60">
+                                                    <span>{msgs}</span>
+                                                </div> :
+                                                <div className="own_message_same_div messageLiOwnl60">
+                                                    <span>{msgs}</span>
+                                                </div>
 
-                                        })
-                                    </li>
-                                )
+                                            })
+                                        </li>
+                                    )
+                                } else {
+                                    return (
+                                        <li className="messageLiOther"
+                                            key={i}
+                                            ref={myRef}>
+                                            {msgs.length > 60 ?
+                                                <div className="other_message_same_div messageLiOtherm60">
+                                                    <span>{msgs}</span>
+                                                </div> :
+                                                <div className="other_message_same_div messageLiOtherl60">
+                                                    <span>{msgs}</span>
+                                                </div>
+                                            })
+                                        </li>
+                                    )
+                                }
                             }
                         }) : console.log()
                 }
@@ -167,14 +195,6 @@ function SendContact(props) {
             </form>
         </div >
     )
-
-
-    // <div className="send_container">
-    //     <div className="">
-
-    //     </div>
-    // </div>
-
 }
 
 export default SendContact

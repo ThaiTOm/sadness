@@ -1,4 +1,4 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage } = require("./messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff } = require("./messageControll");
 
 module.exports = {
     index: function (io, socket) {
@@ -34,6 +34,11 @@ module.exports = {
             const { roomMessage, messageMessage, memberMessage } = sendMessageOff({ room, message, id: userId })
             io.to(roomMessage).emit("message", { user: memberMessage, text: messageMessage, idRoom: room })
         });
+        socket.on("sendImageOff",({room,image,userId})=>{
+            const {roomMessage, message, member} = sendImageOff({room,image,userId});
+            io.to(room).emit("message", {user:member, image:message, idRoom:room})
+            console.log(room)
+        })
         socket.on("seenMessage", ({id,user1,user2})=>{
              seenMessage({id,user1,user2})
         })
