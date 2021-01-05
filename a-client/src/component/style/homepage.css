@@ -768,19 +768,29 @@ button {
 .messageLiOtherm60 {
     width: 60%
 }
+
 .messageImage{
     width: 100%;
-    height: max-content;
     display:flex;
     margin: 10px 0;
 }
+.messageImage input[type=checkbox] {
+    display: none;
+}
+
+.messageImage input[type=checkbox]:checked ~ label > img {
+    width: 600px;
+    height: 800px;
+    cursor: zoom-out;
+  }
 .messageImage img{
     width: 300px;
     height: 400px;
-
+    transition: transform 0.25s ease;
+    cursor: zoom-in;
 }
 /* message image own */
-.mIOwn img{
+.mIOwn label{
     margin-left:auto;
     margin-right: 15px;
 }

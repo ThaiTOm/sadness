@@ -27,6 +27,7 @@ exports.getIdRooms = (req, res) => {
     })
 }
 exports.listContact = (req, res) => {
+    console.log("run")
     //id is idRoom
     const { id } = req.body
     User.findById(id, async (err, result) => {

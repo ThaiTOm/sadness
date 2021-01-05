@@ -64,8 +64,14 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
             if (msgs.idRoom === idRoom) {
                 lu = msgs.user
                 // let a = msgs.text.split(",")
+                let a
+                if (msgs.text) {
+                    a = decryptWithAES(msgs.text)
+                } else {
+                    a = ""
+                }
+
                 if (lu === id) {
-                    let a = decryptWithAES(arr[0])
                     if (a.length > 0) {
                         let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                         setValue("Bạn:  " + mess)
@@ -74,7 +80,6 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                         setValue("Bạn:  " + "da gui hinh anh")
                     }
                 } else {
-                    let a = decryptWithAES(arr[0])
                     if (a.length > 0) {
                         let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
                         setValue("Đằng ấy:  " + mess)

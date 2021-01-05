@@ -45,7 +45,7 @@ function Chat() {
         for (let i = 0; i < file.length; i++) {
             reader.readAsDataURL(file[i])
             reader.onloadend = () => {
-                socket.emit("sendImageOff", { room: idRoom, image: reader.result, userId:id })
+                socket.emit("sendImageOff", { room: idRoom, image: reader.result, userId: id })
             }
         }
     }
@@ -100,7 +100,7 @@ function Chat() {
                 setFinish(true)
                 setidRoom(msg.roomId)
             }
-            if(msg.image){
+            if (msg.image) {
                 setValue(img => [...img, msg.image + ";" + msg.user])
             }
             else if (msg.text) {
@@ -109,12 +109,10 @@ function Chat() {
             }
         })
     }, [])
-
     //defined button find partner classname
     var btnClassFind = classNames({
         "onclic": wait,
     })
-
     return (
         <div className="message_container">
             <div className="container_button">
@@ -125,9 +123,7 @@ function Chat() {
                     onClick={HanldeClickFind}
                 >
                 </button>
-
             </div>
-
             <ul
                 style={finish === false ? { display: "none" } : {}}>
                 {
@@ -203,7 +199,6 @@ function Chat() {
                 </span>
                 <div className="extension_input">
                     <input
-                        multiple
                         id="icon_button_file"
                         type="file"
                         onChange={handleFileUpload}

@@ -27,6 +27,7 @@ function SendContact(props) {
         } catch (error) {
         }
     }
+
     const encryptTo = text => {
         const passphrase = '123nguyenduythaise1';
         return CryptoJS.AES.encrypt(text, passphrase).toString();
@@ -56,7 +57,7 @@ function SendContact(props) {
         let a = end + 10
         setEnd(a)
     }
-    const handleFileUpload = (e) => {
+    const handleFileUpload = async (e) => {
         let file = e.target.files;
         let reader = new FileReader()
         for (let i = 0; i < file.length; i++) {
@@ -65,7 +66,6 @@ function SendContact(props) {
                 socket.emit("sendImageOff", { room: id, image: reader.result, userId })
             }
         }
-
     }
     const useRefTrigger = () => {
         fileRef.current.click()
@@ -106,22 +106,30 @@ function SendContact(props) {
                 {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
- 
                             let arr = item.split(",")
                             if (arr[0] === "image") {
                                 let imgUrl = arr[1] + "," + arr[2].split(";")[0]
                                 if (arr[2].split(";")[1] === userId) {
                                     return (
                                         // message image own
-                                        <li key={i} className="messageImage mIOwn ">
-                                            <img  src={imgUrl}></img>
+                                        <li
+                                            ref={myRef}
+                                            key={i}
+                                            className="messageImage mIOwn">
+                                            <input type="checkbox" id={i}></input>
+                                            <label for={i}>
+                                                <img src={imgUrl}></img>
+                                            </label>
                                         </li>
                                     )
                                 } else {
                                     return (
                                         //message image other
-                                        <li key={i} className="messageImage mIOther">
-                                            <img  src={imgUrl}></img>
+                                        <li
+                                            ref={myRef}
+                                            key={i}
+                                            className="messageImage mIOther">
+                                            <img src={imgUrl}></img>
                                         </li>
                                     )
                                 }
@@ -178,7 +186,6 @@ function SendContact(props) {
                 </span>
                 <div className="extension_input">
                     <input
-                        multiple
                         id="icon_button_file"
                         type="file"
                         onChange={handleFileUpload}
@@ -191,7 +198,6 @@ function SendContact(props) {
                 <button type="submit">
                     <SendIcon />
                 </button>
-
             </form>
         </div >
     )

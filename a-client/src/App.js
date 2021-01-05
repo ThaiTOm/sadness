@@ -15,12 +15,30 @@ function App() {
         <Route exact path="/" >
           <HomePage />
         </Route>
-        <Route path="/users/active/:token" exact render={props => <ActivatePage {...props} />} />
-        <Route path="/users/forget" exact render={props => <Forget {...props} />} />
-        <Route path="/users/password/forget/:token" exact render={props => <ChangePassword {...props} />} />
-        <Route path="/chat" component={Chat} />
-        <Route path="/news" component={NewsMain} />
-        <Route path="/report" component={Main_block}/>
+        <Route
+          path="/users/active/:token"
+          exact
+          render={props => <ActivatePage {...props} />}
+        />
+        <Route
+          path="/users/forget"
+          exact
+          render={props => <Forget {...props} />}
+        />
+        <Route
+          path="/users/password/forget/:token"
+          exact
+          render={props => <ChangePassword {...props} />}
+        />
+        <Route
+          path="/chat"
+          component={Chat} />
+        <Route
+          path="/news"
+          component={NewsMain} />
+        <Route
+          path="/report"
+          component={Main_block} />
       </Switch>
     </Router>
   );

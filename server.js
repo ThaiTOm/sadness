@@ -5,13 +5,13 @@ const connectDB = require("./config/db");
 const http = require("http");
 const authRoute = require("./routes/indexAuth.route");
 const messageRoute = require("./routes/message.route")
-
-const promisify = require('util').promisify;
 const realTimeD = require("./realtime/index");
+
 
 const responseTime = require("response-time");
 
 const redis = require("redis");
+// const { User } = require("./models/user.models");
 
 const client = redis.createClient();
 const app = express();
@@ -37,15 +37,13 @@ const io = require("socket.io")(server, {
 // connect real time
 io.on('connection', (socket) => realTimeD.index(io, socket));
 
-
-
 app.use("/api/", authRoute);
-app.use("/api/msgC/", messageRoute)
-app.get("/", async (req, res) => {
-    client.lrange("a", 0, -1, (err, resu) => {
-        res.json(resu)
-    })
-})
+app.use("/api/msgC/", messageRoute);
+// app.use("/", graphqlHTTP({
+//     schema,
+//     rootValue: root,
+//     graphiql: true
+// }))
 
 app.use((req, res, next) => {
     res.status(404).json({
