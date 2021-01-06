@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
 import "../style/newspage.css"
-
+import PostBlogMain from "./postBlog"
 
 function NewsMain() {
     const [open, setOpen] = useState(true);
@@ -40,10 +40,6 @@ function NewsMain() {
                             <HomeIcon />
                             <Link to="/news">Trang chủ</Link>
                         </li>
-                        {/* <li>
-                            <HelpIcon />
-                            <Link to="/rule">Thông báo</Link>
-                        </li> */}
                         <li>
                             <HelpIcon />
                             <Link to="/friend">Bạn bè</Link>
@@ -62,6 +58,10 @@ function NewsMain() {
                         </li>
                     </ul>
                 </div>
+                <div className="main_news">
+                    <PostBlogMain />
+                </div>
+
             </div>
         </div>
     )
