@@ -45,6 +45,7 @@ function Chat() {
         for (let i = 0; i < file.length; i++) {
             reader.readAsDataURL(file[i])
             reader.onloadend = () => {
+                console.log(reader.result)
                 socket.emit("sendImageOff", { room: idRoom, image: reader.result, userId: id })
             }
         }

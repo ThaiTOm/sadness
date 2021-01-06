@@ -5,10 +5,11 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import CreateIcon from '@material-ui/icons/Create';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import HandleFileUpload from "./handleFiles";
 
 function Index() {
     const [text, setText] = useState("")
-    const [file, setFile] = useState([])
+    const [file, setFile] = useState("")
     const [open, setOpen] = useState(false)
 
     const dragFile = (file) => {
@@ -16,13 +17,11 @@ function Index() {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(text, file)
-    }
 
+    }
     const handleOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -48,6 +47,7 @@ function Index() {
                     <form onSubmit={handleSubmit} className="form_post_blog">
                         <h4>Dang tai noi dung cua ban</h4>
                         <div
+                            suppressContentEditableWarning={true}
                             id="type_text_div"
                             contentEditable="true"
                             onChange={e => setText(e.target.value)} >
@@ -66,6 +66,9 @@ function Index() {
                                 </section>
                             )}
                         </Dropzone>
+                        <div>
+                            <HandleFileUpload props={file}/>
+                        </div>
                         <button type="submit">Submit</button>
                     </form>
 

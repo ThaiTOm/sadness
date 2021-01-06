@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
 import "../style/newspage.css"
-import PostBlogMain from "./postBlog"
+import PostBlogMain from "./postNews/postBlog"
 
 function NewsMain() {
     const [open, setOpen] = useState(true);

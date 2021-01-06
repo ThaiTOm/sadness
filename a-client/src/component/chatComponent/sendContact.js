@@ -57,7 +57,7 @@ function SendContact(props) {
         let a = end + 10
         setEnd(a)
     }
-    const handleFileUpload = async (e) => {
+    const handleFileUpload =  (e) => {
         let file = e.target.files;
         let reader = new FileReader()
         for (let i = 0; i < file.length; i++) {
