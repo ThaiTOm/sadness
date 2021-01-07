@@ -1,19 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import CreateIcon from '@material-ui/icons/Create';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import HandleFileUpload from "./handleFiles";
 
 function Index() {
     const [text, setText] = useState("")
-    const [file, setFile] = useState("")
+    const [file, setFile] = useState([])
+    // const [dataFile, setDataFile] = useState("")
     const [open, setOpen] = useState(false)
 
     const dragFile = (file) => {
-        setFile(file)
+        let data = file[0];
+        let reader = new FileReader()
+        reader.readAsDataURL(data)
+        reader.onloadend = () => {
+            setFile(value => [...value, reader.result])
+        }
     }
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -25,6 +30,11 @@ function Index() {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleDeleteImamge = (index) => {
+        const arr = [...file]
+        arr.splice(index, 1)
+        setFile(arr)
+    }
     return (
         <div className="post_data">
             <button type="button" onClick={handleOpen}>
@@ -67,7 +77,15 @@ function Index() {
                             )}
                         </Dropzone>
                         <div>
-                            <HandleFileUpload props={file}/>
+                            <div className="image_post_news">
+                                {
+                                    typeof file !== 'undefined' ? Object.values(file).map(function (value, index) {
+                                        return <li key={index}>
+                                            <img src={value}></img>
+                                            <span onClick={() => handleDeleteImamge(index)}>&#10005;</span>
+                                        </li>
+                                    }) : {}}
+                            </div>
                         </div>
                         <button type="submit">Submit</button>
                     </form>
@@ -75,7 +93,6 @@ function Index() {
                 </Fade>
             </Modal>
         </div>
-
     )
 }
 
