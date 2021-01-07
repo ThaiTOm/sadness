@@ -2,27 +2,30 @@ import React, { useState, useEffect } from 'react'
 
 function HandleFile(props) {
     const [file, setFile] = useState([])
-
+    const handleDeleteImamge = (index) => {
+        const arr = [...file]
+        arr.splice(index, 1)
+        setFile(arr)
+    }
     useEffect(() => {
         if (props.props) {
-            console.log(props.props)
             let file = props.props[0];
             let reader = new FileReader()
-                reader.readAsDataURL(file)
-                reader.onloadend = () => {
-                    setFile(value => [...value, reader.result])
-                }
-            
+            reader.readAsDataURL(file)
+            reader.onloadend = () => {
+                setFile(value => [...value, reader.result])
+            }
+
         }
     }, [props.props])
     return (
-        <div>
-            {console.log(file)}
+        <div className="image_post_news">
             {
                 typeof file !== 'undefined' ? Object.values(file).map(function (value, index) {
-                    return <div>
-                        {"value"}
-                    </div>
+                    return <li>
+                        <img src={value}></img>
+                        <span onClick={() => handleDeleteImamge(index)}>&#10005;</span>
+                    </li>
                 }) : {}}
         </div>
     )
