@@ -42,7 +42,6 @@ app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
 
-
 app.use((req, res, next) => {
     res.status(404).json({
         succes: false,

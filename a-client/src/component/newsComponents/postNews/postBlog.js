@@ -5,6 +5,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import CreateIcon from '@material-ui/icons/Create';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import axios from "axios";
 
 function Index() {
     const [text, setText] = useState("")
@@ -21,8 +22,13 @@ function Index() {
         }
     }
     const handleSubmit = (e) => {
-        e.preventDefault()
-
+        e.preventDefault();
+        axios.post("http://localhost:2704/api/news/post", { text, file })
+            .then(data => {
+                console.log(data)
+            }).catch(err => {
+                console.log(err)
+            })
     }
     const handleOpen = () => {
         setOpen(true);
@@ -34,6 +40,9 @@ function Index() {
         const arr = [...file]
         arr.splice(index, 1)
         setFile(arr)
+    }
+    const handleChangeText = e => {
+        setText(e)
     }
     return (
         <div className="post_data">
@@ -60,9 +69,9 @@ function Index() {
                             suppressContentEditableWarning={true}
                             id="type_text_div"
                             contentEditable="true"
-                            onChange={e => setText(e.target.value)} >
-                            Ban hay nhap vao day
-                            </div>
+                            onInput={e => handleChangeText(e.currentTarget.textContent)} >
+                                Bạn hãy nhập vào đây
+                        </div>
                         <Dropzone
                             onDrop={acceptedFiles => dragFile(acceptedFiles)}>
                             {({ getRootProps, getInputProps }) => (
