@@ -73,9 +73,11 @@ function SendContact(props) {
     useEffect(() => {
         axios.post("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
             .then(res => {
-                setMsg(res.data.reverse().slice(2, res.data.length))
+                setMsg(res.data)
                 setLoad(false)
-            }).catch(err => { })
+            }).catch(err => { 
+                return <div>Oops, bạn hãy thử lại sau</div>
+            })
     }, [id, start, end])
 
     // get message 
@@ -148,7 +150,7 @@ function SendContact(props) {
                                                     <span>{msgs}</span>
                                                 </div>
 
-                                            })
+                                            }
                                         </li>
                                     )
                                 } else {
@@ -163,7 +165,7 @@ function SendContact(props) {
                                                 <div className="other_message_same_div messageLiOtherl60">
                                                     <span>{msgs}</span>
                                                 </div>
-                                            })
+                                            }
                                         </li>
                                     )
                                 }

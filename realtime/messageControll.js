@@ -3,6 +3,8 @@ const { cutSpaceInString } = require("../a-client/src/algorithm/algorithm");
 const redis = require("redis");
 const client = redis.createClient();
 const promisify = require('util').promisify;
+const memcachePlus = require("memcache-plus")
+const cm = new memcachePlus()
 
 const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
@@ -35,29 +37,34 @@ const addUser = async ({ id, ipOfUser, len }) => {
                         // get 2 items first in the array
                         arrOfRegion[ipOfUser].splice(0, 2)
                         // First we need to add Room Id to their account to find faster
-                        client.rpush(name1, roomChatId)
-                        client.rpush(name2, roomChatId)
-                        // Expire when we will delete the value
-                        client.expire(name1, 36600)
-                        client.expire(name2, 36600)
+                        cm.add(name1, roomChatId + ",")
+                            .then(() => {
+                            })
+                            .catch(() => {
+                                cm.append(name1, roomChatId + ",")
+                            })
+                        cm.add(name2, roomChatId + ",")
+                            .then(() => {
+                            })
+                            .catch(() => {
+                                cm.append(name2, roomChatId + ",")
+                            })
                         // then move it to messSave
-                        client.lpush(roomChatId, name1, name2, (err, res) => {
-                            if (err) {
-                            }
-                        })
-                        client.expire(roomChatId, 36600)
-                        // updateMessage(roomChat.name1, roomChat.room)
-                        // updateMessage(roomChat.name2, roomChat.room)
+                        let firstValue = [name1 + "," + name2]
+                        cm.add(roomChatId, firstValue)
+                        // client.expire(roomChatId, 36600)
                         return { idRoom: roomChatId }
                     }
                     let a = arrOfRegion[ipOfUser];
                     // Check if 2 people here not block each other
-                    let getLrange = promisify(client.lrange).bind(client);
-                    let arr = await getLrange(a[0].id + "blackList", 0, -1);
+                    let arr = await cm.get(a[0].id + "blackList")
 
                     for (let i = 1; i < a.length; i++) {
                         //check if that one is not from the list
-                        if (arr.includes(a[i].id) === false) {
+                        if (arr === null) {
+                            let arg = [a[0], a[i]]
+                            return createRoom(arg)
+                        } else if (arr.includes(a[i].id) === false) {
                             let arg = [a[0], a[i]]
                             //pass data to createRoom function and return that
                             return createRoom(arg)
@@ -110,22 +117,34 @@ const addUser = async ({ id, ipOfUser, len }) => {
 const sendMessage = ({ room, message, id }) => {
     //mess contain message and id 
     let mess = message + "," + id + "," + "false"
-    client.lpush(room, mess, (err, result) => {
-        if (err) {
-        }
-    })
-
+    cm.get(room)
+        .then((value) => {
+            let arr = [...value]
+            arr.push(mess)
+            cm.replace(room, arr)
+        })
     return { roomMessage: room, messageMessage: message, memberMessage: id }
 }
 
 const sendMessageOff = ({ room, message, id }) => {
     let mess = message + "," + id + "," + "false"
-    client.lpush(room, mess, (err, result) => {
-    })
+    cm.get(room)
+        .then((value) => {
+            let arr = [...value]
+            arr.push(mess)
+            cm.replace(room, arr)
+        })
     return { roomMessage: room, messageMessage: message, memberMessage: id }
 }
 const sendImageOff = ({ room, image, userId }) => {
-    client.lpush(room, "image," + image + ";" + userId)
+    let mess = "image," + image + ";" + userId
+    cm.get(room)
+        .then((value) => {
+            let arr = [...value]
+            arr.push(mess)
+            cm.replace(room, arr)
+        })
+
     return { roomMessage: room, message: "image," + image, member: userId }
 }
 // const addFriend = ({ id }) => {
@@ -145,13 +164,15 @@ const sendImageOff = ({ room, image, userId }) => {
 //     }
 // }
 const seenMessage = async ({ id, user1, user2 }) => {
-    let getm = promisify(client.lrange).bind(client)
-    const lastM = await getm(id, 0, 0)
-    const arr = await lastM[0].split(",")
-    if (arr[2] === "false") {
+    let getM = await cm.get(id)
+    let arr = getM[getM.length - 1].split(",")
+    if(arr[2] === "false"){
         arr[2] = "true"
-        client.lset(id, 0, arr.join(","))
+        let old = [...getM]
+        old[old.length - 1] = arr.join(",")
+        cm.replace(id, old)
     }
+
 }
 
 module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff };

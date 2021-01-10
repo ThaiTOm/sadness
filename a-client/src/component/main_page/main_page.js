@@ -20,7 +20,7 @@ function Main_page() {
     const id = getCookie().token;
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
-    //value contain the messag last and id of 2 people
+    //value contain idRooms
     const [value, setValue] = useState([]);
     const [name, setName] = useState("Recal")
     // user contain 2 user 
@@ -33,7 +33,6 @@ function Main_page() {
                 } else {
                     setValue(val => [...val, res.data])
                 }
-
             }).catch(err => {
             })
     }, [start])
@@ -111,5 +110,5 @@ function Main_page() {
         </div >
     )
 }
-   
+
 export default Main_page

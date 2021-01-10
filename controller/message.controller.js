@@ -2,32 +2,24 @@ const redis = require("redis");
 const clientRedis = redis.createClient();
 const promisify = require('util').promisify;
 const { User } = require("../models/user.models");
+const memcachePlus = require("memcache-plus")
+const cm = new memcachePlus()
 
-exports.getIdRooms = (req, res) => {
+
+exports.getIdRooms = async (req, res) => {
     const { id } = req.body;
-    clientRedis.llen(id, (err, result) => {
-        if (err) {
-            return res.json({
-                error: "Something went wrong, Please try again"
-            })
-        } else {
-            clientRedis.lrange(id, 0, -1, (err, idRooms) => {
-                if (err) {
-                    return res.json({
-                        error: "Something went wrong, Please try again"
-                    })
-                } else {
-                    return res.json({
-                        len: result,
-                        idRooms: idRooms
-                    })
-                }
-            })
-        }
+    const rooms = await cm.get(id)
+    if (rooms !== null) {
+        const arr = rooms.split(",")
+        return res.json({
+            len: arr.length,
+        })
+    }
+    return res.json({
+        len: 0
     })
 }
 exports.listContact = (req, res) => {
-    console.log("run")
     //id is idRoom
     const { id } = req.body
     User.findById(id, async (err, result) => {
@@ -40,15 +32,22 @@ exports.listContact = (req, res) => {
                 res.json({ message: "Ban da bi block" })
             } else {
                 const { start, end } = req.query
-                let getLast = promisify(clientRedis.lrange).bind(clientRedis)
-                let alrange = promisify(clientRedis.lrange).bind(clientRedis)
-                const rang = await alrange(id, start, end)
+                let ru = await cm.get(id)
                 let arr = []
-                for (let value of rang) {
-                    let a = await getLast(value, -2, -1)
-                    let b = await getLast(value, 0, 0)
-                    await a.push(b.join(""), value)
-                    arr.push(a)
+                if (ru !== null) {
+                    for (let value of ru.split(",").slice(start, end)) {
+                        // a contain  users in that room
+                        if (value) {
+                            let allMessage = await cm.get(value)
+                            let a = allMessage[0].split(",")
+                            // b contaion message last in that room
+                            let b = allMessage[allMessage.length - 1]
+                            let data = [
+                                a[0], a[1], b, value
+                            ]
+                            arr.push(data)
+                        }
+                    }
                 }
                 res.json(arr)
             }
@@ -57,25 +56,32 @@ exports.listContact = (req, res) => {
 }
 
 exports.sendContactRoom = async (req, res) => {
-    const { id, start, end } = req.query
-    let lenMsg = promisify(clientRedis.llen).bind(clientRedis)
-    // sfl === start from list
-    // let sfl = await lenMsg(id) - start
-    let getMsg = promisify(clientRedis.lrange).bind(clientRedis)
-    const msg = await getMsg(id, start, end)
+    const { id, start, end } = await req.query
+    const data = await cm.get(id)
+    let msg
+    if (data.length - end < 0) {
+        msg = await data.slice(1, data.length)
+    } else {
+        msg = await data.slice(data.length - end + 1, data.length)
+    }
+
     res.json(msg)
 }
 
 exports.setBlock = async (req, res) => {
-    // const u1 = req.userBlock;
-    // const u2 = req.userBBlock
     const { idSend } = req.body
     const arr = req.body.id.split(";")
-    console.log(arr[2], arr[1])
-    //check 2 id send from client what is id want to block another
     if (arr[1] === idSend) {
-        clientRedis.lpush(idSend + "blackList", arr[2])
-        clientRedis.lpush(arr[2] + "blackList", idSend)
+        cm.add(idSend + "blackList", arr[2])
+            .then()
+            .catch(() => {
+                cm.append(idSend + "blackList", arr[2])
+            })
+        cm.add(arr[2] + "blackList", idSend)
+            .then()
+            .catch(() => {
+                cm.append(arr[2] + "blackList", idSend)
+            })
         User.findOneAndUpdate({ _id: arr[2] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
             if (err) {
                 return res.json({
@@ -88,8 +94,16 @@ exports.setBlock = async (req, res) => {
             }
         })
     } else {
-        clientRedis.lpush(idSend + "blackList", arr[1])
-        clientRedis.lpush(arr[1] + "blackList", idSend)
+        cm.add(idSend + "blackList", arr[1])
+            .then()
+            .catch(() => {
+                cm.append(idSend + "blackList", arr[1])
+            })
+        cm.add(arr[1] + "blackList", idSend)
+            .then()
+            .catch(() => {
+                cm.append(arr[1] + "blackList", idSend)
+            })
         User.findOneAndUpdate({ _id: arr[1] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
             if (err) {
                 return res.json({

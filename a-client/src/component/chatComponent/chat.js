@@ -13,6 +13,7 @@ function Chat() {
     const id = getCookie().token;
     const ipOfUser = "Dong nai";
     const [value, setValue] = useState([]);
+    // len is len of rooms the user had join
     const [len, SetLen] = useState(0);
     const fileRef = useRef(null)
     //This id room contain every id of the message that they have
@@ -56,6 +57,7 @@ function Chat() {
     const HanldeClickFind = (e) => {
         if (wait !== true) {
             socket.emit("join", { id, len, ipOfUser }, (error) => {
+                console.log(error)
                 if (error === "error") {
                     setWait(true)
                 } else {
