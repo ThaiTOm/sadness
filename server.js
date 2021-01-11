@@ -15,7 +15,6 @@ const responseTime = require("response-time");
 
 const redis = require("redis");
 // const { User } = require("./models/user.models");
-
 const client = redis.createClient();
 const app = express();
 const server = http.createServer(app);
@@ -43,32 +42,16 @@ io.on('connection', (socket) => realTimeD.index(io, socket));
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
-app.get("/", async(req, res) => {
-    // let message = ["1", "2", "3", "4"]
-    // let ob = {
-    //     message: message,
-    //     user1: "thai",
-    //     user2: "duy"
-    // }
-    // // cm.add("key", "ob,ob2")
-    // //     .then()
-    // //     .catch(() => {
-    // //         cm.append("key", "ob, 1 , ")
-    // //     })
-    // let arr = await cm.get("key")
-    // res.json(arr)
-    // const room = await cm.get("5ff701b3c1d1100f2de9940b0")
-    // res.json(room)
-    const arr = [1]
-    // cm.add("key",arr)
-    //   .then((err)=>{
-    //       res.json(err)
-    //   })
-   const a = await cm.get("5ff701b3c1d1100f2de9940b2")
-   res.json(a)
-    // cm.flush()
+app.get("/", async (req, res) => {
+    let ob = {
+        like: 0,
+        comment:""
+    }
+    client.hgetall("a", (err, data) => {
+        return res.json(data)
+    })
 })
-app.get("/delete",(req,res)=>{
+app.get("/delete", (req, res) => {
     cm.flush()
     res.json("ok")
 })

@@ -22,7 +22,6 @@ function Forget() {
                 setFormData({
                     ...formData,
                     email: ""
-
                 })
                 toast.success(res.data.message)
             }).catch(err => {

@@ -20,7 +20,7 @@
     width: 75%;
 }
 
-.post_data button {
+.post_data_button{
     position: fixed;
     bottom: 10px;
     right: 10px;
@@ -111,6 +111,7 @@
     border-radius: 5px;
     margin-bottom: 10px;
     overflow-y: scroll;
+    white-space: pre;
     margin-top: 5px;
 }
 

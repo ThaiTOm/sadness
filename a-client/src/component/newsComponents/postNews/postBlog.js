@@ -6,12 +6,16 @@ import Fade from '@material-ui/core/Fade';
 import CreateIcon from '@material-ui/icons/Create';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from "axios";
+import { getCookie } from '../../../helpers/auth';
+import { ToastContainer, toast } from "react-toastify";
+
 
 function Index() {
     const [text, setText] = useState("")
     const [file, setFile] = useState([])
     // const [dataFile, setDataFile] = useState("")
     const [open, setOpen] = useState(false)
+    const id = getCookie().token;
 
     const dragFile = (file) => {
         let data = file[0];
@@ -23,9 +27,10 @@ function Index() {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:2704/api/news/post", { text, file })
+        axios.post("http://localhost:2704/api/news/post", { text, file,id })
             .then(data => {
-                console.log(data)
+                toast.success("Yêu cầu của bạn đã được thực hiện")
+                handleClose( )
             }).catch(err => {
                 console.log(err)
             })
@@ -42,11 +47,19 @@ function Index() {
         setFile(arr)
     }
     const handleChangeText = e => {
-        setText(e)
+        setText(e.target.innerText)
+    }
+    const handleLineBreak = e =>{
+        if(e.key === "Enter"){
+            let value = text + "<br/>"
+            
+            setText(value)
+        }
     }
     return (
         <div className="post_data">
-            <button type="button" onClick={handleOpen}>
+            <ToastContainer/>
+            <button className="post_data_button" type="button" onClick={handleOpen}>
                 <CreateIcon />
             </button>
             <Modal
@@ -67,9 +80,10 @@ function Index() {
                         <h4>Dang tai noi dung cua ban</h4>
                         <div
                             suppressContentEditableWarning={true}
+                            onKeyPress={handleLineBreak}
                             id="type_text_div"
                             contentEditable="true"
-                            onInput={e => handleChangeText(e.currentTarget.textContent)} >
+                            onInput={e => handleChangeText(e)} >
                                 Bạn hãy nhập vào đây
                         </div>
                         <Dropzone
@@ -98,7 +112,6 @@ function Index() {
                         </div>
                         <button type="submit">Submit</button>
                     </form>
-
                 </Fade>
             </Modal>
         </div>

@@ -19,7 +19,9 @@ body {
     background-image: url("../image/homepage.jpg");
     height: 100%;
 }
-
+.Toastify__toast{
+    border-radius: 10px !important
+}
 .navbar {
     margin-bottom: 100px;
     width: 100%;

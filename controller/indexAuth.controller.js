@@ -77,7 +77,6 @@ exports.activationController = (req, res) => {
                     email,
                     password
                 })
-
                 user.save((err, user) => {
                     if (err) {
                         return res.status(401).json({
