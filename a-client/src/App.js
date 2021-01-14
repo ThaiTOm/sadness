@@ -39,7 +39,10 @@ function App() {
         <Route
           path="/report"
           component={Main_block} />
+
       </Switch>
+
+
     </Router>
   );
 }

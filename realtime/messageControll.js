@@ -74,37 +74,55 @@ const addUser = async ({ id, ipOfUser, len }) => {
                 }
                 return { idRoom: user.room }
             } else {
-                if (arrOfRegion[i].length > 0) {
-                    arrOfRegion[i].push(user)
-                    if (arrOfRegion[i].length % 2 === 0) {
-                        let a = arrOfRegion[i].slice(0, 2);
-                        let roomChatId = a[0].room
+                // If user of this region have more than 0 then push new user in
+                arrOfRegion[i].push(user);
+                // If that region has more than 1 people than we get that out
+                if (arrOfRegion[i].length >= 2) {
+                    // Use login here
+                    const createRoom = (a) => {
                         let name1 = a[0].id
                         let name2 = a[1].id
-                        let roomChat = {
-                            "id": roomChatId
-                        };
+                        let roomChatId = a[0].room
                         // we get first id in the room and set that id to id room
                         // get 2 items first in the array
-                        arrOfRegion[ipOfUser].splice(0, 2)
-
+                        arrOfRegion[i].splice(0, 2)
+                        // First we need to add Room Id to their account to find faster
+                        cm.add(name1, roomChatId + ",")
+                            .then(() => {
+                            })
+                            .catch(() => {
+                                cm.append(name1, roomChatId + ",")
+                            })
+                        cm.add(name2, roomChatId + ",")
+                            .then(() => {
+                            })
+                            .catch(() => {
+                                cm.append(name2, roomChatId + ",")
+                            })
                         // then move it to messSave
-                        client.rpush(name1, roomChatId)
-                        client.rpush(name2, roomChatId)
-
-                        client.expire(name1, 3600)
-                        client.expire(name2, 3600)
-
-                        client.hmset(roomChatId, "roomChatId", roomChatId)
-                        client.expire(roomChatId, 3600)
-
-                        // updateMessage(roomChat.name1, roomChat.room)
-                        // updateMessage(roomChat.name2, roomChat.room)
+                        let firstValue = [name1 + "," + name2]
+                        cm.add(roomChatId, firstValue)
+                        // client.expire(roomChatId, 36600)
                         return { idRoom: roomChatId }
                     }
+                    let a = arrOfRegion[ipOfUser];
+                    // Check if 2 people here not block each other
+                    let arr = await cm.get(a[0].id + "blackList")
 
-                    return { idRoom: user.room }
+                    for (let i = 1; i < a.length; i++) {
+                        //check if that one is not from the list
+                        if (arr === null) {
+                            let arg = [a[0], a[i]]
+                            return createRoom(arg)
+                        } else if (arr.includes(a[i].id) === false) {
+                            let arg = [a[0], a[i]]
+                            //pass data to createRoom function and return that
+                            return createRoom(arg)
+                        }
+                    }
+                    return { idRoom: user.room, yet: "yet" }
                 }
+                return { idRoom: user.room }
             }
         }
         // If no one is waiting than 
@@ -166,7 +184,7 @@ const sendImageOff = ({ room, image, userId }) => {
 const seenMessage = async ({ id, user1, user2 }) => {
     let getM = await cm.get(id)
     let arr = getM[getM.length - 1].split(",")
-    if(arr[2] === "false"){
+    if (arr[2] === "false") {
         arr[2] = "true"
         let old = [...getM]
         old[old.length - 1] = arr.join(",")

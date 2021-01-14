@@ -44,12 +44,15 @@ app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
 app.get("/", async (req, res) => {
     let ob = {
-        like: 0,
-        comment:""
+        like: 3,
+        comment: ""
     }
-    client.hgetall("a", (err, data) => {
-        return res.json(data)
+    client.sort("indices", "by", "*->like", (err) => {
+        if (err) {
+            return res.json(err)
+        }
     })
+    res.json("ok")
 })
 app.get("/delete", (req, res) => {
     cm.flush()

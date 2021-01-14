@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.post("/getIdRoom", getIdRooms)
 router.post("/contactL", listContact)
-router.post("/sendContact", sendContactRoom)
+router.get("/sendContact", sendContactRoom)
 router.post("/blockUser", setBlock)
 module.exports = router

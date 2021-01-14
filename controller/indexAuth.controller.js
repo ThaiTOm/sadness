@@ -6,6 +6,12 @@ const jwt = require("jsonwebtoken");
 const { errorHandler } = require("../helpers/dbErrorHandle");
 const sgEmail = require("@sendgrid/mail");
 const { User } = require("../models/user.models");
+const { Blog } = require("../models/blog.models")
+const date = require('date-and-time');
+const redis = require("redis");
+const clientRedis = redis.createClient();
+const promisify = require('util').promisify;
+
 sgEmail.setApiKey("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")
 
 exports.registerController = (req, res) => {
@@ -122,8 +128,8 @@ exports.loginController = (req, res) => {
                     error: "Emaail or password was wrong. Please try again"
                 })
             }
-            const token = user._id            
-            const { email, name , blockN} = user;
+            const token = user._id
+            const { email, name, blockN } = user;
             return res.json({
                 token,
                 user_email: email,
@@ -319,4 +325,41 @@ exports.facebookController = (req, res) => {
                 })
             })
     )
+}
+exports.updateController = async (req, res) => {
+    const arr = await Blog.find({}).exec()
+
+    arr.sort(function (a, b) {
+        return a.createdAt - b.createdAt
+    })
+    for (let i = 0; i < arr.length - 1; i++) {
+        let a = date.format(arr[1].createdAt, 'YYYY/MM/DD')
+        let timeA = a.split("/")
+        let b = date.format(arr[i + 1].createdAt, 'YYYY/MM/DD')
+        let timeB = b.split("/")
+        if (timeA[2] === timeB[2]) {
+            if (timeA[1] === timeB[1]) {
+                if (timeA[0] === timeA[0]) {
+                    if (arr[i].likes < arr[i + 1].likes) {
+                        let old = arr[i]
+                        arr[i] = arr[i + 1]
+                        arr[i + 1] = old
+                    }
+                }
+            }
+        }
+    }
+    Blog.deleteMany({}, (err, data) => {
+        if (err) {
+            return res.json("Bị Lỗi mongodb")
+        } else {
+            Blog.insertMany(arr, (err, result) => {
+                if (err) {
+                    return res.json("Bi loi khi insert")
+                } else {
+                    return res.json("Ok")
+                }
+            })
+        }
+    })
 }

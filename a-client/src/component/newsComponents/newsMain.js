@@ -5,6 +5,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
 import "../style/newspage.css"
 import PostBlogMain from "./postNews/postBlog"
+import ViewBlogMain from "./viewBlog/viewBlog"
 
 function NewsMain() {
     const [open, setOpen] = useState(true);
@@ -60,6 +61,7 @@ function NewsMain() {
                 </div>
                 <div className="main_news">
                     <PostBlogMain />
+                    <ViewBlogMain />
                 </div>
 
             </div>

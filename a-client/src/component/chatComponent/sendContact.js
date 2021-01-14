@@ -53,11 +53,12 @@ function SendContact(props) {
         }
     }
     const handleClickLoad = () => {
+        // console.run
         setLoad(true);
         let a = end + 10
         setEnd(a)
     }
-    const handleFileUpload =  (e) => {
+    const handleFileUpload = (e) => {
         let file = e.target.files;
         let reader = new FileReader()
         for (let i = 0; i < file.length; i++) {
@@ -71,11 +72,12 @@ function SendContact(props) {
         fileRef.current.click()
     }
     useEffect(() => {
-        axios.post("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
+        console.log("rn")
+        axios.get("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
             .then(res => {
                 setMsg(res.data)
                 setLoad(false)
-            }).catch(err => { 
+            }).catch(err => {
                 return <div>Oops, bạn hãy thử lại sau</div>
             })
     }, [id, start, end])
@@ -131,7 +133,10 @@ function SendContact(props) {
                                             ref={myRef}
                                             key={i}
                                             className="messageImage mIOther">
-                                            <img src={imgUrl}></img>
+                                            <input type="checkbox" id={i}></input>
+                                            <label for={i}>
+                                                <img src={imgUrl}></img>
+                                            </label>
                                         </li>
                                     )
                                 }
@@ -149,7 +154,6 @@ function SendContact(props) {
                                                 <div className="own_message_same_div messageLiOwnl60">
                                                     <span>{msgs}</span>
                                                 </div>
-
                                             }
                                         </li>
                                     )

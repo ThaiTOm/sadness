@@ -57,7 +57,6 @@ function Chat() {
     const HanldeClickFind = (e) => {
         if (wait !== true) {
             socket.emit("join", { id, len, ipOfUser }, (error) => {
-                console.log(error)
                 if (error === "error") {
                     setWait(true)
                 } else {
@@ -136,14 +135,26 @@ function Chat() {
                             let imgUrl = arr[1] + "," + arr[2].split(";")[0]
                             if (arr[2].split(";")[1] === id) {
                                 return (
-                                    <li className="messageImageOwn">
-                                        <img key={i} src={imgUrl}></img>
+                                    <li
+                                        ref={myRef}
+                                        key={i}
+                                        className="messageImage mIOwn">
+                                        <input type="checkbox" id={i}></input>
+                                        <label for={i}>
+                                            <img src={imgUrl}></img>
+                                        </label>
                                     </li>
                                 )
                             } else {
                                 return (
-                                    <li className="messageImageOther">
-                                        <img key={i} src={imgUrl}></img>
+                                    <li
+                                        ref={myRef}
+                                        key={i}
+                                        className="messageImage mIOther">
+                                        <input type="checkbox" id={i}></input>
+                                        <label for={i}>
+                                            <img src={imgUrl}></img>
+                                        </label>
                                     </li>
                                 )
                             }
