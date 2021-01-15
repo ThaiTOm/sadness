@@ -12,7 +12,6 @@ function NewsMain() {
     const closeNavbar = (e) => {
         setOpen(!open)
     }
-
     return (
         <div className="news_page">
             <header>
@@ -33,7 +32,7 @@ function NewsMain() {
                             { left: "0", borderLeft: "20px solid yellow", borderRight: "0" }}>
                     </div>
                     <ul >
-                        <li >
+                        <li>
                             <MessageIcon />
                             <Link to="/">Trò chuyện</Link>
                         </li>
