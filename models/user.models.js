@@ -24,9 +24,13 @@ const UserSchema = new mongoose.Schema({
         default: ""
     },
     // so lan block
-    blockN:{
+    blockN: {
         default: 0,
         type: Number
+    },
+    likes: {
+        type: Array,
+        default: []
     }
 }, { timeStamp: true })
 

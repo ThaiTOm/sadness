@@ -9,7 +9,8 @@ const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()
-
+var cache = require('memory-cache');
+var newCache = new cache.Cache();
 
 const responseTime = require("response-time");
 
@@ -57,6 +58,10 @@ app.get("/", async (req, res) => {
 app.get("/delete", (req, res) => {
     cm.flush()
     res.json("ok")
+})
+app.get("/delete/memory", (req, res) => {
+    res.json("ok")
+    newCache.clear()
 })
 
 app.use((req, res, next) => {

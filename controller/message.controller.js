@@ -1,6 +1,3 @@
-const redis = require("redis");
-const clientRedis = redis.createClient();
-const promisify = require('util').promisify;
 const { User } = require("../models/user.models");
 const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()

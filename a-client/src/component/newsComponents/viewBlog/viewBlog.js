@@ -3,22 +3,14 @@ import "../../style/viewBlog.css"
 import axios from "axios"
 import Skeleton from './Skeleton'
 import InfiniteScroll from "react-infinite-scroll-component";
+import { getCookie } from '../../../helpers/auth';
+import classnames from "classnames";
 
 function ViewBlog() {
     const [start, setStatr] = useState(0)
     const [end, setEnd] = useState(3)
     const [blog, setBlog] = useState([])
-    useEffect(() => {
-        axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end)
-            .then(async res => {
-                let a = res.data.data
-                for await (let value of a) {
-                    setBlog(a => [...a, value])
-                }
-            })
-            .catch(err => {
-            })
-    }, [start, end])
+    const id = getCookie().token
 
     const fetchData = () => {
         setTimeout(() => {
@@ -26,6 +18,34 @@ function ViewBlog() {
             setEnd(end + 3)
         }, 1500);
     }
+    const handleLike = (value) => {
+
+        axios.post("http://localhost:2704/api/news/like", { value, id })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+    useEffect(() => {
+        axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
+            .then(async res => {
+                let a = res.data.data
+                for await (let value of a) {
+                    setBlog(a => [...a, value])
+                }
+            })
+            .catch(err => {
+                return (
+                    <div>
+                        Có lỗi đả xảy ra bạn hãy thử lại sau
+                    </div>
+                )
+            })
+    }, [end])
+
+
     return (
         <div className="viewBlog">
             {blog.length === 0 && <Skeleton />}
@@ -66,22 +86,47 @@ function ViewBlog() {
                                         }
                                     </div>
                                     <div className="activities_blog">
-                                        <li className="like">
-                                            Like
+                                        {value.isLiked === true ?
+                                            <div>
+                                                <input
+                                                    defaultChecked={true}
+                                                    onClick={e => handleLike(value.idBlog)}
+                                                    type="checkbox"
+                                                    id={"like_button_label" + i} />
+                                                <label for={"like_button_label" + i} >
+                                                    <li className="like">
+                                                        Like
+                                                    </li>
+                                                </label>
+                                            </div> :
+                                            <div>
+                                                <input
+                                                    onClick={e => handleLike(value.idBlog)}
+                                                    type="checkbox"
+                                                    id={"like_button_label" + i} />
+                                                <label for={"like_button_label" + i} >
+                                                    <li className="like">
+                                                        Like
+                                                    </li>
+                                                </label>
+                                            </div>}
+                                        <div>
+                                            <li className="comment list">
+                                                Comment
                                         </li>
-                                        <li className="comment">
-                                            Comment
+                                        </div>
+                                        <div>
+                                            <li className="share list">
+                                                Share
                                         </li>
-                                        <li className="share">
-                                            Share
-                                        </li>
+                                        </div>
+
                                     </div>
                                 </div>
                             </li>
                         )
                     }) : {}
                 }
-
             </InfiniteScroll>
         </div>
     )
