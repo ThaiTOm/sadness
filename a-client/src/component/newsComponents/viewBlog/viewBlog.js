@@ -19,7 +19,6 @@ function ViewBlog() {
         }, 1500);
     }
     const handleLike = (value) => {
-
         axios.post("http://localhost:2704/api/news/like", { value, id })
             .then(res => {
                 console.log(res)
@@ -55,6 +54,7 @@ function ViewBlog() {
                 hasMore={true}
                 loader={<Skeleton />}
             >
+                {console.log(blog)}
                 {
                     blog !== undefined ? blog.map(function (value, i) {
                         return (

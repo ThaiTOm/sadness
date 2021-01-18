@@ -11,7 +11,7 @@ const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()
 var cache = require('memory-cache');
 var newCache = new cache.Cache();
-
+const date = require("date-and-time")
 const responseTime = require("response-time");
 
 const redis = require("redis");
@@ -43,17 +43,12 @@ io.on('connection', (socket) => realTimeD.index(io, socket));
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
-app.get("/", async (req, res) => {
-    let ob = {
-        like: 3,
-        comment: ""
-    }
-    client.sort("indices", "by", "*->like", (err) => {
-        if (err) {
-            return res.json(err)
-        }
-    })
-    res.json("ok")
+app.get("/", (req, res) => {
+    let now = Date.now()
+    console.log(now)
+
+
+    return res.json(now - 3600000)
 })
 app.get("/delete", (req, res) => {
     cm.flush()

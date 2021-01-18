@@ -332,23 +332,6 @@ exports.updateController = async (req, res) => {
     arr.sort(function (a, b) {
         return a.createdAt - b.createdAt
     })
-    for (let i = 0; i < arr.length - 1; i++) {
-        let a = date.format(arr[1].createdAt, 'YYYY/MM/DD')
-        let timeA = a.split("/")
-        let b = date.format(arr[i + 1].createdAt, 'YYYY/MM/DD')
-        let timeB = b.split("/")
-        if (timeA[2] === timeB[2]) {
-            if (timeA[1] === timeB[1]) {
-                if (timeA[0] === timeA[0]) {
-                    if (arr[i].likes < arr[i + 1].likes) {
-                        let old = arr[i]
-                        arr[i] = arr[i + 1]
-                        arr[i + 1] = old
-                    }
-                }
-            }
-        }
-    }
     Blog.deleteMany({}, (err, data) => {
         if (err) {
             return res.json("Bị Lỗi mongodb")

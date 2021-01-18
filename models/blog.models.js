@@ -16,6 +16,10 @@ const blogSchema = new mongoose.Schema({
     commentNumber: {
         type: Number,
         default: 0
+    },
+    createdAt: {
+        type: Number,
+        default: Date.now
     }
-}, { timestamps: true })
+})
 exports.Blog = mongoose.model("Blog", blogSchema)

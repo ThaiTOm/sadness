@@ -3,6 +3,7 @@ const client = redis.createClient()
 const promisify = require("util").promisify
 const { Blog } = require("../models/blog.models")
 const { User } = require("../models/user.models")
+const date = require('date-and-time');
 var cache = require('memory-cache');
 var newCache = new cache.Cache();
 
@@ -29,7 +30,6 @@ exports.postBlog = (req, res) => {
             }
             client.hmset(data._id.toString(), ob, (err) => {
                 if (err) {
-                    console.log(err)
                     return res.json({
                         error: "Đã xảy ra lỗi xin bạn hãy thử lại sau"
                     })
@@ -42,40 +42,88 @@ exports.postBlog = (req, res) => {
         }
     })
 }
+
 exports.viewBlog = async (req, res) => {
-    const { start, end, id } = req.query
+    let { start, end, id } = req.query
     let arrLike = newCache.get(id) || []
-    // arr is contain from most likes to later likes
-    const arr = await Blog.find({}, null, { skip: Number(start), limit: Number(end) }).exec()
-    console.log(start, end)
+    let time = Date.now()
     let data = []
-    for await (let value of arr) {
-        let idBlog = value._id.toString()
-        let isLiked = arrLike.indexOf(idBlog)
-        let promiseRedis = promisify(client.hgetall).bind(client)
-        let a = await promiseRedis(idBlog)
-        if (isLiked > -1) {
-            let newArr = {
-                isLiked: true,
-                idBlog,
-                text: JSON.parse(a.contentText),
-                image: JSON.parse(a.contentImg)
-            }
-            data.push(newArr)
-        } else {
-            let newArr = {
-                isLiked: false,
-                idBlog,
-                text: JSON.parse(a.contentText),
-                image: JSON.parse(a.contentImg)
-            }
-            data.push(newArr)
+
+    const getItem = async (gthan, lthan) => {
+        let arr = await Blog.find({ "createdAt": { $gt: gthan, $lt: lthan } }).exec()
+        arr.sort((a, b) => {
+            return b.likes - a.likes
+        })
+        return arr.slice(Number(start), Number(end))
+    }
+
+    const switchFunction = async (value) => {
+        switch (value) {
+            case "0":
+                let tenA = await getItem(time - 3600000, time)
+                return tenA
+            case "1":
+                let twenE = await getItem(time - 3600000 * 2, time - 3600000)
+                return twenE
+            case "2":
+                let thirdE = await getItem(time - 3600000 * 3, time - 3600000 * 2)
+                return thirdE
+            case "3":
+                let fourE = await getItem(time - 3600000 * 4, time - 3600000 * 3)
+                return fourE
+            case "4":
+                let fiveE = await getItem(time - 3600000 * 5, time - 3600000 * 4)
+                return fiveE
+            case "5":
+                let sixE = await getItem(time - 3600000 * 6, time - 3600000 * 5)
+                return sixE
+            case "6":
+                let sevenE = await getItem(time - 3600000 * 7, time - 3600000 * 6)
+                return sevenE
+            default:
+
+                let e = await Blog.find({}, null, { skip: Number(start), limit: Number(end) }).exec()
+                return e
         }
     }
-    return res.json({
-        data: data
-    })
+    let arr = []
+    for (let i = 0; i < 8; i++) {
+        let wait = await switchFunction(i.toString())
+        if (wait.length > 0) {
+            arr = arr.concat(wait)
+            for await (let value of arr) {
+                let idBlog = value._id.toString()
+                let isLiked = arrLike.indexOf(idBlog)
+                let promiseRedis = promisify(client.hgetall).bind(client)
+                let a = await promiseRedis(idBlog)
+                if (isLiked > -1) {
+                    let newArr = {
+                        likes: value.likes,
+                        isLiked: true,
+                        idBlog,
+                        text: JSON.parse(a.contentText),
+                        image: JSON.parse(a.contentImg)
+                    }
+                    data.push(newArr)
+                } else {
+                    let newArr = {
+                        likes: value.likes,
+                        isLiked: false,
+                        idBlog,
+                        text: JSON.parse(a.contentText),
+                        image: JSON.parse(a.contentImg)
+                    }
+                    data.push(newArr)
+                }
+            }
+            return res.json({
+                data: data
+            })
+
+        }
+    }
 }
+
 exports.likeBlog = (req, res) => {
     // id is id of the user, value is the id of blog
     const { id, value } = req.body
