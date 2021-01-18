@@ -93,7 +93,7 @@ exports.viewBlog = async (req, res) => {
                 return e
         }
     }
-
+    let value = []
     const ret = async (ed) => {
         let arr = await switchFunction(ed)
         if (arr.length > 0) {

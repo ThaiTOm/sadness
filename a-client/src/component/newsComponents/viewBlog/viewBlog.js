@@ -18,15 +18,7 @@ function ViewBlog() {
             setEnd(end + 3)
         }, 1500);
     }
-    const handleLike = (value) => {
-        axios.post("http://localhost:2704/api/news/like", { value, id })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
             .then(async res => {
@@ -43,7 +35,51 @@ function ViewBlog() {
                 )
             })
     }, [end])
-
+    const SeeLike = (cb) => {
+        const { value, i } = cb.props
+        console.log(cb)
+        const [like, setLike] = useState(value.likes)
+        const handleLike = (data) => {
+            setLike(like + 1)
+            axios.post("http://localhost:2704/api/news/like", { data, id })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+        return (
+            <>
+                {
+                    value.isLiked === true ?
+                        <div>
+                            <input
+                                defaultChecked={true}
+                                onClick={e => handleLike(value.idBlog)}
+                                type="checkbox"
+                                id={"like_button_label" + i} />
+                            <label for={"like_button_label" + i} >
+                                <li className="like">
+                                    {like} Like
+                        </li>
+                            </label>
+                        </div> :
+                        <div>
+                            <input
+                                onClick={e => handleLike(value.idBlog)}
+                                type="checkbox"
+                                id={"like_button_label" + i} />
+                            <label for={"like_button_label" + i} >
+                                <li className="like">
+                                    {like} Like
+                        </li>
+                            </label>
+                        </div>
+                }
+            </>
+        )
+    }
 
     return (
         <div className="viewBlog">
@@ -54,7 +90,6 @@ function ViewBlog() {
                 hasMore={true}
                 loader={<Skeleton />}
             >
-                {console.log(blog)}
                 {
                     blog !== undefined ? blog.map(function (value, i) {
                         return (
@@ -93,30 +128,7 @@ function ViewBlog() {
                                         }
                                     </div>
                                     <div className="activities_blog">
-                                        {value.isLiked === true ?
-                                            <div>
-                                                <input
-                                                    defaultChecked={true}
-                                                    onClick={e => handleLike(value.idBlog)}
-                                                    type="checkbox"
-                                                    id={"like_button_label" + i} />
-                                                <label for={"like_button_label" + i} >
-                                                    <li className="like">
-                                                        Like
-                                                    </li>
-                                                </label>
-                                            </div> :
-                                            <div>
-                                                <input
-                                                    onClick={e => handleLike(value.idBlog)}
-                                                    type="checkbox"
-                                                    id={"like_button_label" + i} />
-                                                <label for={"like_button_label" + i} >
-                                                    <li className="like">
-                                                        Like
-                                                    </li>
-                                                </label>
-                                            </div>}
+                                        <SeeLike props={{ value, i }} />
                                         <div>
                                             <li className="comment list">
                                                 Comment
