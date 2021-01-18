@@ -123,3 +123,33 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: center;
 }
+
+.image-blog {
+    margin-bottom: 10px
+}
+
+.image-blog .one img {
+    width: 100%;
+    height: 400px;
+}
+
+.image-blog .two, .image-blog .three .two {
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-blog .two img {
+    width: 49.9%;
+    height: 400px;
+}
+
+.image-blog .three .two img {
+    height: 300px;
+    width: 49.9%;
+}
+
+.image-blog .three img {
+    width: 100%;
+    height: 300px;
+    padding-top: 2px;
+}

@@ -74,11 +74,18 @@ function ViewBlog() {
                                                     <img src={value.image[0]} />
                                                 </div>
                                                 : value.image.length === 2 ?
-                                                    <div>
+                                                    <div className="two">
                                                         <img src={value.image[0]}></img>
+                                                        <img src={value.image[1]}></img>
                                                     </div>
                                                     : value.image.length >= 3 ?
-                                                        <div>
+                                                        <div className="three">
+                                                            <div className="two">
+                                                                <img src={value.image[0]}></img>
+                                                                <img src={value.image[1]}></img>
+                                                            </div>
+
+                                                            <img src={value.image[2]}></img>
                                                         </div>
                                                         : value.image.length === 0 ?
                                                             <div>

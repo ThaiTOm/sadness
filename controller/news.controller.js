@@ -44,54 +44,61 @@ exports.postBlog = (req, res) => {
 }
 
 exports.viewBlog = async (req, res) => {
-    let { start, end, id } = req.query
-    let arrLike = newCache.get(id) || []
-    let time = Date.now()
-    let data = []
-
+    var { start, end, id } = req.query
+    start = Number(start)
+    end = Number(end)
+    var arrLike = newCache.get(id) || []
+    var time = Date.now()
+    var data = []
     const getItem = async (gthan, lthan) => {
         let arr = await Blog.find({ "createdAt": { $gt: gthan, $lt: lthan } }).exec()
         arr.sort((a, b) => {
             return b.likes - a.likes
         })
-        return arr.slice(Number(start), Number(end))
+        if (start > arr.length) {
+            return []
+        }
+        if (end > arr.length) {
+            return arr.slice(Number(start), arr.length)
+        } else {
+            return arr.slice(Number(start), Number(end))
+        }
     }
 
     const switchFunction = async (value) => {
         switch (value) {
-            case "0":
+            case 0:
                 let tenA = await getItem(time - 3600000, time)
                 return tenA
-            case "1":
+            case 1:
                 let twenE = await getItem(time - 3600000 * 2, time - 3600000)
                 return twenE
-            case "2":
+            case 2:
                 let thirdE = await getItem(time - 3600000 * 3, time - 3600000 * 2)
                 return thirdE
-            case "3":
+            case 3:
                 let fourE = await getItem(time - 3600000 * 4, time - 3600000 * 3)
                 return fourE
-            case "4":
+            case 4:
                 let fiveE = await getItem(time - 3600000 * 5, time - 3600000 * 4)
                 return fiveE
-            case "5":
+            case 5:
                 let sixE = await getItem(time - 3600000 * 6, time - 3600000 * 5)
                 return sixE
-            case "6":
+            case 6:
                 let sevenE = await getItem(time - 3600000 * 7, time - 3600000 * 6)
                 return sevenE
             default:
-
                 let e = await Blog.find({}, null, { skip: Number(start), limit: Number(end) }).exec()
                 return e
         }
     }
-    let arr = []
-    for (let i = 0; i < 8; i++) {
-        let wait = await switchFunction(i.toString())
-        if (wait.length > 0) {
-            arr = arr.concat(wait)
+
+    const ret = async (ed) => {
+        let arr = await switchFunction(ed)
+        if (arr.length > 0) {
             for await (let value of arr) {
+                // console.log(arr)
                 let idBlog = value._id.toString()
                 let isLiked = arrLike.indexOf(idBlog)
                 let promiseRedis = promisify(client.hgetall).bind(client)
@@ -119,8 +126,29 @@ exports.viewBlog = async (req, res) => {
             return res.json({
                 data: data
             })
-
+        } else {
+            //if in last 2 hours does not have any new post then plush more to get
+            if (ed > 5) {
+                return res.json({
+                    end: "uh"
+                })
+            } else {
+                ret(ed + 1)
+            }
         }
+    }
+    if (0 <= start < 10) {
+        return ret(0)
+    } else if (10 <= start < 20) {
+        return ret(1)
+    } else if (20 <= start < 30) {
+        return ret(2)
+    } else if (30 <= start < 40) {
+        return ret(3)
+    } else if (40 <= start < 50) {
+        return ret(4)
+    } else if (50 <= start < 60) {
+        return ret(5)
     }
 }
 
@@ -179,8 +207,5 @@ exports.likeBlog = (req, res) => {
             newCache.put(id, old)
             incData()
         }
-
-
     }
-
 }

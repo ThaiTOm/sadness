@@ -326,23 +326,3 @@ exports.facebookController = (req, res) => {
             })
     )
 }
-exports.updateController = async (req, res) => {
-    const arr = await Blog.find({}).exec()
-
-    arr.sort(function (a, b) {
-        return a.createdAt - b.createdAt
-    })
-    Blog.deleteMany({}, (err, data) => {
-        if (err) {
-            return res.json("Bị Lỗi mongodb")
-        } else {
-            Blog.insertMany(arr, (err, result) => {
-                if (err) {
-                    return res.json("Bi loi khi insert")
-                } else {
-                    return res.json("Ok")
-                }
-            })
-        }
-    })
-}
