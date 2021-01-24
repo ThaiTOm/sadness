@@ -72,7 +72,6 @@ function SendContact(props) {
         fileRef.current.click()
     }
     useEffect(() => {
-        console.log("rn")
         axios.get("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
             .then(res => {
                 setMsg(res.data)

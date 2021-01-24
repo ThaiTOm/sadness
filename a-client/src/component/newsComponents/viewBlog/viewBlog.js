@@ -4,14 +4,32 @@ import axios from "axios"
 import Skeleton from './Skeleton'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getCookie } from '../../../helpers/auth';
-import classnames from "classnames";
+import TextField from '@material-ui/core/TextField';
+import socketApp from '../../../socket';
+import { ToastContainer, toast } from "react-toastify";
+import SeeLike from '../exNews/seeLike';
+import LikeComment from '../exOne/likeComment';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
 function ViewBlog() {
+    let socket = socketApp.getSocket();
     const [start, setStatr] = useState(0)
     const [end, setEnd] = useState(3)
     const [blog, setBlog] = useState([])
+    const [comment, setComment] = useState("")
     const id = getCookie().token
 
+    const handleSubmit = (e, value) => {
+        e.preventDefault()
+        setComment("")
+        socket.emit("comment", { idRecieve: value.idBlog, idSent: id, value: comment }, (error) => {
+            if (error === "error") {
+                toast.error("Có lỗi đó xảy ra bạn hãy thử lại sau")
+            } else {
+                toast.success("Yêu cầu của bạn đã được thực hiện")
+            }
+        })
+    }
     const fetchData = () => {
         setTimeout(() => {
             setStatr(start + 3)
@@ -35,54 +53,9 @@ function ViewBlog() {
                 )
             })
     }, [end])
-    const SeeLike = (cb) => {
-        const { value, i } = cb.props
-        console.log(cb)
-        const [like, setLike] = useState(value.likes)
-        const handleLike = (data) => {
-            setLike(like + 1)
-            axios.post("http://localhost:2704/api/news/like", { data, id })
-                .then(res => {
-                    console.log(res)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        }
-        return (
-            <>
-                {
-                    value.isLiked === true ?
-                        <div>
-                            <input
-                                defaultChecked={true}
-                                onClick={e => handleLike(value.idBlog)}
-                                type="checkbox"
-                                id={"like_button_label" + i} />
-                            <label for={"like_button_label" + i} >
-                                <li className="like">
-                                    {like} Like
-                        </li>
-                            </label>
-                        </div> :
-                        <div>
-                            <input
-                                onClick={e => handleLike(value.idBlog)}
-                                type="checkbox"
-                                id={"like_button_label" + i} />
-                            <label for={"like_button_label" + i} >
-                                <li className="like">
-                                    {like} Like
-                        </li>
-                            </label>
-                        </div>
-                }
-            </>
-        )
-    }
-
     return (
         <div className="viewBlog">
+            <ToastContainer />
             {blog.length === 0 && <Skeleton />}
             <InfiniteScroll
                 dataLength={blog.length}
@@ -139,7 +112,36 @@ function ViewBlog() {
                                                 Share
                                         </li>
                                         </div>
+                                    </div>
+                                    <div className="comment_blog_view">
+                                        {
+                                            value.comment.map(function (data, i) {
+                                                return <div
+                                                    key={i}
+                                                    className="comment_blog"
+                                                >
+                                                    <div className="content">
+                                                        <img src="./demo.jpeg"></img>
+                                                        <span>{data.value}</span>
+                                                    </div>
+                                                    <div className="activities">
+                                                        <LikeComment props={{ data, i, value: value.idBlog }} />
+                                                        <div className="comment list">
+                                                            <li >
+                                                                <ChatBubbleOutlineIcon /> comment
+                                                            </li>
+                                                        </div>
 
+                                                    </div>
+                                                </div>
+                                            })
+                                        }
+                                        <form onSubmit={e => { handleSubmit(e, value) }}>
+                                            <TextField
+                                                onChange={e => setComment(e.target.value)}
+                                                value={comment}
+                                                label="Comment" />
+                                        </form>
                                     </div>
                                 </div>
                             </li>

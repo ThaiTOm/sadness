@@ -56,7 +56,7 @@ function Chat() {
     }
     const HanldeClickFind = (e) => {
         if (wait !== true) {
-            socket.emit("join", { id, len, ipOfUser }, (error) => {
+            socket.emit("joinChat", { id, len, ipOfUser }, (error) => {
                 if (error === "error") {
                     setWait(true)
                 } else {

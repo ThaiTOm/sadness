@@ -1,19 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MessageIcon from '@material-ui/icons/Message';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import HelpIcon from '@material-ui/icons/Help';
 import "../style/newspage.css"
-import PostBlogMain from "./postNews/postBlog"
+import PostBlogMain from "./exNews/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
+import socketApp from "../../socket"
+import { getCookie } from "../../helpers/auth"
+import { ToastContainer, toast } from "react-toastify";
 
 function NewsMain() {
+    const id = getCookie().token
+    let socket = socketApp.getSocket();
     const [open, setOpen] = useState(true);
     const closeNavbar = (e) => {
         setOpen(!open)
     }
+    useEffect(() => {
+        socket.emit("join", { id })
+    }, [])
+    useEffect(() => {
+        socket.on("activities", msg => {
+            console.log(msg.type)
+            toast.success(msg.type)
+        })
+    })
     return (
         <div className="news_page">
+            <ToastContainer />
             <header>
                 <div className="navbar_auth">
                     <p> Recal </p>

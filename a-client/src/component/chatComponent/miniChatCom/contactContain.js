@@ -33,7 +33,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
     }
     useEffect(() => {
         //message contain when another not sending and that is the last time when message send
-        socket.emit("joinBack", { idRoom })
+        socket.emit("joinChatBack", { idRoom })
         if (arr[1] === id) {
             let a = decryptWithAES(arr[0])
             if (a.length > 0) {

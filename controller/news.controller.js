@@ -7,6 +7,7 @@ const date = require('date-and-time');
 var cache = require('memory-cache');
 var newCache = new cache.Cache();
 
+
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
     let arr = text.split(/\r\n|\r|\n/)
@@ -48,12 +49,19 @@ exports.viewBlog = async (req, res) => {
     start = Number(start)
     end = Number(end)
     var arrLike = newCache.get(id) || []
-    var time = Date.now()
+    var time = date.format(new Date(), 'hh:A').split(":")
+    if (time[1] === "PM") {
+        time = Number(time[0]) + 12
+    } else {
+        time = Number(time[0])
+    }
     var data = []
     const getItem = async (gthan, lthan) => {
         let arr = await Blog.find({ "createdAt": { $gt: gthan, $lt: lthan } }).exec()
         arr.sort((a, b) => {
-            return b.likes - a.likes
+            let valueA = a.likes + a.commentNumber
+            let valueB = b.likes + b.commentNumber
+            return valueB - valueA
         })
         if (start > arr.length) {
             return []
@@ -66,50 +74,61 @@ exports.viewBlog = async (req, res) => {
     }
 
     const switchFunction = async (value) => {
+        let x = 1
         switch (value) {
             case 0:
-                let tenA = await getItem(time - 3600000, time)
+                let tenA = await getItem(time - x, time)
                 return tenA
             case 1:
-                let twenE = await getItem(time - 3600000 * 2, time - 3600000)
+                let twenE = await getItem(time - x * 2, time - x)
                 return twenE
             case 2:
-                let thirdE = await getItem(time - 3600000 * 3, time - 3600000 * 2)
+                let thirdE = await getItem(time - x * 3, time - x * 2)
                 return thirdE
             case 3:
-                let fourE = await getItem(time - 3600000 * 4, time - 3600000 * 3)
+                let fourE = await getItem(time - x * 4, time - x * 3)
                 return fourE
             case 4:
-                let fiveE = await getItem(time - 3600000 * 5, time - 3600000 * 4)
+                let fiveE = await getItem(time - x * 5, time - x * 4)
                 return fiveE
             case 5:
-                let sixE = await getItem(time - 3600000 * 6, time - 3600000 * 5)
+                let sixE = await getItem(time - x * 6, time - x * 5)
                 return sixE
             case 6:
-                let sevenE = await getItem(time - 3600000 * 7, time - 3600000 * 6)
+                let sevenE = await getItem(time - x * 7, time - x * 6)
                 return sevenE
             default:
-                let e = await Blog.find({}, null, { skip: Number(start), limit: Number(end) }).exec()
-                return e
+                let e = await Blog.find({}, null).exec()
+                e.sort((a, b) => {
+                    return b.likes - a.likes
+                })
+                return e.slice(Number(start), Number(end))
         }
     }
-    let value = []
     const ret = async (ed) => {
         let arr = await switchFunction(ed)
         if (arr.length > 0) {
             for await (let value of arr) {
-                // console.log(arr)
                 let idBlog = value._id.toString()
+                let commentTop = value.comment
+                commentTop.sort((a, b) => {
+                    return b.likes - a.likes
+                })
+                commentTop = commentTop.slice(0, 3)
                 let isLiked = arrLike.indexOf(idBlog)
                 let promiseRedis = promisify(client.hgetall).bind(client)
                 let a = await promiseRedis(idBlog)
                 if (isLiked > -1) {
+                    // commentTop.map(function(a){
+                    //     cacheDisk.has
+                    // })
                     let newArr = {
                         likes: value.likes,
                         isLiked: true,
                         idBlog,
                         text: JSON.parse(a.contentText),
-                        image: JSON.parse(a.contentImg)
+                        image: JSON.parse(a.contentImg),
+                        comment: commentTop
                     }
                     data.push(newArr)
                 } else {
@@ -118,7 +137,8 @@ exports.viewBlog = async (req, res) => {
                         isLiked: false,
                         idBlog,
                         text: JSON.parse(a.contentText),
-                        image: JSON.parse(a.contentImg)
+                        image: JSON.parse(a.contentImg),
+                        comment: commentTop
                     }
                     data.push(newArr)
                 }
@@ -128,11 +148,12 @@ exports.viewBlog = async (req, res) => {
             })
         } else {
             //if in last 2 hours does not have any new post then plush more to get
-            if (ed > 5) {
+            if (ed > 8) {
                 return res.json({
                     end: "uh"
                 })
             } else {
+
                 ret(ed + 1)
             }
         }
@@ -149,63 +170,5 @@ exports.viewBlog = async (req, res) => {
         return ret(4)
     } else if (50 <= start < 60) {
         return ret(5)
-    }
-}
-
-exports.likeBlog = (req, res) => {
-    // id is id of the user, value is the id of blog
-    const { id, value } = req.body
-    // increment likes in mongodb
-    let incData = () => {
-        Blog.findOneAndUpdate({ _id: value }, { $inc: { "likes": 1 } }).exec((err, result) => {
-            if (err) {
-                return res.json({
-                    error: "Some thing went wrong, please try again"
-                })
-            } else {
-                User.updateOne({ _id: id }, { $push: { "likes": value } }, (err, data) => {
-                    if (err) {
-                        return res.json({
-                            error: "Some thing went wrong, please try again"
-                        })
-                    } else {
-                        return 0
-                    }
-                })
-            }
-        })
-    }
-    let cacheData = newCache.get(id)
-    if (cacheData === null) {
-        newCache.put(id, [value], 31104000)
-        incData()
-    } else {
-        let old = [...cacheData]
-        let index = old.indexOf(value)
-        if (index > -1) {
-            old.splice(index, 1)
-            newCache.put(id, old)
-            Blog.findOneAndUpdate({ _id: value }, { $inc: { "likes": -1 } }).exec((err, result) => {
-                if (err) {
-                    return res.json({
-                        error: "Some thing went wrong, please try again"
-                    })
-                } else {
-                    User.updateOne({ _id: id }, { $push: { "likes": value } }, (err, data) => {
-                        if (err) {
-                            return res.json({
-                                error: "Some thing went wrong, please try again"
-                            })
-                        } else {
-                            return 0
-                        }
-                    })
-                }
-            })
-        } else {
-            old.push(value)
-            newCache.put(id, old)
-            incData()
-        }
     }
 }

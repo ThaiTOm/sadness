@@ -1,8 +1,9 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff } = require("./messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff } = require("./controlleRealTime/messageControll");
+const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
 
 module.exports = {
     index: function (io, socket) {
-        socket.on('join', async ({ id, len, ipOfUser }, callback) => {
+        socket.on('joinChat', async ({ id, len, ipOfUser }, callback) => {
             const { yet, have, idRoom } = await addUser({ id, len, ipOfUser });
             if (yet) {
                 callback("error")
@@ -17,7 +18,7 @@ module.exports = {
             socket.join(idRoom)
             callback();
         });
-        socket.on("joinBack", ({ idRoom }) => {
+        socket.on("joinChatBack", ({ idRoom }) => {
             socket.join(idRoom)
         })
 
@@ -26,7 +27,7 @@ module.exports = {
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
-            io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage,idRoom:roomMessage });
+            io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage, idRoom: roomMessage });
 
             callback();
         });
@@ -34,17 +35,46 @@ module.exports = {
             const { roomMessage, messageMessage, memberMessage } = sendMessageOff({ room, message, id: userId })
             io.to(roomMessage).emit("message", { user: memberMessage, text: messageMessage, idRoom: room })
         });
-        socket.on("sendImageOff",({room,image,userId})=>{
-            const {roomMessage, message, member} = sendImageOff({room,image,userId});
-            io.to(room).emit("message", {user:member, image:message, idRoom:room})
-            console.log(room)
+        socket.on("sendImageOff", ({ room, image, userId }) => {
+            const { roomMessage, message, member } = sendImageOff({ room, image, userId });
+            io.to(room).emit("message", { user: member, image: message, idRoom: room })
         })
-        socket.on("seenMessage", ({id,user1,user2})=>{
-             seenMessage({id,user1,user2})
+        socket.on("seenMessage", ({ id, user1, user2 }) => {
+            seenMessage({ id, user1, user2 })
         })
-        // socket.on("addF", ({ id }, callback) => {
-        //     const { room, req, res, time } = addFriend({ id })
-        //     io.to(room).emit("receive", { time: time })
-        // })
+        socket.on("join", ({ id }) => {
+            socket.join(id)
+        })
+        socket.on("comment", async ({ idRecieve, idSent, value }, callback) => {
+            const { user, error } = await comment({ idRecieve, idSent, value })
+            if (error) {
+                return callback(error)
+            } if (user) {
+                callback("ok")
+                io.to(user.user).emit("activities", { type: "Có người đã bình luận về bài viết cuả bạn" })
+            } else {
+                callback("ok")
+            }
+        })
+        socket.on("like", async ({ value, id }, callback) => {
+            const { error, message, user } = await likeBlog({ value, id })
+            if (error) {
+                return callback("error")
+            } else if (message) {
+                callback("message")
+                io.to(user).emit("activities", { type: "Có người đã thích bài viết của bạn" })
+            }
+        })
+        socket.on("likeCmt", async ({ value, id, idComment }, callback) => {
+            const { error, message, user } = await likeCmt({ value, id, idComment })
+            if (error) {
+                return callback("Đã có lỗi xảy ra bạn hãy thử lại sau")
+            } if (message === "exists") {
+                return callback(message)
+            } if (user) {
+                io.to(user).emit("activities", { type: "Có người đã thích bình luận của bạn" })
+            }
+        })
     }
 }
+
