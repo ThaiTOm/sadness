@@ -14,7 +14,6 @@ const addUser = async ({ id, ipOfUser, len }) => {
             return { have: "have" }
         }
     }
-
     // Create new variable that handle name and room of someone
     const user = { id: id, room: id + len };
     const createRoom = (a, pos) => {

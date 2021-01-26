@@ -50,6 +50,7 @@ module.exports = {
             if (error) {
                 return callback(error)
             } if (user) {
+                console.log(user.user)
                 callback("ok")
                 io.to(user.user).emit("activities", { type: "Có người đã bình luận về bài viết cuả bạn" })
             } else {
@@ -67,7 +68,7 @@ module.exports = {
         })
         socket.on("likeCmt", async ({ value, id, idComment }, callback) => {
             const { error, message, user } = await likeCmt({ value, id, idComment })
-            if (error) {
+            if (error === false) {
                 return callback("Đã có lỗi xảy ra bạn hãy thử lại sau")
             } if (message === "exists") {
                 return callback(message)

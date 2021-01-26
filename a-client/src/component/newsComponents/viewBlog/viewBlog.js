@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import "../../style/viewBlog.css"
 import axios from "axios"
-import Skeleton from './Skeleton'
+import Skeleton from "../exNews/Skeleton"
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getCookie } from '../../../helpers/auth';
 import TextField from '@material-ui/core/TextField';
@@ -10,10 +10,12 @@ import { ToastContainer, toast } from "react-toastify";
 import SeeLike from '../exNews/seeLike';
 import LikeComment from '../exOne/likeComment';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import { Link } from "react-router-dom"
+
 
 function ViewBlog() {
     let socket = socketApp.getSocket();
-    const [start, setStatr] = useState(0)
+    const [start, setStart] = useState(0)
     const [end, setEnd] = useState(3)
     const [blog, setBlog] = useState([])
     const [comment, setComment] = useState("")
@@ -25,14 +27,12 @@ function ViewBlog() {
         socket.emit("comment", { idRecieve: value.idBlog, idSent: id, value: comment }, (error) => {
             if (error === "error") {
                 toast.error("Có lỗi đó xảy ra bạn hãy thử lại sau")
-            } else {
-                toast.success("Yêu cầu của bạn đã được thực hiện")
             }
         })
     }
     const fetchData = () => {
         setTimeout(() => {
-            setStatr(start + 3)
+            setStart(start + 3)
             setEnd(end + 3)
         }, 1500);
     }
@@ -104,8 +104,10 @@ function ViewBlog() {
                                         <SeeLike props={{ value, i }} />
                                         <div>
                                             <li className="comment list">
-                                                Comment
-                                        </li>
+                                                <Link to={"/posts/id=" + value.idBlog}>
+                                                    comment
+                                                </Link>
+                                            </li>
                                         </div>
                                         <div>
                                             <li className="share list">
@@ -131,7 +133,6 @@ function ViewBlog() {
                                                                 <ChatBubbleOutlineIcon /> comment
                                                             </li>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             })

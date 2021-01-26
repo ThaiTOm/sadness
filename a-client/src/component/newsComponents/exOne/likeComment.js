@@ -15,8 +15,7 @@ const LikeComment = (props) => {
     const handleLike = () => {
         setLike(like + 1)
         setIsLiked(true)
-        socket.emit("likeCmt", { value: value, id: idUser, idComment: data.id }, callback => {
-            console.log(callback)
+        socket.emit("likeCmt", { value, id: idUser, idComment: data.id }, callback => {
             if (callback === "error") {
                 setLike(like - 1)
                 setIsLiked(false)

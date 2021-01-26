@@ -4,9 +4,9 @@ const promisify = require("util").promisify
 const { Blog } = require("../models/blog.models")
 const { User } = require("../models/user.models")
 const date = require('date-and-time');
-var cache = require('memory-cache');
-var newCache = new cache.Cache();
-
+const { nodeCache, newCache } = require("../nodeCache");
+// newCache save post like
+// cacheNode save comment like
 
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
@@ -114,21 +114,37 @@ exports.viewBlog = async (req, res) => {
                 commentTop.sort((a, b) => {
                     return b.likes - a.likes
                 })
-                commentTop = commentTop.slice(0, 3)
                 let isLiked = arrLike.indexOf(idBlog)
                 let promiseRedis = promisify(client.hgetall).bind(client)
                 let a = await promiseRedis(idBlog)
+                var comment = []
+                let arr = await nodeCache.get(id) || ""
+                arr = arr.split(",")
+                for await (let value of commentTop) {
+                    if (arr.indexOf(value.id) > -1) {
+                        let newArr = {
+                            likes: value.likes,
+                            isLiked: true,
+                            id: value.id
+                        }
+                        comment.push(newArr)
+                    } else {
+                        let newArr = {
+                            likes: value.likes,
+                            isLiked: false,
+                            id: value.id
+                        }
+                        comment.push(newArr)
+                    }
+                }
                 if (isLiked > -1) {
-                    // commentTop.map(function(a){
-                    //     cacheDisk.has
-                    // })
                     let newArr = {
                         likes: value.likes,
                         isLiked: true,
                         idBlog,
                         text: JSON.parse(a.contentText),
                         image: JSON.parse(a.contentImg),
-                        comment: commentTop
+                        comment: comment.slice(0, 3)
                     }
                     data.push(newArr)
                 } else {
@@ -138,7 +154,7 @@ exports.viewBlog = async (req, res) => {
                         idBlog,
                         text: JSON.parse(a.contentText),
                         image: JSON.parse(a.contentImg),
-                        comment: commentTop
+                        comment: comment.slice(0, 3)
                     }
                     data.push(newArr)
                 }
@@ -171,4 +187,69 @@ exports.viewBlog = async (req, res) => {
     } else if (50 <= start < 60) {
         return ret(5)
     }
+}
+exports.viewOne = async (req, res) => {
+    const { id, user } = req.query
+    let value = await Blog.findById({ "_id": id }).exec()
+    let arr = newCache.get(user) || []
+    let createdAt = new Date(value.createdAt);
+    let d = new Date()
+    let now = d.getTime()
+    // hl === how long
+    let hl = now - createdAt
+    hl = new Date(hl);
+    hl = date.format(hl, 'DD-MM-YYYY');
+    if (arr.indexOf(id) > -1) {
+        let promiseRedis = promisify(client.hgetall).bind(client)
+        let a = await promiseRedis(id)
+        let data = {
+            isLiked: true,
+            text: JSON.parse(a.contentText),
+            img: JSON.parse(a.contentImg),
+            likes: value.likes,
+            time: hl,
+            idBlog: value.id
+        }
+        return res.json(data)
+    } else {
+        let promiseRedis = promisify(client.hgetall).bind(client)
+        let a = await promiseRedis(id)
+        let data = {
+            isLiked: false,
+            text: JSON.parse(a.contentText),
+            img: JSON.parse(a.contentImg),
+            likes: value.likes,
+            time: hl,
+            idBlog: value.id
+        }
+        return res.json(data)
+    }
+}
+exports.viewComment = async (req, res) => {
+    const { start, id, blog } = req.query
+    let commentArr = await Blog.findById({ "_id": blog }, "comment", { skip: Number(start), limit: 10 }).exec()
+    let likeArr = await nodeCache.get(id) || []
+    let arr = []
+    for await (let value of commentArr.comment) {
+        if (likeArr.indexOf(value.id) > -1) {
+            let data = {
+                id: value.id,
+                likes: value.likes,
+                isLiked: true,
+                data: value.value
+            }
+            arr.push(data)
+        } else {
+            let data = {
+                id: value.id,
+                likes: value.likes,
+                isLiked: false,
+                data: value.value
+            }
+            arr.push(data)
+        }
+    }
+    res.json({
+        data: arr
+    })
 }

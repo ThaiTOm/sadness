@@ -7,6 +7,7 @@ import HomePage from './component/HomePage';
 import Chat from './component/chatComponent/chat';
 import NewsMain from './component/newsComponents/newsMain';
 import Main_block from './component/blockComponent/main.block';
+import ViewOneBlog from './component/newsComponents/viewBlog/viewOneBlog';
 
 function App() {
   return (
@@ -39,10 +40,11 @@ function App() {
         <Route
           path="/report"
           component={Main_block} />
-
+        <Route
+          path="/posts/id=:id"
+          render={props => <ViewOneBlog {...props} />}
+        />
       </Switch>
-
-
     </Router>
   );
 }

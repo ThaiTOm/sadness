@@ -9,7 +9,6 @@ import axios from "axios";
 import { getCookie } from '../../../helpers/auth';
 import { ToastContainer, toast } from "react-toastify";
 
-
 function Index() {
     const [text, setText] = useState("")
     const [file, setFile] = useState([])
@@ -27,10 +26,10 @@ function Index() {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:2704/api/news/post", { text, file,id })
+        axios.post("http://localhost:2704/api/news/post", { text, file, id })
             .then(data => {
                 toast.success("Yêu cầu của bạn đã được thực hiện")
-                handleClose( )
+                handleClose()
             }).catch(err => {
                 console.log(err)
             })
@@ -49,16 +48,16 @@ function Index() {
     const handleChangeText = e => {
         setText(e.target.innerText)
     }
-    const handleLineBreak = e =>{
-        if(e.key === "Enter"){
+    const handleLineBreak = e => {
+        if (e.key === "Enter") {
             let value = text + "<br/>"
-            
+
             setText(value)
         }
     }
     return (
         <div className="post_data">
-            <ToastContainer/>
+            <ToastContainer />
             <button className="post_data_button" type="button" onClick={handleOpen}>
                 <CreateIcon />
             </button>
@@ -84,7 +83,7 @@ function Index() {
                             id="type_text_div"
                             contentEditable="true"
                             onInput={e => handleChangeText(e)} >
-                                Bạn hãy nhập vào đây
+                            Bạn hãy nhập vào đây
                         </div>
                         <Dropzone
                             onDrop={acceptedFiles => dragFile(acceptedFiles)}>

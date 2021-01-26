@@ -105,7 +105,8 @@ input[type="checkbox"] {
 }
 
 :checked+label {
-    background-color: rgb(48, 179, 226) !important
+    background-color: rgb(48, 179, 226) !important;
+    border-radius: 10px;
 }
 
 .activities_blog label {
@@ -158,11 +159,7 @@ input[type="checkbox"] {
     padding-bottom: 20px;
 }
 
-.comment_blog_view .MuiInputBase-input {
-    color: black !important
-}
-
-.comment_blog_view .MuiFormLabel-root {
+.comment_blog_view .MuiFormLabel-root, .comment_blog_view .MuiInputBase-input {
     color: black !important
 }
 
@@ -194,7 +191,6 @@ input[type="checkbox"] {
 
 .like, .comment li {
     display: flex;
-    align-items: center;
 }
 
 .like .MuiSvgIcon-root, .comment .MuiSvgIcon-root {
@@ -203,4 +199,186 @@ input[type="checkbox"] {
 
 .like svg, .comment li svg {
     padding-right: 5px;
+}
+
+.post_viewing_div {
+    margin-top: 5%;
+    height: 100%;
+    width: 90%;
+}
+
+.post_viewing .flex {
+    flex: 0 50%;
+}
+
+.slide-container {
+    width: 54%;
+    height: 100%;
+}
+
+.slide-container img {
+    width: 665px !important;
+    height: 497px !important;
+}
+
+.post_viewing .content {
+    background-color: burlywood;
+    width: 60%;
+    height: 500px;
+    padding-left: 10px;
+    overflow-y: scroll;
+}
+
+.post_viewing .content .content_div {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.post_viewing .content .content_div img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.extension_blog {
+    display: flex;
+}
+
+.extension_blog .ex {
+    flex: 0 0 31.333333%;
+    background-color: whitesmoke;
+    margin: 5px 11px 10px 0;
+    border-radius: 10px;
+}
+
+.extension_blog .ex .like {
+    padding: 10px 61px;
+}
+
+/* Comment text field */
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: 30px;
+}
+
+#txtSearch {
+    -webkit-appearance: none;
+    margin-top: 30px;
+    box-sizing: border-box;
+    border-radius: 40px;
+    font-size: 14px;
+    border: 2px solid #00B8FF;
+    background: none;
+    width: 400px;
+    margin: 0;
+    transition: 0.3s;
+    padding-left: 20px;
+    padding-top: 10px;
+    white-space: pre;
+    min-height: 3em;
+    /* overflow: auto; */
+}
+
+::-webkit-textarea-placeholder {
+    color: rgb(88, 88, 88);
+}
+
+#txtSearch:hover {
+    color: #fff;
+    box-sizing: border-box;
+    border: 2px solid #00B8FF;
+    background: #00B8FF;
+}
+
+#txtSearch:focus {
+    background: #00B8FF;
+    border: 2px solid #00B8FF;
+    color: #fff
+}
+
+#btnSearch {
+    font-family: "Lato";
+    -webkit-appearance: none;
+    text-transform: uppercase;
+    border-radius: 30px;
+    height: 40px;
+    width: 90px;
+    color: rgb(88, 88, 88);
+    background: #00B8FF;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+#btnSearch:hover {
+    background: none;
+    color: #00B8FF;
+    border: 2px solid #00B8FF;
+}
+
+#btnSearch:active {
+    border-color: #0086C6;
+    background: none;
+}
+
+#dis {
+    margin-top: 30px;
+    display: block;
+    text-align: justify;
+    margin-left: 30px;
+    width: 600px;
+    color: #00B8FF;
+}
+
+.content_comment_a_blog {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.content_comment_a_blog .activities {
+    display: flex;
+}
+
+.content_comment_a_blog .activities .list, .post_viewing, .extension_blog .ex, .post_viewing_div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment_a_blog .content_comment_a_blog img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.value_content_comment_a_blog {
+    display: flex
+}
+
+.value_content_comment_a_blog div {
+    margin-left: 10px;
+    background-color: cadetblue;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.value_content_comment_a_blog p {
+    line-height: 0.5
+}
+
+.content_comment_a_blog .activities {
+    margin-left: 55px;
+    margin-top: 10px;
+}
+
+.content_comment_a_blog .activities .comment {
+    margin-left: 10px;
 }

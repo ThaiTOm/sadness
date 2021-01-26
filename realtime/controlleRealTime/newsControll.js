@@ -1,22 +1,22 @@
 const { Blog } = require("../../models/blog.models")
 const { User } = require("../../models/user.models")
-var cache = require('memory-cache');
-var newCache = new cache.Cache();
+const { nodeCache, newCache } = require("../../nodeCache");
+
 // newCache save post like
-const NodeCache = require("node-cache");
-const nodeCache = new NodeCache();
 // cacheNode save comment like
 
 const comment = async ({ idRecieve, idSent, value }) => {
-    let length = Blog.findById({ "_id": idRecieve }).comment.length
+    let x = await Blog.findById({ "_id": idRecieve }, "comment").exec()
+    let length = x.comment.length || 0
+    let text = value.split(/\r\n|\r|\n/)
     const data = {
         id: idSent + ";" + length,
-        value,
+        value: text,
         likes: 0
     }
     let user = await Blog.findById({ "_id": idRecieve }, "user").exec()
     if (user.user === idSent) {
-        const a = await Blog.findByIdAndUpdate({ _id: idRecieve }, { $push: { "comment": data }, $inc: { "commentNumber": 1 } }).exec()
+        await Blog.findByIdAndUpdate({ _id: idRecieve }, { $push: { "comment": data }, $inc: { "commentNumber": 1 } }).exec()
         return {
             ok: "ok"
         }
@@ -32,7 +32,6 @@ const comment = async ({ idRecieve, idSent, value }) => {
             user
         }
     }
-
 }
 
 const likeBlog = async ({ id, value }) => {
@@ -117,11 +116,9 @@ const likeCmt = async ({ value, id, idComment }) => {
     if (cacheData === undefined || cacheData.length === 0) {
         return incData()
     } else {
-        console.log(value, idComment)
         let arr = cacheData.split(",")
         let index = arr.indexOf(idComment)
         if (index > -1) {
-
             await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": -1 } }).exec()
             let old = [...arr]
             old.splice(index, 1)

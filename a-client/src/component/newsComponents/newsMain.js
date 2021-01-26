@@ -22,7 +22,6 @@ function NewsMain() {
     }, [])
     useEffect(() => {
         socket.on("activities", msg => {
-            console.log(msg.type)
             toast.success(msg.type)
         })
     })

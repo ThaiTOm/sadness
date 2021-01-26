@@ -25,6 +25,7 @@
     "react-infinite-scroll-component": "^5.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "react-slideshow-image": "^3.4.3",
     "react-toastify": "^6.1.0",
     "react-use-scroll-position": "^2.0.0",
     "socket.io": "^3.0.2",
