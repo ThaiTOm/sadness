@@ -1,16 +1,39 @@
 import React, { useState, useEffect } from 'react'
-import { getCookie } from '../../../helpers/auth';
+import { getCookie, signOut } from '../../../helpers/auth';
 import axios from "axios"
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 import LikePost from "../exNews/seeLike"
 import Comment from "../exOne/comment"
+import { Link } from "react-router-dom";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { MenuItem, Menu, Button } from '@material-ui/core';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 function ViewOneBlog(props) {
     const id = getCookie().token
     const [data, setData] = useState(null)
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [open, setOpen] = useState(null)
     let arr = props.location.pathname.split("/")
 
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogOut = () => {
+        signOut();
+        window.location.reload(false);
+    }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClickNoti = (e) => {
+        setOpen(e.currentTarget)
+    }
+    const handleCloseNoti = () => {
+        setOpen(null);
+    };
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/post?" + arr[2] + "&user=" + id)
             .then(value => {
@@ -19,10 +42,15 @@ function ViewOneBlog(props) {
                 console.log(err)
             })
     }, [])
+
     const Slideshow = () => {
+        const zoomInProperties = {
+            indicators: true,
+            scale: 1.4
+        }
         return (
             <div className="slide-container flex">
-                <Slide className="slide" >
+                <Slide {...zoomInProperties} className="slide" autoplay={false}>
                     {
                         data.img.map(function (value, i) {
                             return <div key={i}>
@@ -36,8 +64,52 @@ function ViewOneBlog(props) {
             </div>
         )
     }
+
     return (
         <div className="post_viewing">
+            <header>
+                <div className="navbar_auth">
+                    <p> Recal </p>
+                    <div className="extension_auth">
+                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickNoti}>
+                            <NotificationsIcon />
+                        </Button>
+                        <Menu
+                            id="menuContainerMessage"
+                            anchorEl={open}
+                            keepMounted
+                            open={Boolean(open)}
+                            onClose={handleCloseNoti}
+                        >
+                            <MenuItem onClick={handleLogOut}>
+                                <span className="simple_menu_span">
+                                    Đăng xuất
+                                </span>
+                            </MenuItem>
+                        </Menu>
+                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <AccountCircleIcon />
+                        </Button>
+                        <Menu
+                            id="menuContainerMessage"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleLogOut}>
+                                <span className="simple_menu_span">
+                                    Đăng xuất
+                                </span>
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                </div>
+            </header>
+            <Link className="go_to_previous" to="/news">
+                Quay lại
+           </Link>
+
             {
                 data !== null ? <div className="post_viewing_div">
                     {

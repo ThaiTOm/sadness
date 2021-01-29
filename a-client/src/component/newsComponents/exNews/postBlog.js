@@ -51,7 +51,6 @@ function Index() {
     const handleLineBreak = e => {
         if (e.key === "Enter") {
             let value = text + "<br/>"
-
             setText(value)
         }
     }

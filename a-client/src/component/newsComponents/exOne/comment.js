@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import socketApp from '../../../socket';
 import { ToastContainer, toast } from "react-toastify";
-import Skeleton from "../exNews/Skeleton"
+import SkeletonComment from "../exNews/SkeletonComment"
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios"
 import LikeComment from "./likeComment"
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
 function Comment(props) {
     const { value, id } = props.props
@@ -22,6 +21,8 @@ function Comment(props) {
             socket.emit("comment", { idRecieve: value.idBlog, idSent: id, value: text }, (error) => {
                 if (error === "error") {
                     toast.error("Có lỗi đó xảy ra bạn hãy thử lại sau")
+                } else {
+                    toast.success("Yêu cầu của bạn đã được thực hiện")
                 }
             })
         }
@@ -51,7 +52,6 @@ function Comment(props) {
                 }
             })
             .catch(err => {
-                console.log(err)
                 return (
                     <div>
                         Có lỗi đả xảy ra bạn hãy thử lại sau
@@ -76,7 +76,12 @@ function Comment(props) {
                 dataLength={comment.length}
                 next={fetchData}
                 hasMore={true}
-            // loader={<Skeleton />}
+                endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                        <b>het</b>
+                    </p>
+                }
+                loader={<SkeletonComment />}
             >
                 {
                     comment.length > 0 ? comment.map(function (vari, i) {

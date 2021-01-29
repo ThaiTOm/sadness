@@ -1,31 +1,16 @@
-body {
+body, #root, .App, .homepage, .MuiMenu-list li {
     width: 100%;
-    height: 100%;
-}
-
-#root {
-    height: 100%;
-}
-
-.App {
     height: 100%;
 }
 
 .Toastify__toast {
     background: #18191a !important;
-}
-
-.homepage {
-    height: 100%;
+    border-radius: 10px !important
 }
 
 .header_notAuth {
     background-image: url("../image/homepage.jpg");
     height: 100%;
-}
-
-.Toastify__toast {
-    border-radius: 10px !important
 }
 
 .navbar {
@@ -148,15 +133,6 @@ button {
     text-decoration: none;
     color: black;
     font-weight: 600;
-}
-
-.MuiMenu-list li {
-    width: 100%;
-    height: 100%;
-}
-
-.MuiSvgIcon-root {
-    margin-top: 15px;
 }
 
 /******************** Sign in button *************/
@@ -430,6 +406,7 @@ button {
     background-color: #000033;
     display: flex;
     padding: 0 40px;
+    z-index: 1
 }
 
 .navbar_auth p {
@@ -502,9 +479,6 @@ button {
     width: 65%;
     height: 100%;
     background-color: #020207;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .container_button {
@@ -935,12 +909,6 @@ button {
     --violet: #da00f7;
 }
 
-div.loaderBalls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 div.loaderBalls>div {
     width: 2vw;
     height: 2vw;
@@ -1012,9 +980,6 @@ div.loaderBalls>div {
     height: 40%;
     width: 80%;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0 10%;
 }
 
@@ -1055,9 +1020,6 @@ div.loaderBalls>div {
 }
 
 .block_page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 10% 0;
     height: 50%;
 }
@@ -1096,4 +1058,13 @@ div.loaderBalls>div {
     cursor: pointer;
     background-color: rgba(46, 229, 157, 0.4);
     border-radius: 10px;
+}
+
+.comment_skeleton_wrapper {
+    width: 200px;
+    height: 100px;
+}
+
+.infinite-scroll-component {
+    overflow: inherit !important
 }

@@ -202,7 +202,7 @@ input[type="checkbox"] {
 }
 
 .post_viewing_div {
-    margin-top: 5%;
+    margin-top: 7%;
     height: 100%;
     width: 90%;
 }
@@ -227,6 +227,7 @@ input[type="checkbox"] {
     height: 500px;
     padding-left: 10px;
     overflow-y: scroll;
+    margin-bottom: auto;
 }
 
 .post_viewing .content .content_div {
@@ -281,7 +282,6 @@ input[type="checkbox"] {
     transition: 0.3s;
     padding-left: 20px;
     padding-top: 10px;
-    white-space: pre;
     min-height: 3em;
     /* overflow: auto; */
 }
@@ -347,10 +347,15 @@ input[type="checkbox"] {
     display: flex;
 }
 
-.content_comment_a_blog .activities .list, .post_viewing, .extension_blog .ex, .post_viewing_div {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.post_viewing {
+    display: flex;
+    overflow-y: hidden
 }
 
 .comment_a_blog .content_comment_a_blog img {
@@ -381,4 +386,35 @@ input[type="checkbox"] {
 
 .content_comment_a_blog .activities .comment {
     margin-left: 10px;
+}
+
+.go_to_previous {
+    margin-bottom: auto;
+    margin-top: 70px;
+    color: black
+}
+
+.more_image {
+    opacity: 0.6;
+    content: "+5";
+}
+
+.last_image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.image-blog .three .two div img {
+    width: 100%;
+    margin-left: 2px;
+}
+
+.two span {
+    color: white;
+    font-size: 2rem;
+    padding: 20px;
+    border-radius: 50%;
+    background-color: #010118;
 }

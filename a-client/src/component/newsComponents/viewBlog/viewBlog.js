@@ -12,7 +12,6 @@ import LikeComment from '../exOne/likeComment';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { Link } from "react-router-dom"
 
-
 function ViewBlog() {
     let socket = socketApp.getSocket();
     const [start, setStart] = useState(0)
@@ -20,13 +19,14 @@ function ViewBlog() {
     const [blog, setBlog] = useState([])
     const [comment, setComment] = useState("")
     const id = getCookie().token
-
     const handleSubmit = (e, value) => {
         e.preventDefault()
         setComment("")
         socket.emit("comment", { idRecieve: value.idBlog, idSent: id, value: comment }, (error) => {
             if (error === "error") {
                 toast.error("Có lỗi đó xảy ra bạn hãy thử lại sau")
+            } else {
+                toast.success("Yêu cầu của bạn đã được thực hiện")
             }
         })
     }
@@ -79,25 +79,119 @@ function ViewBlog() {
                                         {
                                             value.image.length === 1 ?
                                                 <div className="one">
-                                                    <img src={value.image[0]} />
+                                                    <Link to={"/posts/id=" + value.idBlog}>
+                                                        <img
+                                                            style={{
+                                                                borderTopLeftRadius: "25px",
+                                                                borderBottomLeftRadius: "25px",
+                                                                borderTopRightRadius: "25px",
+                                                                borderBottomRightRadius: "25px"
+                                                            }}
+                                                            src={value.image[0]} />
+                                                    </Link>
                                                 </div>
                                                 : value.image.length === 2 ?
                                                     <div className="two">
-                                                        <img src={value.image[0]}></img>
-                                                        <img src={value.image[1]}></img>
+                                                        <Link to={"/posts/id=" + value.idBlog}>
+                                                            <img
+                                                                style={{
+                                                                    borderTopLeftRadius: "25px",
+                                                                    borderBottomLeftRadius: "25px"
+                                                                }}
+                                                                src={value.image[0]}></img>
+                                                            <img
+                                                                style={{
+                                                                    borderTopRightRadius: "25px",
+                                                                    borderBottomRightRadius: "25px"
+                                                                }}
+                                                                src={value.image[1]}></img>
+                                                        </Link>
                                                     </div>
-                                                    : value.image.length >= 3 ?
+                                                    : value.image.length === 3 ?
                                                         <div className="three">
-                                                            <div className="two">
-                                                                <img src={value.image[0]}></img>
-                                                                <img src={value.image[1]}></img>
-                                                            </div>
-
-                                                            <img src={value.image[2]}></img>
+                                                            <Link to={"/posts/id=" + value.idBlog}>
+                                                                <div className="two">
+                                                                    <img
+                                                                        style={{
+                                                                            borderTopLeftRadius: "25px"
+                                                                        }}
+                                                                        src={value.image[0]}></img>
+                                                                    <img
+                                                                        style={{
+                                                                            borderTopRightRadius: "25px"
+                                                                        }}
+                                                                        src={value.image[1]}></img>
+                                                                </div>
+                                                                <img
+                                                                    style={{
+                                                                        borderBottomLeftRadius: "25px",
+                                                                        borderBottomRightRadius: "25px"
+                                                                    }}
+                                                                    src={value.image[2]}></img>
+                                                            </Link>
                                                         </div>
-                                                        : value.image.length === 0 ?
-                                                            <div>
-                                                            </div> : {}
+                                                        : value.image.length === 4 ?
+                                                            <div className="three">
+                                                                <Link to={"/posts/id=" + value.idBlog}>
+                                                                    <div className="two">
+                                                                        <img
+                                                                            style={{
+                                                                                borderTopLeftRadius: "25px",
+                                                                            }}
+                                                                            src={value.image[0]}></img>
+                                                                        <img
+                                                                            style={{
+                                                                                borderTopRightRadius: "25px",
+                                                                            }}
+                                                                            src={value.image[1]}></img>
+                                                                    </div>
+                                                                    <div className="two">
+                                                                        <img
+                                                                            style={{
+                                                                                borderBottomLeftRadius: "25px",
+                                                                            }}
+                                                                            src={value.image[2]}></img>
+                                                                        <img
+                                                                            style={{
+                                                                                borderBottomRightRadius: "25px",
+                                                                            }}
+                                                                            src={value.image[3]}></img>
+                                                                    </div>
+                                                                </Link>
+                                                            </div>
+                                                            : value.image.length > 4 ?
+                                                                <div className="three">
+                                                                    <Link to={"/posts/id=" + value.idBlog}>
+                                                                        <div className="two">
+                                                                            <img
+                                                                                style={{
+                                                                                    borderTopLeftRadius: "25px",
+                                                                                }} src={value.image[0]}></img>
+                                                                            <img
+                                                                                style={{
+                                                                                    borderTopRightRadius: "25px",
+                                                                                }} src={value.image[1]}></img>
+                                                                        </div>
+                                                                        <div className="two" >
+                                                                            <img
+                                                                                style={{
+                                                                                    borderBottomLeftRadius: "25px",
+                                                                                }} src={value.image[2]}></img>
+                                                                            <div style={{ position: "relative", width: "90%" }}>
+                                                                                <img
+                                                                                    style={{
+                                                                                        borderBottomRightRadius: "25px",
+                                                                                    }} className="more_image" src={value.image[3]}></img>
+                                                                                <span className="last_image">
+                                                                                    + {value.image.length - 4}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Link>
+                                                                </div>
+                                                                : value.image.length === 0 ?
+                                                                    <div>
+                                                                    </div> : {}
                                         }
                                     </div>
                                     <div className="activities_blog">
@@ -117,26 +211,60 @@ function ViewBlog() {
                                     </div>
                                     <div className="comment_blog_view">
                                         {
-                                            value.comment.map(function (data, i) {
-                                                return <div
-                                                    key={i}
-                                                    className="comment_blog"
-                                                >
-                                                    <div className="content">
-                                                        <img src="./demo.jpeg"></img>
-                                                        <span>{data.value}</span>
-                                                    </div>
-                                                    <div className="activities">
-                                                        <LikeComment props={{ data, i, value: value.idBlog }} />
-                                                        <div className="comment list">
-                                                            <li >
-                                                                <ChatBubbleOutlineIcon /> comment
+                                            value.comment[0] !== undefined ? <div
+                                                className="comment_blog"
+                                            >
+                                                <div className="content">
+                                                    <img src="./demo.jpeg"></img>
+                                                    <span>{value.comment[0].value}</span>
+                                                </div>
+                                                <div className="activities">
+                                                    <LikeComment props={{ data: value.comment[0], i: value.comment[0].id + 0, value: value.idBlog }} />
+                                                    <div className="comment list">
+                                                        <li >
+                                                            <ChatBubbleOutlineIcon /> comment
                                                             </li>
-                                                        </div>
                                                     </div>
                                                 </div>
-                                            })
+                                            </div> : console.log()
                                         }
+                                        {
+                                            value.comment[1] !== undefined ? <div
+                                                className="comment_blog"
+                                            >
+                                                <div className="content">
+                                                    <img src="./demo.jpeg"></img>
+                                                    <span>{value.comment[1].value}</span>
+                                                </div>
+                                                <div className="activities">
+                                                    <LikeComment props={{ data: value.comment[1], i: value.comment[1].id + 1, value: value.idBlog }} />
+                                                    <div className="comment list">
+                                                        <li >
+                                                            <ChatBubbleOutlineIcon /> comment
+                                                            </li>
+                                                    </div>
+                                                </div>
+                                            </div> : console.log()
+                                        }
+                                        {
+                                            value.comment[2] !== undefined ? <div
+                                                className="comment_blog"
+                                            >
+                                                <div className="content">
+                                                    <img src="./demo.jpeg"></img>
+                                                    <span>{value.comment[2].value}</span>
+                                                </div>
+                                                <div className="activities">
+                                                    <LikeComment props={{ data: value.comment[2], i: value.comment[2].id + 2, value: value.idBlog }} />
+                                                    <div className="comment list">
+                                                        <li >
+                                                            <ChatBubbleOutlineIcon /> comment
+                                                            </li>
+                                                    </div>
+                                                </div>
+                                            </div> : console.log()
+                                        }
+
                                         <form onSubmit={e => { handleSubmit(e, value) }}>
                                             <TextField
                                                 onChange={e => setComment(e.target.value)}

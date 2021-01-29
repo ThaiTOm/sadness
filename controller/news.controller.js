@@ -5,8 +5,9 @@ const { Blog } = require("../models/blog.models")
 const { User } = require("../models/user.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
+
 // newCache save post like
-// cacheNode save comment like
+// cacheNode save comment like, notifications
 
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
@@ -119,7 +120,11 @@ exports.viewBlog = async (req, res) => {
                 let a = await promiseRedis(idBlog)
                 var comment = []
                 let arr = await nodeCache.get(id) || ""
-                arr = arr.split(",")
+                if (arr.length === 0) {
+                    arr = arr
+                } else {
+                    arr = arr.split(",")
+                }
                 for await (let value of commentTop) {
                     if (arr.indexOf(value.id) > -1) {
                         let newArr = {
@@ -252,4 +257,16 @@ exports.viewComment = async (req, res) => {
     res.json({
         data: arr
     })
+}
+exports.getNotifications = async (req, res) => {
+    const { id, start, end } = req.query
+    let value = await nodeCache.get(id + "noti")
+    console.log(value)
+    if (value === undefined) {
+        return res.json([])
+    } else {
+        return res.json({
+            value
+        })
+    }
 }

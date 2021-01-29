@@ -21,7 +21,9 @@ exports.listContact = (req, res) => {
     const { id } = req.body
     User.findById(id, async (err, result) => {
         if (err) {
-            console.log(err)
+            return res.json({
+                error: "Lỗi hệ thống bạn hãy thử lại sau"
+            })
         }
         else {
             const { blockN } = result;

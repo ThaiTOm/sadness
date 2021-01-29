@@ -50,7 +50,6 @@ module.exports = {
             if (error) {
                 return callback(error)
             } if (user) {
-                console.log(user.user)
                 callback("ok")
                 io.to(user.user).emit("activities", { type: "Có người đã bình luận về bài viết cuả bạn" })
             } else {

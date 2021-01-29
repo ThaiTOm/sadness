@@ -48,12 +48,6 @@
     color: black
 }
 
-.modal_post_blog {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .form_post_blog {
     background-color: beige;
     padding: 2% 5% 2% 5%;
@@ -69,9 +63,6 @@
 .form_post_blog p {
     height: 100%;
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0 10%;
 }
 
@@ -102,9 +93,6 @@
 }
 
 .drag_file .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     height: 100%;
 }
@@ -193,4 +181,13 @@
 
 .image_post_news span:hover {
     color: rgba(245, 32, 4, 0.6);
+}
+
+.extension_auth {
+    margin-left: auto;
+    margin-right: 55px;
+}
+
+.extension_auth .MuiSvgIcon-root {
+    font-size: 2rem;
 }

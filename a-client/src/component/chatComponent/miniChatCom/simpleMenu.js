@@ -4,7 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import { Link } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
-import { signOut,getCookie } from '../../../helpers/auth';
+import { signOut, getCookie } from '../../../helpers/auth';
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -27,44 +27,32 @@ export default function SimpleMenu({ id, onClick }) {
         }
     }
     // handleAB = handle Agree block
-    const handleAB = async () =>{
+    const handleAB = async () => {
         const idSend = getCookie().token
-        axios.post("http://localhost:2704/api/msgC/blockUser" ,{idSend, id})
-        .then(res=>{
-            toast.success("Yêu cầu của bạn đã được thực hiện")
-            setOpen(false)
-            setAnchorEl(null)
-        }).catch(err=>{
+        axios.post("http://localhost:2704/api/msgC/blockUser", { idSend, id })
+            .then(res => {
+                toast.success("Yêu cầu của bạn đã được thực hiện")
+                setOpen(false)
+                setAnchorEl(null)
+            }).catch(err => {
 
-            console.log(err)
-        })
+                console.log(err)
+            })
 
     }
     const handleCloseBlock = () => {
         setOpen(false)
     }
-    const handleLogOut = () =>{
+    const handleLogOut = () => {
         signOut();
         window.location.reload(false);
     }
-    // const handleAddF = () => {
-    //     if (id) {
-    //         socket.emit("addF", { id }, (error) => {
-    //         })
-    //     }
-    //     handleClose()
-    // }
-    // useEffect(() => {
-    //     socket.on("receive", value => {
-    //         console.log(value)
-    //     })
-    // }, [])
     return (
         <div className="menuMessage" >
-            <ToastContainer/>
+            <ToastContainer />
             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                 &#9776;
-      </Button>
+            </Button>
             <Menu
                 id="menuContainerMessage"
                 anchorEl={anchorEl}
@@ -72,10 +60,6 @@ export default function SimpleMenu({ id, onClick }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {/* <MenuItem
-                    onClick={handleAddF} >
-                    Gửi lời mời kết bạn
-                </MenuItem> */}
                 <MenuItem onClick={handleClose}>
                     <span
                         className="simple_menu_span"
@@ -120,7 +104,7 @@ export default function SimpleMenu({ id, onClick }) {
                 </MenuItem>
                 <MenuItem onClick={handleLogOut}>
                     <span className="simple_menu_span">
-                       Đăng xuất
+                        Đăng xuất
                     </span>
                 </MenuItem>
                 {/* <MenuItem onClick={}>Logout</MenuItem> */}
