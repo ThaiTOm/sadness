@@ -46,33 +46,33 @@ module.exports = {
             socket.join(id)
         })
         socket.on("comment", async ({ idRecieve, idSent, value }, callback) => {
-            const { user, error } = await comment({ idRecieve, idSent, value })
+            const { user, error, type, number } = await comment({ idRecieve, idSent, value })
             if (error) {
                 return callback(error)
             } if (user) {
                 callback("ok")
-                io.to(user.user).emit("activities", { type: "Có người đã bình luận về bài viết cuả bạn" })
+                io.to(user.user).emit("activities", { type, value: " người đã bình luận về bài viết của bạn", number })
             } else {
                 callback("ok")
             }
         })
         socket.on("like", async ({ value, id }, callback) => {
-            const { error, message, user } = await likeBlog({ value, id })
+            const { error, message, user, type, number } = await likeBlog({ value, id })
             if (error) {
                 return callback("error")
             } else if (message) {
                 callback("message")
-                io.to(user).emit("activities", { type: "Có người đã thích bài viết của bạn" })
+                io.to(user).emit("activities", { type, value: " người đã thích bài viết của bạn", number })
             }
         })
         socket.on("likeCmt", async ({ value, id, idComment }, callback) => {
-            const { error, message, user } = await likeCmt({ value, id, idComment })
+            const { error, message, user, type, number } = await likeCmt({ value, id, idComment })
             if (error === false) {
                 return callback("Đã có lỗi xảy ra bạn hãy thử lại sau")
             } if (message === "exists") {
                 return callback(message)
             } if (user) {
-                io.to(user).emit("activities", { type: "Có người đã thích bình luận của bạn" })
+                io.to(user).emit("activities", { type, value: " người đã thích bình luận của bạn", number })
             }
         })
     }

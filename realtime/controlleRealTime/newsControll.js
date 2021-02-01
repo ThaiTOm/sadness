@@ -5,15 +5,55 @@ const { nodeCache, newCache } = require("../../nodeCache");
 // newCache save post like
 // cacheNode save comment like, notifications
 
-var saveCacheNode = (user, type, link) => {
+var saveCacheNode = async (user, type, link, id) => {
     let arr = nodeCache.get(user + "noti") || []
-    const ob = {
+    let ob
+    let i = 0
+    for await (let a of arr) {
+        if (a.type === type && a.value === link && a.id === id) {
+            ob = {
+                id,
+                type: type,
+                value: link,
+                seen: false,
+                number: a.number + 1
+            }
+            let old = [...arr]
+            old.splice(i, 1)
+            old.unshift(ob)
+            nodeCache.set(user + "noti", old, 2147483647)
+            return {
+                number: ob.number
+            }
+        } else {
+            ob = {
+                id,
+                type: type,
+                value: link,
+                seen: false,
+                number: 1
+            }
+            arr.unshift(ob)
+            nodeCache.set(user + "noti", arr, 2147483647)
+            console.log(ob.number)
+            return {
+                number: ob.number
+            }
+        }
+        i++
+    }
+    ob = {
+        id,
         type: type,
         value: link,
-        seen: false
+        seen: false,
+        number: 1
     }
-    arr.push(ob)
+    arr.unshift(ob)
     nodeCache.set(user + "noti", arr, 2147483647)
+    return {
+        number: ob.number
+    }
 }
 const comment = async ({ idRecieve, idSent, value }) => {
     let x = await Blog.findById({ "_id": idRecieve }, "comment").exec()
@@ -38,13 +78,14 @@ const comment = async ({ idRecieve, idSent, value }) => {
                 }
             }
         })
-        saveCacheNode(user.user, "comment", "posts/id=" + idRecieve)
+        let { number } = await saveCacheNode(user.user, " người đã bình luận về bài viết của bạn", "posts/id=" + idRecieve, data.id)
         return {
-            user
+            user,
+            type: "post/id=" + idRecieve,
+            number
         }
     }
 }
-
 
 const likeBlog = async ({ id, value }) => {
     // id is id of the user, value is the id of blog
@@ -59,11 +100,13 @@ const likeBlog = async ({ id, value }) => {
             }
         }
         // save to cache for the notifications
-        saveCacheNode(a.user, "likeBlog", "posts/id=" + value)
+        let { number } = await saveCacheNode(a.user, " người đã thích bài viết của bạn", "posts/id=" + value, value)
         return {
             error: "",
             message: "ok",
-            user: a.user
+            user: a.user,
+            type: "posts/id=" + value,
+            number
         }
     }
     let cacheData = newCache.get(id)
@@ -92,38 +135,43 @@ const likeBlog = async ({ id, value }) => {
 const likeCmt = async ({ value, id, idComment }) => {
     // value contain id of post comment, id is id of user
     let a = idComment.split(";")
+    var user = await Blog.findById({ _id: value }).exec()
     let incData = async (data) => {
         if (data === undefined) {
             await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": 1 } }).exec()
             let err = nodeCache.set(id, idComment, 2147483647)
-            if (a[0] === id) {
+            if (a[0] === user.user) {
                 return {
                     error: err,
                     message: "ok"
                 }
             }
-            saveCacheNode(a[0], "likeCmt", "posts/id=" + value)
+            let { number } = await saveCacheNode(user.user, " người đã thích bình luận của bạn", "posts/id=" + value, idComment)
             return {
                 error: err,
                 message: "ok",
-                user: a[0]
+                user: user.user,
+                type: "posts/id=" + value,
+                number
             }
         } else {
             await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": 1 } }).exec()
             let arr = data
             arr = arr + "," + idComment
             let err = nodeCache.set(id, arr, 2147483647)
-            if (a[0] === id) {
+            if (user.user === id) {
                 return {
                     error: err,
                     message: "ok"
                 }
             }
-            saveCacheNode(a[0], "likeCmt", "posts/id=" + value)
+            let { number } = await saveCacheNode(user.user, " người đã thích bình luận của bạn", "posts/id=" + value, idComment)
             return {
                 error: err,
                 message: "ok",
-                user: a[0]
+                user: user.user,
+                type: "posts/id=" + value,
+                number
             }
         }
     }

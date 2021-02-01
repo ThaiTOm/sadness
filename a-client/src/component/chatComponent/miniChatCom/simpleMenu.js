@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-// import { Link } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
 import { signOut, getCookie } from '../../../helpers/auth';
 import axios from "axios";

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { getCookie } from '../../../helpers/auth';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import socketApp from '../../../socket';
-
+import RequireLogin from '../../../helpers/requireLogin';
 
 const LikeComment = (props) => {
     let socket = socketApp.getSocket();
@@ -11,23 +11,29 @@ const LikeComment = (props) => {
     const { i } = props.props
     const [like, setLike] = useState(data.likes)
     const [isLiked, setIsLiked] = useState(data.isLiked)
+    const [login, setLogin] = useState(null)
     const idUser = getCookie().token
+
     const handleLike = () => {
-        setLike(like + 1)
-        setIsLiked(true)
-        console.log(props.props)
-        socket.emit("likeCmt", { value, id: idUser, idComment: data.id }, callback => {
-            if (callback === "error") {
-                setLike(like - 1)
-                setIsLiked(false)
-            } if (callback === "exists") {
-                setLike(like - 1)
-                setIsLiked(false)
-            }
-        })
+        if (!idUser) {
+            setLogin(true)
+        } else {
+            setLike(like + 1)
+            setIsLiked(true)
+            socket.emit("likeCmt", { value, id: idUser, idComment: data.id }, callback => {
+                if (callback === "error") {
+                    setLike(like - 1)
+                    setIsLiked(false)
+                } if (callback === "exists") {
+                    setLike(like - 1)
+                    setIsLiked(false)
+                }
+            })
+        }
     }
     return (
         <div className="list">
+            {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
             {
                 isLiked === true ?
                     <div>
@@ -36,7 +42,7 @@ const LikeComment = (props) => {
                             onClick={e => handleLike()}
                             type="checkbox"
                             id={"like_button_label " + i + data} />
-                        <label for={"like_button_label " + i + data} >
+                        <label htmlFor={"like_button_label " + i + data} >
                             <li className="like">
                                 <FavoriteIcon /> {like}
                             </li>
@@ -48,7 +54,7 @@ const LikeComment = (props) => {
                             onClick={e => handleLike()}
                             type="checkbox"
                             id={"like_button_label " + i + data} />
-                        <label for={"like_button_label " + i + data} >
+                        <label htmlFor={"like_button_label " + i + data} >
                             <li className="like">
                                 <FavoriteBorderIcon /> {like}
                             </li>

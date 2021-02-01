@@ -13,25 +13,29 @@ import React, { useMemo, useState, useEffect } from 'react'
 import axios from "axios"
 import { getCookie } from './helpers/auth';
 
-
 function App() {
   const id = getCookie().token
   const [value, setValue] = useState([]);
-  const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(10);
   const notifications = useMemo(() => ({ value, setValue }), [value, setValue]);
 
   useEffect(() => {
-    axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=" + start + "&end=" + end)
-      .then(async res => {
-        for await (let data of res.data.value) {
-          setValue(a => [...a, data])
+    axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
+      .then(res => {
+        if (res.data.value !== undefined) {
+          for (let data of res.data.value) {
+            console.log(data)
+            let arr = {
+              type: data.value,
+              value: data.type,
+              number: data.number
+            }
+            setValue(a => [...a, arr])
+          }
         }
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(err)
       })
-  }, [])
+  }, [id])
 
   return (
     <BrowserRouter >

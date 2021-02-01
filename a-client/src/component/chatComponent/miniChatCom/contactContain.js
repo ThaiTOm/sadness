@@ -6,12 +6,13 @@ import classNames from "classnames";
 
 // This function is use for render list of contact
 var socket = socketApp.getSocket();
+
 function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
     const [read, setRead] = useState(false);
     const [active, setActive] = useState(false);
     const [value, setValue] = useState("");
     // lu last user, clu contain last user and message
-    let lu, clu;
+    let lu;
 
     const id = getCookie().token;
     //this message is last message when not online
@@ -41,7 +42,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                 setValue("Bạn:  " + mess)
             }
             else {
-                setValue("Bạn:  " + "da gui hinh anh")
+                setValue("Bạn: đã gửi hình ảnh")
             }
         } else {
             let a = decryptWithAES(arr[0])
@@ -50,7 +51,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                 setValue("Đằng ấy:  " + mess)
             }
             else {
-                setValue("Đằng ấy:  " + "da gui hinh anh")
+                setValue("Đằng ấy: đã gửi hình ảnh")
             }
             // arr[2] contain true or false read
             if (arr[2] === "false") {
@@ -77,7 +78,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                         setValue("Bạn:  " + mess)
                     }
                     else {
-                        setValue("Bạn:  " + "da gui hinh anh")
+                        setValue("Bạn: đã gửi hình ảnh")
                     }
                 } else {
                     if (a.length > 0) {
@@ -85,7 +86,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                         setValue("Đằng ấy:  " + mess)
                     }
                     else {
-                        setValue("Đằng ấy:  " + "da gui hinh anh")
+                        setValue("Đằng ấy:  đã gửi hình ảnh")
                     }
                     // arr[2] contain true or false read
                     if (arr[2] === "false") {

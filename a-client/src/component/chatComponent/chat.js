@@ -92,7 +92,7 @@ function Chat() {
         return () => {
             source.cancel()
         }
-    }, [])
+    }, [id])
     //load message
     useEffect(() => {
         socket.on("message", msg => {

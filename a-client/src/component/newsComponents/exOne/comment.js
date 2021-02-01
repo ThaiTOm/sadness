@@ -5,6 +5,8 @@ import SkeletonComment from "../exNews/SkeletonComment"
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios"
 import LikeComment from "./likeComment"
+import RequireLogin from '../../../helpers/requireLogin';
+
 
 function Comment(props) {
     const { value, id } = props.props
@@ -13,7 +15,7 @@ function Comment(props) {
     const [start, setStart] = useState(0)
     const [end, setEnd] = useState(10)
     const [comment, setComment] = useState([])
-
+    const [login, setLogin] = useState(null)
     const handleSubmit = (e) => {
         if (text.length > 0) {
             e.preventDefault()
@@ -33,16 +35,30 @@ function Comment(props) {
             setEnd(end + 10)
         }, 1500);
     }
-
+    const handleLoginValidate = () => {
+        if (!id) {
+            setLogin(true)
+        } else {
+            setLogin(null)
+        }
+    }
     useEffect(() => {
-        socket.emit("join", { id })
-    }, [])
-    useEffect(() => {
-        socket.on("activities", msg => {
-            toast.success(msg.type)
-        })
-    }, [])
-
+        setComment([])
+        axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
+            .then(async res => {
+                let a = res.data.data
+                for await (let value of a) {
+                    setComment(a => [...a, value])
+                }
+            })
+            .catch(err => {
+                return (
+                    <div>
+                        Có lỗi đả xảy ra bạn hãy thử lại sau
+                    </div>
+                )
+            })
+    }, [value.idBlog])
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
             .then(async res => {
@@ -61,9 +77,11 @@ function Comment(props) {
     }, [start])
     return (
         <div className="comment_a_blog">
+            {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
             <ToastContainer />
             <form className="input-container ex" onSubmit={handleSubmit}>
                 <div
+                    onClick={handleLoginValidate}
                     suppressContentEditableWarning={true}
                     contentEditable
                     id="txtSearch"

@@ -115,36 +115,36 @@
     margin-top: 5px;
 }
 
-#type_text_div::-webkit-scrollbar, .image_post_news::-webkit-scrollbar, .post_viewing .content::-webkit-scrollbar {
+#type_text_div::-webkit-scrollbar, .image_post_news::-webkit-scrollbar, .post_viewing .content::-webkit-scrollbar, #menuContainerMessage .MuiPaper-root::-webkit-scrollbar {
     width: 5px;
     height: 5px;
     border: 0px;
 }
 
-#type_text_div::-webkit-scrollbar-thumb, .image_post_news::-webkit-scrollbar-thumb, .post_viewing .content::-webkit-scrollbar-thumb {
+#type_text_div::-webkit-scrollbar-thumb, .image_post_news::-webkit-scrollbar-thumb, .post_viewing .content::-webkit-scrollbar-thumb, #menuContainerMessage .MuiPaper-root::-webkit-scrollbar-thumb {
     background: #000000;
     border: 0px none #ffffff;
     border-radius: 50px;
 }
 
-#type_text_div::-webkit-scrollbar-thumb:hover, .image_post_news::-webkit-scrollbar-thumb:hover, .post_viewing .content::-webkit-scrollbar-thumb:hover {
+#type_text_div::-webkit-scrollbar-thumb:hover, .image_post_news::-webkit-scrollbar-thumb:hover, .post_viewing .content::-webkit-scrollbar-thumb:hover, #menuContainerMessage .MuiPaper-root:hover {
     background: black;
 }
 
-#type_text_div::-webkit-scrollbar-thumb:active, .image_post_news::-webkit-scrollbar-thumb:active, .post_viewing .content::-webkit-scrollbar-thumb:active {
+#type_text_div::-webkit-scrollbar-thumb:active, .image_post_news::-webkit-scrollbar-thumb:active, .post_viewing .content::-webkit-scrollbar-thumb:active, #menuContainerMessage .MuiPaper-root:active {
     background: #000000;
 }
 
-#type_text_div::-webkit-scrollbar-track:hover, .image_post_news::-webkit-scrollbar-track:hover, .post_viewing .content::-webkit-scrollbar-track:hover {
+#type_text_div::-webkit-scrollbar-track:hover, .image_post_news::-webkit-scrollbar-track:hover, .post_viewing .content::-webkit-scrollbar-track:hover, #menuContainerMessage .MuiPaper-root:hover {
     background: white;
 }
 
-#type_text_div::-webkit-scrollbar-track:active, .post_viewing .content::-webkit-scrollbar-track {
+#type_text_div::-webkit-scrollbar-track:active, .post_viewing .content::-webkit-scrollbar-track, .image_post_news::-webkit-scrollbar-track, #menuContainerMessage .MuiPaper-root::-webkit-scrollbar-track:active {
     background: white;
     ;
 }
 
-#type_text_div::-webkit-scrollbar-corner, .image_post_news::-webkit-scrollbar-corner, .image_post_news::-webkit-scrollbar-corner {
+#type_text_div::-webkit-scrollbar-corner, .image_post_news::-webkit-scrollbar-corner, .image_post_news::-webkit-scrollbar-corner, #menuContainerMessage .MuiPaper-root::-webkit-scrollbar-corner {
     background: transparent;
 }
 

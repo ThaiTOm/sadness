@@ -3,10 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { makeStyles } from '@material-ui/core/styles';
-import { authenicate, isAuth } from "../../helpers/auth";
+import { authenicate } from "../../helpers/auth";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { Link,useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     floatingLabelFocusStyle: {
@@ -38,7 +38,7 @@ function LoginForm() {
                     password: ""
                 });
                 toast.success(res.data.message);
-                if(res.data.blockN > 3){
+                if (res.data.blockN > 3) {
                     history.push("/report")
                 }
                 authenicate(res);
@@ -58,7 +58,6 @@ function LoginForm() {
             authenicate(res)
             window.location.reload(false);
         }).catch(err => {
-            console.log(err)
             toast.error("Login with Google failed")
         })
     }
@@ -76,7 +75,6 @@ function LoginForm() {
         sendGoogleToken(response.tokenId)
     }
     const responseFacebook = response => {
-        console.log(response)
         sendFacebookToken(response.userID, response.accessToken)
     }
     return (

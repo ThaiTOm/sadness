@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     paper: {
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: "rgb(36, 37, 38)",
         border: '1px solid #000',
         // boxShadow: theme.shadows[5],
         padding: theme.spacing(1, 10, 10),
@@ -98,8 +98,8 @@ function PageNotAuth() {
                             Đừng để bản thân quá nặng lòng hãy mở lòng và bạn sẽ thấy thoải mái hơn. Cho đi là nhận lại!
                     </p>
                     </div>
-                    <div className="button-navbar treat-wrapper row">
-                        <button className="signIn-navbar treat-button col-sm-12 col-md-6" type="button" onClick={handleOpenSignIn}>Đăng nhập</button>
+                    <div className="button-navbar treat-wrapper">
+                        <button className="signIn-navbar treat-button " type="button" onClick={handleOpenSignIn}>Đăng nhập</button>
                         {/* **************************** Modal to Login ****************************************/}
                         <Modal
                             aria-labelledby="transition-modal-title"
@@ -122,7 +122,7 @@ function PageNotAuth() {
 
                         {/* ************** * * * **   Button to SignUp                  *   ************* */}
 
-                        <button className="signUp-navbar treat-button col-sm-12 col-md-6" type="button" onClick={handleOpenSignUp}>Đăng ký</button>
+                        <button className="signUp-navbar treat-button" type="button" onClick={handleOpenSignUp}>Đăng ký</button>
                         <Modal
                             aria-labelledby="transition-modal-title"
                             aria-describedby="transition-modal-description"

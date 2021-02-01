@@ -26,18 +26,18 @@ function ActivatePage(props) {
                 toast.success(res.data.message)
                 authenicate(res)
             }).catch(err => {
-                toast.error(err.response.data.error)
+                toast.error("Something went wrong please try again")
             })
     }
     return (
-        <div>
+        <>
             {isAuth() ? <Redirect to="/" /> : null}
             <ToastContainer />
-            <form onSubmit={hanldeSubmit}>
-                <button type="submit">active</button>
+            <form className="active_page" onSubmit={hanldeSubmit}>
+                <p>Active page</p>
+                <button type="submit" style={{ backgroundColor: "rgba(46, 229, 156, 0.788)" }} className="facebook_login">Xác nhận</button>
             </form>
-            <h1>Nguyendutyhas</h1>
-        </div>
+        </>
     )
 }
 

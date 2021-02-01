@@ -3,6 +3,12 @@ body, #root, .App, .homepage, .MuiMenu-list li {
     height: 100%;
 }
 
+.active_page {
+    background-color: blanchedalmond;
+    width: 50%;
+    height: 50%
+}
+
 .Toastify__toast {
     background: #18191a !important;
     border-radius: 10px !important
@@ -69,14 +75,16 @@ body, #root, .App, .homepage, .MuiMenu-list li {
 /************** For button navbar *************/
 
 .button-navbar {
+    margin-top: 50px;
     width: 500px;
     margin-left: 36%;
     text-align: center;
+    display: flex;
+    align-items: center;
 }
 
 .treat-button {
     margin-left: 40px;
-    margin-top: 30px;
     font-size: 2.6vmin;
     -webkit-appearance: none;
     -moz-appearance: none;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { getCookie, signOut } from '../../../helpers/auth';
 import axios from "axios"
 import { Slide } from 'react-slideshow-image';
@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { Notifications } from '../../../userContext';
+
 
 function ViewOneBlog(props) {
     const id = getCookie().token
@@ -16,11 +18,11 @@ function ViewOneBlog(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(null)
     let arr = props.location.pathname.split("/")
+    const { value, setValue } = useContext(Notifications);
 
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     const handleLogOut = () => {
         signOut();
         window.location.reload(false);
@@ -30,10 +32,11 @@ function ViewOneBlog(props) {
     };
     const handleClickNoti = (e) => {
         setOpen(e.currentTarget)
-    }
+    };
     const handleCloseNoti = () => {
         setOpen(null);
     };
+
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/post?" + arr[2] + "&user=" + id)
             .then(value => {
@@ -41,7 +44,7 @@ function ViewOneBlog(props) {
             }).catch(err => {
                 console.log(err)
             })
-    }, [])
+    }, [arr[2]])
 
     const Slideshow = () => {
         const zoomInProperties = {
@@ -55,7 +58,7 @@ function ViewOneBlog(props) {
                         data.img.map(function (value, i) {
                             return <div key={i}>
                                 <div className="image-container" >
-                                    <img src={value} />
+                                    <img alt={value.slice(100, 110)} src={value} />
                                 </div>
                             </div>
                         })
@@ -81,11 +84,19 @@ function ViewOneBlog(props) {
                             open={Boolean(open)}
                             onClose={handleCloseNoti}
                         >
-                            <MenuItem onClick={handleLogOut}>
-                                <span className="simple_menu_span">
-                                    Đăng xuất
-                                </span>
-                            </MenuItem>
+                            {
+                                value.map(
+                                    function (x) {
+                                        let value = x.type.split("/")
+                                        return <Link to={value[1]}>
+                                            <MenuItem className="notifications_span">
+                                                <span className="simple_menu_span">
+                                                    {x.number}{x.value}
+                                                </span>
+                                            </MenuItem>
+                                        </Link>
+                                    })
+                            }
                         </Menu>
                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                             <AccountCircleIcon />
@@ -109,7 +120,6 @@ function ViewOneBlog(props) {
             <Link className="go_to_previous" to="/news">
                 Quay lại
            </Link>
-
             {
                 data !== null ? <div className="post_viewing_div">
                     {
@@ -120,7 +130,7 @@ function ViewOneBlog(props) {
                     }
                     <div className="content flex">
                         <div className="content_div">
-                            <img src="/demo.jpeg"></img>
+                            <img alt="this is your avatar" src="/demo.jpeg"></img>
                             <span>{data.time}</span>
                             {
                                 data.text.map(function (value, i) {

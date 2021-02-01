@@ -7,15 +7,16 @@ import "../style/newspage.css"
 import PostBlogMain from "./exNews/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import socketApp from "../../socket"
-import { getCookie, signOut, isAuth } from "../../helpers/auth"
+import { getCookie, signOut } from "../../helpers/auth"
 import { ToastContainer, toast } from "react-toastify";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { Notifications } from '../../userContext';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function NewsMain() {
-    const id = getCookie().token
+    const id = getCookie().token || ""
     const [openNoti, setOpenNoti] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(true);
@@ -24,17 +25,38 @@ function NewsMain() {
     }
     const { value, setValue } = useContext(Notifications);
     let socket = socketApp.getSocket();
+
     useEffect(() => {
-        if (id === undefined) {
-            <Redirect to="/" />
-        }
         socket.emit("join", { id })
     }, [])
     useEffect(() => {
-        socket.on("activities", msg => {
-            toast.success(msg.type)
+        socket.on("activities", async (msg) => {
+            toast.info(
+                msg.number + msg.value
+            )
+            let arr = {
+                type: msg.type,
+                value: msg.value,
+                number: msg.number
+            }
+            let i = 0
+            for await (let data of value) {
+                if (data.type === arr.type && data.value === arr.value) {
+                    let old = [...arr]
+                    old.splice(i, 1)
+                    old.unshift(data)
+                    console.log(data)
+                    setValue(old)
+                } else {
+                    setValue(a => [...a, arr])
+                }
+                i++
+            }
+            if (value.length === 0) {
+                setValue(a => [...a, arr])
+            }
         })
-    })
+    }, [])
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -55,7 +77,6 @@ function NewsMain() {
     };
     return (
         <div className="news_page">
-            {isAuth() ? null : <Redirect to="/" />}
             <ToastContainer />
             <header>
                 <div className="navbar_auth">
@@ -71,12 +92,13 @@ function NewsMain() {
                             open={Boolean(openNoti)}
                             onClose={handleCloseNoti}
                         >
+                            <p>Thông báo</p>
                             {
                                 value.map(function (data) {
-                                    return <Link to={data.value}>
-                                        <MenuItem>
+                                    return <Link to={data.type}>
+                                        <MenuItem className="notifications_span">
                                             <span className="simple_menu_span">
-                                                {data.type}
+                                                {data.number}{data.value}
                                             </span>
                                         </MenuItem>
                                     </Link>
@@ -96,7 +118,7 @@ function NewsMain() {
                         >
                             <MenuItem onClick={handleLogOut}>
                                 <span className="simple_menu_span">
-                                    Đăng xuất
+                                    <ExitToAppIcon /> Đăng xuất
                                 </span>
                             </MenuItem>
                         </Menu>

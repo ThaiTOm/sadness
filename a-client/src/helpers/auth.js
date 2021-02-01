@@ -1,4 +1,4 @@
-import cookie, { remove } from "js-cookie";
+import cookie from "js-cookie";
 import { replaceTelex } from "../algorithm/algorithm";
 
 

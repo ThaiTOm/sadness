@@ -41,7 +41,7 @@
     flex-wrap: wrap;
 }
 
-.activities_blog div {
+.activities_blog .inner {
     list-style: none;
     flex: 0 0 31.333333%;
     display: flex;
@@ -100,6 +100,11 @@
     cursor: pointer
 }
 
+.inner .like svg, .inner .list svg {
+    padding-right: 10px;
+    color: #242526;
+}
+
 input[type="checkbox"] {
     display: none
 }
@@ -111,10 +116,10 @@ input[type="checkbox"] {
 
 .activities_blog label {
     list-style: none;
-    flex: 0 0 31.333333%;
+    flex: 0 0 28%;
     border-radius: 10px;
     background-color: whitesmoke;
-    padding: 10px 63px;
+    padding: 10px 61px;
 }
 
 .activities_blog label li {
@@ -347,7 +352,7 @@ input[type="checkbox"] {
     display: flex;
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -417,4 +422,113 @@ input[type="checkbox"] {
     padding: 20px;
     border-radius: 50%;
     background-color: #010118;
+}
+
+.notifications_span .simple_menu_span {
+    padding: 30px 30px;
+}
+
+.notifications_span .simple_menu_span:hover {
+    background-color: rgba(189, 187, 185, 0.747);
+}
+
+.simple_menu_span {
+    color: white;
+}
+
+#menuContainerMessage .MuiPaper-root {
+    background-color: #242526 !important;
+    left: initial !important;
+    right: 10px;
+    width: auto !important;
+    height: 500px;
+}
+
+.MuiList-root a {
+    text-decoration: none;
+    color: rgba(245, 245, 245, 0.514);
+    font-weight: 550
+}
+
+#menuContainerMessage p {
+    margin: 5px 0 5px 10px;
+    font-weight: 700;
+    color: white
+}
+
+.paper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(36, 37, 38);
+    padding: 50px 140px;
+    z-index: 100;
+    -webkit-box-shadow: 9px 6px 50px 11px #000000;
+    box-shadow: 9px 6px 50px 11px #000000;
+}
+
+.paper .MuiFormLabel-root {
+    background-color: initial;
+    padding: 0
+}
+
+.paper p {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.507);
+    text-align: center;
+}
+
+.close_button {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.close_button:hover {
+    color: rgba(46, 229, 157, 0.4)
+}
+
+.active_page {
+    background-color: blanchedalmond;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.active_page p {
+    text-align: center;
+    font-size: 2rem;
+}
+
+.active_page button {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+}
+
+.MuiListItem-button:hover {
+    background-color: rgba(0, 0, 0, 0.76) !important
+}
+
+.share span {
+    cursor: pointer;
+}
+
+#share-menu .MuiPaper-root {
+    height: 200px;
+    background-color: #242526;
+    width: 200px
+}
+
+#share-menu .MuiMenu-list li {
+    height: 50px;
+    width: 200px;
 }

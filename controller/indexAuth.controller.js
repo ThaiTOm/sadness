@@ -6,11 +6,7 @@ const jwt = require("jsonwebtoken");
 const { errorHandler } = require("../helpers/dbErrorHandle");
 const sgEmail = require("@sendgrid/mail");
 const { User } = require("../models/user.models");
-const { Blog } = require("../models/blog.models")
-const date = require('date-and-time');
-const redis = require("redis");
-const clientRedis = redis.createClient();
-const promisify = require('util').promisify;
+
 
 sgEmail.setApiKey("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")
 
@@ -73,7 +69,7 @@ exports.activationController = (req, res) => {
     if (token) {
         jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, (err, decoded) => {
             if (err) {
-                return res.json(401).json({
+                return res.status(401).json({
                     error: "Expired Token signup again"
                 })
             } else {

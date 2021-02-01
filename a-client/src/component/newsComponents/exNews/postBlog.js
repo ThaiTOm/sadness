@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -7,13 +7,15 @@ import CreateIcon from '@material-ui/icons/Create';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from "axios";
 import { getCookie } from '../../../helpers/auth';
-import { ToastContainer, toast } from "react-toastify";
+import RequireLogin from '../../../helpers/requireLogin';
+
 
 function Index() {
     const [text, setText] = useState("")
     const [file, setFile] = useState([])
     // const [dataFile, setDataFile] = useState("")
     const [open, setOpen] = useState(false)
+    const [login, setLogin] = useState(false)
     const id = getCookie().token;
 
     const dragFile = (file) => {
@@ -28,14 +30,18 @@ function Index() {
         e.preventDefault();
         axios.post("http://localhost:2704/api/news/post", { text, file, id })
             .then(data => {
-                toast.success("Yêu cầu của bạn đã được thực hiện")
                 handleClose()
             }).catch(err => {
                 console.log(err)
             })
     }
     const handleOpen = () => {
-        setOpen(true);
+        if (!id) {
+            setLogin(true)
+        } else {
+            setOpen(true);
+        }
+
     };
     const handleClose = () => {
         setOpen(false);
@@ -56,7 +62,7 @@ function Index() {
     }
     return (
         <div className="post_data">
-            <ToastContainer />
+            {login === true ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
             <button className="post_data_button" type="button" onClick={handleOpen}>
                 <CreateIcon />
             </button>

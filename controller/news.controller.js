@@ -2,7 +2,6 @@ const redis = require("redis")
 const client = redis.createClient()
 const promisify = require("util").promisify
 const { Blog } = require("../models/blog.models")
-const { User } = require("../models/user.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
 
@@ -44,7 +43,6 @@ exports.postBlog = (req, res) => {
         }
     })
 }
-
 exports.viewBlog = async (req, res) => {
     var { start, end, id } = req.query
     start = Number(start)
@@ -261,7 +259,6 @@ exports.viewComment = async (req, res) => {
 exports.getNotifications = async (req, res) => {
     const { id, start, end } = req.query
     let value = await nodeCache.get(id + "noti")
-    console.log(value)
     if (value === undefined) {
         return res.json([])
     } else {
@@ -269,4 +266,39 @@ exports.getNotifications = async (req, res) => {
             value
         })
     }
+}
+exports.getBlogWithOut = async (req, res) => {
+    const { start, end } = req.query
+    let arr = await Blog.find({}).exec()
+    arr.sort(function (a, b) {
+        return b.likes - a.likes
+    })
+    let data = []
+    for await (let value of arr.slice(start, end)) {
+        let createdAt = new Date(value.createdAt);
+        let d = new Date()
+        let now = d.getTime()
+        // hl === how long
+        let hl = now - createdAt
+        hl = new Date(hl);
+        hl = date.format(hl, 'DD-MM-YYYY');
+        let promiseRedis = promisify(client.hgetall).bind(client)
+        let a = await promiseRedis(value.id)
+        let commentTop = value.comment
+        commentTop.sort((a, b) => {
+            return b.likes - a.likes
+        })
+        let x = {
+            text: JSON.parse(a.contentText),
+            image: JSON.parse(a.contentImg),
+            likes: value.likes,
+            time: hl,
+            idBlog: value.id,
+            comment: commentTop
+        }
+        data.push(x)
+    }
+    return res.json({
+        data: data
+    })
 }
