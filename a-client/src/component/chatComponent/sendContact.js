@@ -1,26 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from "axios"
-import CryptoJS from 'crypto-js';
-import { getCookie } from '../../helpers/auth';
-import SendIcon from '@material-ui/icons/Send';
+import { decryptWithAES, encryptTo, getCookie } from '../../helpers/auth';
+import SendOutlinedIcon from '@material-ui/icons/Send';
 import socketApp from '../../socket';
 import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
+import "../style/call.css"
+import MicIcon from '@material-ui/icons/Mic';
+import HeadsetIcon from '@material-ui/icons/Headset';
+import Peer from "peerjs"
+import { createEmptyAudioTrack } from '../../helpers/audio';
+import { set } from 'js-cookie';
+const userId = getCookie().token;
+
 
 // This function is use for send and view message
 function SendContact(props) {
-    const userId = getCookie().token;
     let socket = socketApp.getSocket();
+    let createPeer = async () => {
+        return new Peer(userId, {
+            host: "/",
+            port: 3001
+        })
+    }
     const { id } = props;
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
     //msg contain all message before
+
     const [msg, setMsg] = useState([]);
     // about message is contain new message typing
-    const [message, setMessage] = useState("")
-    const myRef = useRef(null)
-    const fileRef = useRef(null)
+    const [message, setMessage] = useState("");
+    const myRef = useRef(null);
+    const fileRef = useRef(null);
     const [load, setLoad] = useState(false);
+    const [useer, setUser] = useState(null);
+    const [audio, setAudio] = useState(null);
     const executeScroll = () => {
         try {
             myRef.current.scrollIntoView()
@@ -28,22 +43,6 @@ function SendContact(props) {
         }
     }
 
-    const encryptTo = text => {
-        const passphrase = '123nguyenduythaise1';
-        return CryptoJS.AES.encrypt(text, passphrase).toString();
-    }
-    const decryptWithAES = ciphertext => {
-        const passphrase = '123nguyenduythaise1';
-        const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        let originalText
-        //if original text is defined that assign it
-        try {
-            originalText = bytes.toString(CryptoJS.enc.Utf8);
-        } catch (error) {
-            originalText = ""
-        }
-        return originalText;
-    };
     const handleSubmit = e => {
         e.preventDefault();
         setMessage("")
@@ -92,14 +91,75 @@ function SendContact(props) {
             executeScroll()
         })
     }, [])
+    // Use effect for voice chat
+    var audioStream
+
+    let createNullStream = () => {
+        const audioTrack = createEmptyAudioTrack();
+        const streamNull = new MediaStream([audioTrack]);
+        audioStream = (
+            <audio muted playsInline autoPlay />
+        )
+        setAudio(audioStream)
+    }
+    const createCall = (call) => {
+        call.on("stream", async (userVideoStream) => {
+            let audioStream = async () => {
+                const audioTrack = createEmptyAudioTrack();
+                const streamNull = new MediaStream([audioTrack]);
+                try {
+                    // <audio playsInline ref={audio => }/>
+                    return <audio playsInline ref={audio => audio ? audio.srcObject = userVideoStream : streamNull} autoPlay />
+                } catch (error) {
+                    console.log("run 123")
+                }
+            }
+            let a = await audioStream()
+            console.log(a)
+            setAudio(a)
+        })
+    }
+    const plus = async (peer, stream) => {
+        // check if that peer is destroyed or not 
+        if (peer.destroyed === false) {
+            // run normally
+            peer.on("call", call => {
+                call.answer(stream)
+                createCall(call)
+            })
+            socket.on("user-connect", value => {
+                const call = peer.call(value.id, stream)
+                createCall(call)
+            })
+        } else {
+            createNullStream()
+        }
+    }
+
+    useEffect(async () => {
+        let peerJS = await createPeer()
+        peerJS.on("open", idPeer => {
+            socket.emit("chatVideo", { idRoom: id, id: userId })
+        })
+        // get user media
+        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
+            plus(peerJS, stream)
+        }).catch(err => {
+            // if user does not accept to stream then create new null stream
+            const audioTrack = createEmptyAudioTrack();
+            const stream = new MediaStream([audioTrack]);
+            plus(peerJS, stream)
+        })
+    }, [id])
+
 
     return (
         <div className="message_container">
             <ul>
                 <div className="button_load_more">
-                    {load === false ?
-                        <button onClick={handleClickLoad}>Tải thêm</button>
-                        : <div className="loaderBalls">
+                    {load === false ? <button onClick={handleClickLoad}>Tải thêm</button>
+                        :
+                        <div className="loaderBalls">
                             <div className="yellow"></div>
                             <div className="red"></div>
                             <div className="blue"></div>
@@ -196,14 +256,34 @@ function SendContact(props) {
                         onChange={handleFileUpload}
                         ref={fileRef}
                     />
-                    <IconButton onClick={useRefTrigger}>
-                        <ImageIcon />
-                    </IconButton>
+                    <div classNam="inner_title">
+                        <IconButton className="image_upload_message_icon" onClick={useRefTrigger}>
+                            <ImageIcon />
+                        </IconButton>
+                        <span className="title" id="image_upload_message_title">
+                            Đăng tải ảnh
+                    </span>
+                    </div>
                 </div>
                 <button type="submit">
-                    <SendIcon />
+                    <SendOutlinedIcon />
                 </button>
             </form>
+            <div className="call_div_container">
+                <div>
+                    <span>Voice Chat</span>
+                </div>
+                <div className="main_mic">
+                    <div className="user_device">
+                        <img src="../demo.jpeg"></img>
+                        <div className="icon_device">
+                            {audio}
+                            <MicIcon />
+                            <HeadsetIcon />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div >
     )
 }

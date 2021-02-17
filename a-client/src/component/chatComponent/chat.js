@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import CryptoJS from 'crypto-js';
 import classNames from 'classnames';
 import { getCookie } from '../../helpers/auth';
-import SendIcon from '@material-ui/icons/Send';
+import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import axios from "axios"
 import socketApp from '../../socket';
 import ImageIcon from '@material-ui/icons/Image';
@@ -46,7 +46,6 @@ function Chat() {
         for (let i = 0; i < file.length; i++) {
             reader.readAsDataURL(file[i])
             reader.onloadend = () => {
-                console.log(reader.result)
                 socket.emit("sendImageOff", { room: idRoom, image: reader.result, userId: id })
             }
         }
@@ -217,13 +216,19 @@ function Chat() {
                         type="file"
                         onChange={handleFileUpload}
                         ref={fileRef}
+
                     />
-                    <IconButton onClick={useRefTrigger}>
-                        <ImageIcon />
-                    </IconButton>
+                    <div classNam="inner_title">
+                        <IconButton className="image_upload_message_icon" onClick={useRefTrigger}>
+                            <ImageIcon />
+                        </IconButton>
+                        <span className="title" id="image_upload_message_title">
+                            Đăng tải ảnh
+                    </span>
+                    </div>
                 </div>
                 <button type="submit">
-                    <SendIcon />
+                    <SendOutlinedIcon />
                 </button>
             </form>
         </div>

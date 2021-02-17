@@ -128,14 +128,16 @@ exports.viewBlog = async (req, res) => {
                         let newArr = {
                             likes: value.likes,
                             isLiked: true,
-                            id: value.id
+                            id: value.id,
+                            value: value.value
                         }
                         comment.push(newArr)
                     } else {
                         let newArr = {
                             likes: value.likes,
                             isLiked: false,
-                            id: value.id
+                            id: value.id,
+                            value: value.value
                         }
                         comment.push(newArr)
                     }
@@ -267,6 +269,7 @@ exports.getNotifications = async (req, res) => {
         })
     }
 }
+// get blog without id 
 exports.getBlogWithOut = async (req, res) => {
     const { start, end } = req.query
     let arr = await Blog.find({}).exec()

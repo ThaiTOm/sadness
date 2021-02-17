@@ -31,6 +31,13 @@ const UserSchema = new mongoose.Schema({
     likes: {
         type: Array,
         default: []
+    },
+    lastOffline: {
+        type: String
+    },
+    isOnline: {
+        type: Boolean,
+        default: true
     }
 }, { timeStamp: true })
 

@@ -6,17 +6,16 @@
 
 .news_page .navbar_right {
     position: fixed;
+    width: 5.6%
 }
 
 .news_page .navbar_auth p {
-    cursor: pointer;
     text-align: center;
     font-size: 1.7rem;
     margin: 20px 40%
 }
 
 .main_news {
-    margin-left: 15%;
     width: 100%;
 }
 
@@ -49,15 +48,16 @@
 }
 
 .form_post_blog {
-    background-color: beige;
-    padding: 2% 5% 2% 5%;
+    background-color: #242526;
+    color: white;
+    width: 700px;
+    padding: 20px 50px;
 }
 
 .form_post_blog section {
     height: 100px;
     border-style: dashed;
     border-color: rgb(100, 100, 241);
-    border-radius: 5px;
 }
 
 .form_post_blog p {
@@ -71,6 +71,7 @@
     font-weight: 500;
     font-size: 2rem;
     margin: 0px;
+    margin-bottom: 20px;
 }
 
 .form_post_blog button {
@@ -81,9 +82,7 @@
     background-color: #15c981;
     box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
     transition: all 0.3s ease 0s;
-    cursor: pointer;
     outline: none;
-    border-radius: 10px;
     font-size: 1.5rem
 }
 
@@ -157,7 +156,6 @@
     overflow-x: scroll;
     width: 500px;
     margin-top: 10px;
-    display: flex;
 }
 
 .image_post_news li {
@@ -175,7 +173,6 @@
     position: absolute;
     right: 0;
     font-size: 2rem;
-    cursor: pointer;
     color: white;
 }
 
@@ -190,4 +187,68 @@
 
 .extension_auth .MuiSvgIcon-root {
     font-size: 2rem;
+}
+
+.infinite-scroll-component {
+    background-color: #181818;
+}
+
+.comment_a_blog .infinite-scroll-component {
+    background-color: inherit;
+}
+
+#news {
+    padding-top: 69px
+}
+
+.profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.profile_text {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.profile_text span {
+    font-size: 1.2em;
+    color: #fbff08;
+    text-shadow: 0 0 1px #fbff08, 0 0 1px #fbff08, 0 0 1px #fbff08, 0 0 1px #fbff08, 0 0 1px #fbff08;
+}
+
+.profile_text span:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 1px;
+    z-index: -1;
+    filter: blur(0.5px);
+}
+
+.profile_text span:before {
+    content: '';
+    background: #fbff08;
+    z-index: -2;
+    opacity: .5;
+    filter: blur(2px);
+}
+
+.message_icon .MuiSvgIcon-root:hover {
+    filter: drop-shadow(2px 5px 5px rgba(228, 231, 230, 0.959));
+    transition: all 0.3s ease 0s;
+}
+
+.message_icon svg {
+    color: rgba(225, 230, 228, 0.89)
+}
+
+.icon_nav svg {
+    color: rgba(10, 243, 150, 0.89)
+}
+
+.icon_nav .MuiSvgIcon-root:hover {
+    filter: drop-shadow(2px 5px 5px rgba(10, 243, 150, 0.89));
+    transition: all 0.3s ease 0s;
 }

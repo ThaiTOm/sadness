@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { MenuItem, Menu } from '@material-ui/core';
-import ReplyIcon from '@material-ui/icons/Reply';
+import PresentToAllOutlinedIcon from '@material-ui/icons/PresentToAllOutlined';
 
 function ShareBlog(cb) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -13,9 +13,9 @@ function ShareBlog(cb) {
         setAnchorEl(null);
     };
     return (
-        <li className="share">
+        <div className="share">
             <span className="list" aria-controls="share-menu" aria-haspopup="true" onClick={handleClick}>
-                <ReplyIcon />  Share
+                <PresentToAllOutlinedIcon />  Share
             </span>
             <Menu
                 id="share-menu"
@@ -41,7 +41,7 @@ function ShareBlog(cb) {
                 <MenuItem >My account</MenuItem>
                 <MenuItem >Logout</MenuItem>
             </Menu>
-        </li>
+        </div>
     )
 }
 

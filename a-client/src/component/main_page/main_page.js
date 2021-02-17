@@ -4,19 +4,17 @@ import SimpleMenu from '../chatComponent/miniChatCom/simpleMenu.js';
 import { Link, useHistory } from 'react-router-dom';
 import MessageIcon from '@material-ui/icons/Message';
 import HomeIcon from '@material-ui/icons/Home';
-import HelpIcon from '@material-ui/icons/Help';
 import ContactContain from '../chatComponent/miniChatCom/contactContain.js';
 import { getCookie } from '../../helpers/auth.js';
 import axios from "axios"
 import SendContact from '../chatComponent/sendContact.js';
+import PolicyOutlinedIcon from '@material-ui/icons/PolicyOutlined';
+import DynamicFeedOutlinedIcon from '@material-ui/icons/DynamicFeedOutlined';
+import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 
 function Main_page() {
     const history = useHistory()
     const [room, setRoom] = useState("");
-    const [open, setOpen] = useState(true);
-    const closeNavbar = (e) => {
-        setOpen(!open)
-    }
     const id = getCookie().token;
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
@@ -40,10 +38,10 @@ function Main_page() {
         let id = value.split(",")
         setRoom(id[0])
         setUser(id[1])
+        sessionStorage.removeItem(id)
     }
     return (
         <div className="main_page_auth">
-            {/* <ChatComponent /> */}
             <header>
                 <div className="navbar_auth">
                     <SimpleMenu onClick={(value) => hanldeSetRoom("")} id={room + ";" + user} />
@@ -52,45 +50,47 @@ function Main_page() {
                 </div>
             </header>
             <div className="container">
-                <div className="navbar_right"
-                    style={open === true ? { width: "15%" } :
-                        { overflowY: "hidden", width: "0px" }}
-                >
-                    <div
-                        onClick={closeNavbar}
-                        id="triangle-right"
-                        style={open === true ?
-                            { left: "185px" } :
-                            { left: "0", borderLeft: "20px solid yellow", borderRight: "0" }}>
-                    </div>
+                <div className="navbar_right">
                     <ul >
-                        <li >
-                            <MessageIcon />
-                            <Link to="/">Trò chuyện</Link>
+                        <li className="inner_title">
+                            <Link className="message_icon" to="/">
+                                <MessageIcon />
+                            </Link>
+                            <span className="title" id="m_title">
+                                Tin nhắn
+                            </span>
                         </li>
-                        <li>
-                            <HomeIcon />
-                            <Link to="/news">Trang chủ</Link>
+                        <li className="inner_title">
+                            <Link className="home_icon icon_nav" to="/news">
+                                <HomeIcon />
+                            </Link>
+                            <span className="title" id="h_title">
+                                Trang chủ
+                            </span>
                         </li>
-                        {/* <li>
-                            <HelpIcon />
-                            <Link to="/rule">Thông báo</Link>
-                        </li> */}
-                        <li>
-                            <HelpIcon />
-                            <Link to="/friend">Bạn bè</Link>
+                        <li className="inner_title">
+                            <Link className="feedback_icon icon_nav" to="/feedback">
+                                <DynamicFeedOutlinedIcon />
+                            </Link>
+                            <span className="title" id="f_title">
+                                Góp ý và cải thiện
+                            </span>
                         </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Cài đặt</Link>
+                        <li className="inner_title">
+                            <Link className="contact_icon icon_nav" to="/help">
+                                <ContactSupportOutlinedIcon />
+                            </Link>
+                            <span className="title" id="c_title">
+                                Trợ giúp
+                            </span>
                         </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Hỗ trợ</Link>
-                        </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Điều khoản </Link>
+                        <li className="inner_title">
+                            <Link className="policy_icon icon_nav" to="/policy">
+                                <PolicyOutlinedIcon />
+                            </Link>
+                            <span className="title" id="p_title">
+                                Điều khoản và dịch vụ
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -98,7 +98,7 @@ function Main_page() {
                     // id room id not exists than render chat component
                     room ? <SendContact id={room} name={(value) => setName(value)} /> : <Chat />
                 }
-                <div className="contact" style={open === true ? { width: "20%" } : { width: "35%" }}>
+                <div className="contact" >
                     {
                         // if value have then we can use this 
                         value.length > 0 ?

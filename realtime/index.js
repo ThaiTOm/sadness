@@ -21,14 +21,12 @@ module.exports = {
         socket.on("joinChatBack", ({ idRoom }) => {
             socket.join(idRoom)
         })
-
         socket.on('sendMessage', ({ room, message, id }, callback) => {
             const { roomMessage,
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
             io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage, idRoom: roomMessage });
-
             callback();
         });
         socket.on("sendMessageOff", ({ room, message, userId }) => {
@@ -74,6 +72,12 @@ module.exports = {
             } if (user) {
                 io.to(user).emit("activities", { type, value: " người đã thích bình luận của bạn", number })
             }
+        })
+        socket.on("chatVideo", ({ id, idRoom }) => {
+            socket.to(idRoom).broadcast.emit("user-connect", { id, idRoom })
+        })
+        socket.on("user_dis", ({ idRoom, id }) => {
+            socket.to(idRoom).broadcast.emit("user-disc", { id })
         })
     }
 }

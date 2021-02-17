@@ -1,6 +1,6 @@
 import cookie from "js-cookie";
 import { replaceTelex } from "../algorithm/algorithm";
-
+import CryptoJS from 'crypto-js';
 
 //Set cookie
 export const setCookie = (key, value) => {
@@ -71,3 +71,20 @@ export const updateUser = (res, next) => {
     }
     next()
 }
+//  
+export const encryptTo = text => {
+    const passphrase = '123nguyenduythaise1';
+    return CryptoJS.AES.encrypt(text, passphrase).toString();
+}
+export const decryptWithAES = ciphertext => {
+    const passphrase = '123nguyenduythaise1';
+    const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
+    let originalText
+    //if original text is defined that assign it
+    try {
+        originalText = bytes.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+        originalText = ""
+    }
+    return originalText;
+};

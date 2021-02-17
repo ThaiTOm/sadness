@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import MessageIcon from '@material-ui/icons/Message';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
-import HelpIcon from '@material-ui/icons/Help';
 import "../style/newspage.css"
 import PostBlogMain from "./exNews/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
@@ -14,26 +13,19 @@ import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { Notifications } from '../../userContext';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PolicyOutlinedIcon from '@material-ui/icons/PolicyOutlined';
+import DynamicFeedOutlinedIcon from '@material-ui/icons/DynamicFeedOutlined';
+import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 
 function NewsMain() {
     const id = getCookie().token || ""
     const [openNoti, setOpenNoti] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(true);
-    const closeNavbar = (e) => {
-        setOpen(!open)
-    }
     const { value, setValue } = useContext(Notifications);
     let socket = socketApp.getSocket();
 
     useEffect(() => {
-        socket.emit("join", { id })
-    }, [])
-    useEffect(() => {
         socket.on("activities", async (msg) => {
-            toast.info(
-                msg.number + msg.value
-            )
             let arr = {
                 type: msg.type,
                 value: msg.value,
@@ -45,7 +37,6 @@ function NewsMain() {
                     let old = [...arr]
                     old.splice(i, 1)
                     old.unshift(data)
-                    console.log(data)
                     setValue(old)
                 } else {
                     setValue(a => [...a, arr])
@@ -82,11 +73,16 @@ function NewsMain() {
                 <div className="navbar_auth">
                     <p> Recal </p>
                     <div className="extension_auth">
-                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickNoti}>
-                            <NotificationsIcon />
-                        </Button>
+                        <div className="inner_title">
+                            <Button className="notify_icon" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickNoti}>
+                                <NotificationsIcon />
+                            </Button>
+                            <span className="title" id="notify_title">
+                                Thông báo
+                            </span>
+                        </div>
                         <Menu
-                            id="menuContainerMessage"
+                            id="menu_main_page"
                             anchorEl={openNoti}
                             keepMounted
                             open={Boolean(openNoti)}
@@ -106,11 +102,16 @@ function NewsMain() {
                             }
 
                         </Menu>
-                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                            <AccountCircleIcon />
-                        </Button>
+                        <div className="inner_title">
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className="account_icon">
+                                <AccountCircleIcon />
+                            </Button>
+                            <span id="account_title" className="title">
+                                Tài khoản
+                            </span>
+                        </div>
                         <Menu
-                            id="menuContainerMessage"
+                            id="menu_main_page"
                             anchorEl={anchorEl}
                             keepMounted
                             open={Boolean(anchorEl)}
@@ -125,42 +126,48 @@ function NewsMain() {
                     </div>
                 </div>
             </header>
-            <div className="container">
-                <div className="navbar_right"
-                    style={open === true ? { width: "15%" } :
-                        { overflowY: "hidden", width: "0px" }}
-                >
-                    <div
-                        onClick={closeNavbar}
-                        id="triangle-right"
-                        style={open === true ?
-                            { left: "185px" } :
-                            { left: "0", borderLeft: "20px solid yellow", borderRight: "0" }}>
-                    </div>
-                    <ul >
-                        <li>
-                            <MessageIcon />
-                            <Link to="/">Trò chuyện</Link>
+            <div className="container" id="news">
+                <div className="navbar_right">
+                    <ul>
+                        <li className="inner_title">
+                            <Link className="message_icon" to="/">
+                                <MessageIcon />
+                            </Link>
+                            <span className="title" id="m_title">
+                                Tin nhắn
+                            </span>
                         </li>
-                        <li>
-                            <HomeIcon />
-                            <Link to="/news">Trang chủ</Link>
+                        <li className="inner_title">
+                            <Link className="home_icon icon_nav" to="/news">
+                                <HomeIcon />
+                            </Link>
+                            <span className="title" id="h_title">
+                                Trang chủ
+                            </span>
                         </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/friend">Bạn bè</Link>
+                        <li className="inner_title">
+                            <Link className="feedback_icon icon_nav" to="/feedback">
+                                <DynamicFeedOutlinedIcon />
+                            </Link>
+                            <span className="title" id="f_title">
+                                Góp ý và cải thiện
+                            </span>
                         </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Cài đặt</Link>
+                        <li className="inner_title">
+                            <Link className="contact_icon icon_nav" to="/help">
+                                <ContactSupportOutlinedIcon />
+                            </Link>
+                            <span className="title" id="c_title">
+                                Trợ giúp
+                            </span>
                         </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Hỗ trợ</Link>
-                        </li>
-                        <li>
-                            <HelpIcon />
-                            <Link to="/news">Điều khoản </Link>
+                        <li className="inner_title">
+                            <Link className="policy_icon icon_nav" to="/policy">
+                                <PolicyOutlinedIcon />
+                            </Link>
+                            <span className="title" id="p_title">
+                                Điều khoản và dịch vụ
+                            </span>
                         </li>
                     </ul>
                 </div>

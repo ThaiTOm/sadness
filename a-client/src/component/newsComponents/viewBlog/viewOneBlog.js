@@ -10,7 +10,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { Notifications } from '../../../userContext';
-
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
+import ShareBlog from '../exOne/shareBlog';
 
 function ViewOneBlog(props) {
     const id = getCookie().token
@@ -18,7 +19,7 @@ function ViewOneBlog(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(null)
     let arr = props.location.pathname.split("/")
-    const { value, setValue } = useContext(Notifications);
+    const { value } = useContext(Notifications);
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -118,14 +119,16 @@ function ViewOneBlog(props) {
                 </div>
             </header>
             <Link className="go_to_previous" to="/news">
-                Quay lại
-           </Link>
+                <ArrowBackIosOutlinedIcon />
+                <span>
+                    Quay lại
+                </span>
+            </Link>
             {
                 data !== null ? <div className="post_viewing_div">
                     {
                         data.img !== undefined ? <Slideshow />
                             : <div className="slide-container flex">
-
                             </div>
                     }
                     <div className="content flex">
@@ -140,21 +143,16 @@ function ViewOneBlog(props) {
 
                         </div>
                         <div className="extension_blog">
-                            <LikePost props={{ value: data, i: "1", className: "ex" }} />
-                            <div className="ex">
-                                comment
-                            </div>
-                            <div className="ex">
-                                share
+                            <LikePost props={{ value: data, i: "1", className: "ex night" }} />
+                            <div className="ex night">
+                                <ShareBlog />
                             </div>
                         </div>
                         <Comment props={{ value: data, id: id }} />
                     </div>
                 </div> : console.log()
             }
-
         </div>
-
     )
 }
 

@@ -1,8 +1,6 @@
 const { arrOfRegion } = require("../../region");
 const { cutSpaceInString } = require("../../a-client/src/algorithm/algorithm");
-const redis = require("redis");
-// const client = redis.createClient();
-// const promisify = require('util').promisify;
+
 const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()
 
@@ -44,63 +42,60 @@ const addUser = async ({ id, ipOfUser, len }) => {
     }
     let x = 0;
     // Wait of check when user if join to some room
-    while (x < 1) {
-        // Run until the user find partner
-        for (let i in arrOfRegion) {
-            // Find if have anyone in that state(IP) has alone join to this
-            if (arrOfRegion[ipOfUser].length > 0) {
-                // If user of this region have more than 0 then push new user in
-                arrOfRegion[ipOfUser].push(user);
-                // If that region has more than 1 people than we get that out
-                if (arrOfRegion[ipOfUser].length >= 2) {
-                    // Use logic here
-                    let a = arrOfRegion[ipOfUser];
-                    // Check if 2 people here not block each other
-                    let arr = await cm.get(a[0].id + "blackList")
-                    for (let i = 1; i < a.length; i++) {
-                        //check if that one is not from the list
-                        if (arr === null) {
-                            let arg = [a[0], a[i]]
-                            return createRoom(arg, ipOfUser)
-                        } else if (arr.includes(a[i].id) === false) {
-                            let arg = [a[0], a[i]]
-                            //pass data to createRoom function and return that
-                            return createRoom(arg)
-                        }
+    // Run until the user find partner
+    for (let i in arrOfRegion) {
+        // Find if have anyone in that state(IP) has alone join to this
+        if (arrOfRegion[ipOfUser].length > 0) {
+            // If user of this region have more than 0 then push new user in
+            arrOfRegion[ipOfUser].push(user);
+            // If that region has more than 1 people than we get that out
+            if (arrOfRegion[ipOfUser].length >= 2) {
+                // Use logic here
+                let a = arrOfRegion[ipOfUser];
+                // Check if 2 people here not block each other
+                let arr = await cm.get(a[0].id + "blackList")
+                for (let i = 1; i < a.length; i++) {
+                    //check if that one is not from the list
+                    if (arr === null) {
+                        let arg = [a[0], a[i]]
+                        return createRoom(arg, ipOfUser)
+                    } else if (arr.includes(a[i].id) === false) {
+                        let arg = [a[0], a[i]]
+                        //pass data to createRoom function and return that
+                        return createRoom(arg)
                     }
-                    return { idRoom: user.room, yet: "yet" }
                 }
-                return { idRoom: user.room }
-            } else if (arrOfRegion[i].length > 0) {
-                // If user of this region have more than 0 then push new user in
-                arrOfRegion[i].push(user);
-                // If that region has more than 1 people than we get that out
-                if (arrOfRegion[i].length >= 2 && arrOfRegion[i][0].id !== arrOfRegion[i][1].id) {
-                    // Use logic here
-                    let a = arrOfRegion[i];
-                    // Check if 2 people here not block each other
-                    let arr = await cm.get(a[0].id + "blackList")
-                    for (let x = 1; x < a.length; x++) {
-                        //check if that one is not from the list
-                        if (arr === null) {
-                            let arg = [a[0], a[x]]
-                            return createRoom(arg, x)
-                        } else if (arr.includes(a[x].id) === false) {
-                            let arg = [a[0], a[x]]
-                            //pass data to createRoom function and return that
-                            return createRoom(arg, x)
-                        }
-                    }
-                    return { idRoom: user.room, yet: "yet" }
-                }
-
                 return { idRoom: user.room, yet: "yet" }
             }
+            return { idRoom: user.room }
+        } else if (arrOfRegion[i].length > 0) {
+            // If user of this region have more than 0 then push new user in
+            arrOfRegion[i].push(user);
+            // If that region has more than 1 people than we get that out
+            if (arrOfRegion[i].length >= 2 && arrOfRegion[i][0].id !== arrOfRegion[i][1].id) {
+                // Use logic here
+                let a = arrOfRegion[i];
+                // Check if 2 people here not block each other
+                let arr = await cm.get(a[0].id + "blackList")
+                for (let x = 1; x < a.length; x++) {
+                    //check if that one is not from the list
+                    if (arr === null) {
+                        let arg = [a[0], a[x]]
+                        return createRoom(arg, x)
+                    } else if (arr.includes(a[x].id) === false) {
+                        let arg = [a[0], a[x]]
+                        //pass data to createRoom function and return that
+                        return createRoom(arg, x)
+                    }
+                }
+                return { idRoom: user.room, yet: "yet" }
+            }
+            return { idRoom: user.room, yet: "yet" }
         }
-        // If no one is waiting than 
-        arrOfRegion[ipOfUser].push(user)
-        x += 1
     }
+    // If no one is waiting than 
+    arrOfRegion[ipOfUser].push(user)
+    x += 1
     return { idRoom: user.room, yet: "yet" };
 }
 

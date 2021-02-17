@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios"
 import LikeComment from "./likeComment"
 import RequireLogin from '../../../helpers/requireLogin';
-
+import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 
 function Comment(props) {
     const { value, id } = props.props
@@ -88,7 +88,9 @@ function Comment(props) {
                     onInput={e => setText(e.target.innerText)}
                 >
                 </div>
-                <input type="submit" id="btnSearch" value="enter" />
+                <button type="submit" id="btnSearch" className="comment">
+                    <ChatBubbleOutlineOutlinedIcon />
+                </button>
             </form>
             <InfiniteScroll
                 dataLength={comment.length}

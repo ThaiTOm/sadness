@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import CreateIcon from '@material-ui/icons/Create';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from "axios";
 import { getCookie } from '../../../helpers/auth';
@@ -61,11 +61,15 @@ function Index() {
         }
     }
     return (
-        <div className="post_data">
+        <div className="post_data inner_title">
             {login === true ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
             <button className="post_data_button" type="button" onClick={handleOpen}>
-                <CreateIcon />
+                <CreateOutlinedIcon />
             </button>
+            <span className="title" id="post_blog_title">
+                Đăng tải bài viết của bạn
+                </span>
+
             <Modal
                 className="modal_post_blog"
                 aria-labelledby="transition-modal-title"
@@ -81,7 +85,7 @@ function Index() {
             >
                 <Fade in={open}>
                     <form onSubmit={handleSubmit} className="form_post_blog">
-                        <h4>Dang tai noi dung cua ban</h4>
+                        <h4>Đăng tải nội dung của bạn</h4>
                         <div
                             suppressContentEditableWarning={true}
                             onKeyPress={handleLineBreak}
@@ -91,9 +95,10 @@ function Index() {
                             Bạn hãy nhập vào đây
                         </div>
                         <Dropzone
+                            className="inner_title"
                             onDrop={acceptedFiles => dragFile(acceptedFiles)}>
                             {({ getRootProps, getInputProps }) => (
-                                <section>
+                                <section >
                                     <div className="drag_file" {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         <div className="icon">
@@ -101,6 +106,7 @@ function Index() {
                                         </div>
                                     </div>
                                 </section>
+
                             )}
                         </Dropzone>
                         <div>
@@ -114,7 +120,7 @@ function Index() {
                                     }) : {}}
                             </div>
                         </div>
-                        <button type="submit">Submit</button>
+                        <button type="submit">Đăng tải</button>
                     </form>
                 </Fade>
             </Modal>

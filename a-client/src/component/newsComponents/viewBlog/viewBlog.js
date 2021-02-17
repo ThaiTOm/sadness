@@ -258,13 +258,20 @@ function ViewBlog() {
                         return (
                             <div className="viewBlog_li" key={i}>
                                 <div className="contain_blog" >
-                                    <div className="text_blog">
-                                        {
-                                            value.text.map(function (data) {
-                                                return <p>{data}</p>
-                                            })
-                                        }
+                                    <div className="profile">
+                                        <img src="./demo.jpeg"></img>
+                                        <div className="profile_text">
+                                            <span>Người tỏa sáng nhất là người cô độc nhất</span>
+                                            <div className="text_blog">
+                                                {
+                                                    value.text.map(function (data) {
+                                                        return <p>{data}</p>
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
+
                                     {/* Render Image */}
                                     <div className="image-blog">
                                         <ImageRender props={{ value }} />
@@ -278,7 +285,7 @@ function ViewBlog() {
                                                 </li>
                                             </Link>
                                         </div>
-                                        <div className="inner">
+                                        <div className="inner share">
                                             <ShareBlog />
                                         </div>
                                     </div>

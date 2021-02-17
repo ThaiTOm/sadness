@@ -4,10 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { Beforeunload } from 'react-beforeunload';
+
+import socketApp from './socket';
+import { getCookie } from './helpers/auth';
+let id = getCookie().token
+let socket = socketApp.getSocket()
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Beforeunload onBeforeunload={() => socket.emit("offline", { id })}>
+      <App />
+    </Beforeunload>
   </React.StrictMode>,
   document.getElementById('root')
 );

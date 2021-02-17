@@ -1,21 +1,15 @@
-.viewBlog {
-    width: 100%;
-    height: 100%
-}
-
 .viewBlog_li {
     list-style: none;
     width: 50%;
-    margin-left: 10%;
-    margin-top: 5%;
+    padding-top: 50px;
+    margin-left: 180px;
+    color: whitesmoke
 }
 
 .contain_blog {
-    background-color: wheat;
+    background-color: #2e406f;
     padding: 10% 10% 0% 10%;
-    border-radius: 10px;
-    width: 100%;
-    /* position: relative; */
+    width: 80%;
 }
 
 /* .contain_blog .text_blog {} */
@@ -37,8 +31,6 @@
 .activities_blog {
     display: inline-flex;
     width: 102%;
-    display: flex;
-    flex-wrap: wrap;
 }
 
 .activities_blog .inner {
@@ -47,9 +39,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
+    background-color: initial;
     margin: 5px 11px 10px 0;
-    border-radius: 10px;
 }
 
 .activities_blog .list li {
@@ -68,13 +59,11 @@
     width: 51%;
     margin-left: 10%;
     padding: 10px 50px 50px 50px;
-    border-radius: 10px;
 }
 
 .skeleton {
     background-color: black;
     margin: 10px 0;
-    border-radius: 10px;
     width: 100%;
 }
 
@@ -96,29 +85,18 @@
     height: 50px
 }
 
-.like {
-    cursor: pointer
-}
-
 .inner .like svg, .inner .list svg {
     padding-right: 10px;
-    color: #242526;
 }
 
 input[type="checkbox"] {
     display: none
 }
 
-:checked+label {
-    background-color: rgb(48, 179, 226) !important;
-    border-radius: 10px;
-}
-
-.activities_blog label {
+.activities_blog label.activities_blog label .activities_blog label {
     list-style: none;
     flex: 0 0 28%;
-    border-radius: 10px;
-    background-color: whitesmoke;
+    background-color: initial;
     padding: 10px 61px;
 }
 
@@ -194,6 +172,10 @@ input[type="checkbox"] {
     padding-left: 14px;
 }
 
+.comment_blog .comment {
+    padding-left: 15px;
+}
+
 .like, .comment li {
     display: flex;
 }
@@ -210,6 +192,7 @@ input[type="checkbox"] {
     margin-top: 7%;
     height: 100%;
     width: 90%;
+    color: whitesmoke
 }
 
 .post_viewing .flex {
@@ -227,10 +210,9 @@ input[type="checkbox"] {
 }
 
 .post_viewing .content {
-    background-color: burlywood;
+    background-color: #2a2c2eea;
     width: 60%;
     height: 500px;
-    padding-left: 10px;
     overflow-y: scroll;
     margin-bottom: auto;
 }
@@ -252,10 +234,9 @@ input[type="checkbox"] {
 }
 
 .extension_blog .ex {
-    flex: 0 0 31.333333%;
-    background-color: whitesmoke;
+    flex: 50;
+    background-color: initial;
     margin: 5px 11px 10px 0;
-    border-radius: 10px;
 }
 
 .extension_blog .ex .like {
@@ -305,7 +286,6 @@ input[type="checkbox"] {
 #txtSearch:focus {
     background: #00B8FF;
     border: 2px solid #00B8FF;
-    color: #fff
 }
 
 #btnSearch {
@@ -316,11 +296,14 @@ input[type="checkbox"] {
     height: 40px;
     width: 90px;
     color: rgb(88, 88, 88);
-    background: #00B8FF;
-    border: none;
+    background: initial;
+    border: 2px solid #00B8FF;
     margin-left: 10px;
-    cursor: pointer;
     transition-duration: 0.3s;
+}
+
+#btnSearch svg {
+    color: rgba(46, 229, 156, 0.897)
 }
 
 #btnSearch:hover {
@@ -352,10 +335,8 @@ input[type="checkbox"] {
     display: flex;
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.share .list svg {
+    padding-right: 10px;
 }
 
 .post_viewing {
@@ -377,7 +358,6 @@ input[type="checkbox"] {
     margin-left: 10px;
     background-color: cadetblue;
     padding: 5px 10px;
-    border-radius: 10px;
 }
 
 .value_content_comment_a_blog p {
@@ -396,7 +376,9 @@ input[type="checkbox"] {
 .go_to_previous {
     margin-bottom: auto;
     margin-top: 70px;
-    color: black
+    color: white;
+    width: 7%;
+    display: flex
 }
 
 .more_image {
@@ -425,23 +407,29 @@ input[type="checkbox"] {
 }
 
 .notifications_span .simple_menu_span {
-    padding: 30px 30px;
+    padding: 10px 30px;
 }
 
 .notifications_span .simple_menu_span:hover {
-    background-color: rgba(189, 187, 185, 0.747);
+    background-color: none;
 }
 
 .simple_menu_span {
     color: white;
 }
 
-#menuContainerMessage .MuiPaper-root {
+#menu_main_page .MuiPaper-root {
     background-color: #242526 !important;
     left: initial !important;
     right: 10px;
     width: auto !important;
     height: 500px;
+}
+
+#menuContainerMessage .MuiPaper-root {
+    height: 300px;
+    background-color: #242526 !important;
+    width: auto!important
 }
 
 .MuiList-root a {
@@ -450,7 +438,7 @@ input[type="checkbox"] {
     font-weight: 550
 }
 
-#menuContainerMessage p {
+#menuContainerMessage p, #menu_main_page p {
     margin: 5px 0 5px 10px;
     font-weight: 700;
     color: white
@@ -483,7 +471,6 @@ input[type="checkbox"] {
     position: absolute;
     right: 30px;
     top: 30px;
-    cursor: pointer;
     font-size: 2rem;
 }
 
@@ -498,7 +485,6 @@ input[type="checkbox"] {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 50px;
-    border-radius: 10px;
 }
 
 .active_page p {
@@ -518,10 +504,6 @@ input[type="checkbox"] {
     background-color: rgba(0, 0, 0, 0.76) !important
 }
 
-.share span {
-    cursor: pointer;
-}
-
 #share-menu .MuiPaper-root {
     height: 200px;
     background-color: #242526;
@@ -531,4 +513,26 @@ input[type="checkbox"] {
 #share-menu .MuiMenu-list li {
     height: 50px;
     width: 200px;
+}
+
+.like svg:hover, .inner .list svg:hover {
+    filter: drop-shadow(3px 5px 5px rgba(46, 229, 157, 0.4));
+    transition: all 0.3s ease 0s;
+}
+
+.like svg, .night .like svg {
+    color: rgba(12, 85, 243, 0.822)
+}
+
+.comment svg {
+    color: rgba(46, 229, 156, 0.897)
+}
+
+.share svg {
+    color: rgba(182, 85, 206, 0.966)
+}
+
+.inner a {
+    color: white;
+    text-decoration: none
 }

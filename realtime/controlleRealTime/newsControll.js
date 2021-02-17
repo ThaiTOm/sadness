@@ -16,7 +16,7 @@ var saveCacheNode = async (user, type, link, id) => {
                 type: type,
                 value: link,
                 seen: false,
-                number: a.number + 1
+                number: a.number
             }
             let old = [...arr]
             old.splice(i, 1)
@@ -31,16 +31,14 @@ var saveCacheNode = async (user, type, link, id) => {
                 type: type,
                 value: link,
                 seen: false,
-                number: 1
+                number: a.number + 1
             }
             arr.unshift(ob)
             nodeCache.set(user + "noti", arr, 2147483647)
-            console.log(ob.number)
             return {
                 number: ob.number
             }
         }
-        i++
     }
     ob = {
         id,
@@ -71,13 +69,7 @@ const comment = async ({ idRecieve, idSent, value }) => {
             ok: "ok"
         }
     } else {
-        await Blog.findByIdAndUpdate({ _id: idRecieve }, { $push: { "comment": data }, $inc: { "commentNumber": 1 } }, async (err, data) => {
-            if (err) {
-                return {
-                    error: "error",
-                }
-            }
-        })
+        await Blog.findByIdAndUpdate({ _id: idRecieve }, { $push: { "comment": data }, $inc: { "commentNumber": 1 } })
         let { number } = await saveCacheNode(user.user, " người đã bình luận về bài viết của bạn", "posts/id=" + idRecieve, data.id)
         return {
             user,
@@ -185,6 +177,7 @@ const likeCmt = async ({ value, id, idComment }) => {
             await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": -1 } }).exec()
             let old = [...arr]
             old.splice(index, 1)
+            old = old.join(",")
             nodeCache.set(id, old)
             return {
                 error: "",
@@ -195,4 +188,12 @@ const likeCmt = async ({ value, id, idComment }) => {
         }
     }
 }
-module.exports = { comment, likeBlog, likeCmt };
+const setOffline = ({ id }) => {
+    var d = new Date()
+    var now = d.getTime()
+    User.findByIdAndUpdate({ "_id": id }, { "lastOffline": now, "isOnline": false }).exec()
+}
+const setOnline = ({ id }) => {
+    User.findByIdAndUpdate({ "_id": id }, { "isOnline": true }).exec()
+}
+module.exports = { comment, likeBlog, likeCmt, setOffline, setOnline };

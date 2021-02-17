@@ -6,6 +6,10 @@ import Modal from '@material-ui/core/Modal';
 import { signOut, getCookie } from '../../../helpers/auth';
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
+import BlockIcon from '@material-ui/icons/Block';
+import ReportIcon from '@material-ui/icons/Report';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export default function SimpleMenu({ id, onClick }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,11 +26,10 @@ export default function SimpleMenu({ id, onClick }) {
     const handleClickBlock = () => {
         if (id.length > 2) {
             setOpen(true)
-            console.log(id)
         }
     }
     // handleAB = handle Agree block
-    const handleAB = async () => {
+    const handleAB = () => {
         const idSend = getCookie().token
         axios.post("http://localhost:2704/api/msgC/blockUser", { idSend, id })
             .then(res => {
@@ -34,10 +37,8 @@ export default function SimpleMenu({ id, onClick }) {
                 setOpen(false)
                 setAnchorEl(null)
             }).catch(err => {
-
                 console.log(err)
             })
-
     }
     const handleCloseBlock = () => {
         setOpen(false)
@@ -65,14 +66,14 @@ export default function SimpleMenu({ id, onClick }) {
                         onClick={() => onClick("")}
                         to="/"
                     >
-                        Quay về
+                        <ArrowBackIosOutlinedIcon /> Quay về
                     </span>
                 </MenuItem>
                 <MenuItem>
                     <span
                         className="simple_menu_span"
                         onClick={handleClickBlock}>
-                        Chặn
+                        <BlockIcon />    Chặn
                     </span>
                     <Modal
                         open={open}
@@ -98,12 +99,12 @@ export default function SimpleMenu({ id, onClick }) {
                     <span
                         className="simple_menu_span"
                     >
-                        Báo cáo
+                        <ReportIcon />   Báo cáo
                     </span>
                 </MenuItem>
                 <MenuItem onClick={handleLogOut}>
                     <span className="simple_menu_span">
-                        Đăng xuất
+                        <ExitToAppIcon /> Đăng xuất
                     </span>
                 </MenuItem>
                 {/* <MenuItem onClick={}>Logout</MenuItem> */}
