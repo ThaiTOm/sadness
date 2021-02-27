@@ -7,26 +7,38 @@
 }
 
 .main_mic {
+    border-top: 1px solid rgba(248, 248, 255, 0.322);
     position: absolute;
     bottom: 10px;
     width: 100%;
     padding: 5px 0;
+    height: 50%
+}
+
+.main_mic p {
+    text-align: center;
+    color: whitesmoke
 }
 
 .user_device img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     margin-right: 20px;
     margin-left: 10px;
 }
 
 .user_device {
+    margin-bottom: 10px;
     display: flex;
     justify-items: center;
     align-items: center;
 }
 
 .user_device .icon_device svg {
-    padding-right: 15px;
+    padding-right: 10px;
+}
+
+.user_device .MuiSvgIcon-root {
+    font-size: 1.7rem;
 }

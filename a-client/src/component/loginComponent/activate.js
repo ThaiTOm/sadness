@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { Redirect } from "react-router-dom"
 import { isAuth, authenicate } from "../../helpers/auth";
+
 function ActivatePage(props) {
     const [formData, setFormData] = useState({
         name: "",
@@ -15,7 +16,7 @@ function ActivatePage(props) {
         if (token) {
             setFormData({ ...formData, name, token })
         }
-    }, [])
+    }, [token])
     const { token } = formData;
     const hanldeSubmit = e => {
         e.preventDefault()

@@ -1,24 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react'
-import MessageIcon from '@material-ui/icons/Message';
 import { Link } from 'react-router-dom';
-import HomeIcon from '@material-ui/icons/Home';
 import "../style/newspage.css"
 import PostBlogMain from "./exNews/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import socketApp from "../../socket"
 import { getCookie, signOut } from "../../helpers/auth"
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { Notifications } from '../../userContext';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import PolicyOutlinedIcon from '@material-ui/icons/PolicyOutlined';
-import DynamicFeedOutlinedIcon from '@material-ui/icons/DynamicFeedOutlined';
-import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
+import { navbar_right } from '../../helpers/message';
+
 
 function NewsMain() {
-    const id = getCookie().token || ""
+    // const id = getCookie().token || ""
     const [openNoti, setOpenNoti] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null);
     const { value, setValue } = useContext(Notifications);
@@ -47,7 +44,7 @@ function NewsMain() {
                 setValue(a => [...a, arr])
             }
         })
-    }, [])
+    }, [socket])
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -90,8 +87,8 @@ function NewsMain() {
                         >
                             <p>Thông báo</p>
                             {
-                                value.map(function (data) {
-                                    return <Link to={data.type}>
+                                value.map(function (data, i) {
+                                    return <Link to={data.type} key={i}>
                                         <MenuItem className="notifications_span">
                                             <span className="simple_menu_span">
                                                 {data.number}{data.value}
@@ -100,7 +97,6 @@ function NewsMain() {
                                     </Link>
                                 })
                             }
-
                         </Menu>
                         <div className="inner_title">
                             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className="account_icon">
@@ -127,50 +123,7 @@ function NewsMain() {
                 </div>
             </header>
             <div className="container" id="news">
-                <div className="navbar_right">
-                    <ul>
-                        <li className="inner_title">
-                            <Link className="message_icon" to="/">
-                                <MessageIcon />
-                            </Link>
-                            <span className="title" id="m_title">
-                                Tin nhắn
-                            </span>
-                        </li>
-                        <li className="inner_title">
-                            <Link className="home_icon icon_nav" to="/news">
-                                <HomeIcon />
-                            </Link>
-                            <span className="title" id="h_title">
-                                Trang chủ
-                            </span>
-                        </li>
-                        <li className="inner_title">
-                            <Link className="feedback_icon icon_nav" to="/feedback">
-                                <DynamicFeedOutlinedIcon />
-                            </Link>
-                            <span className="title" id="f_title">
-                                Góp ý và cải thiện
-                            </span>
-                        </li>
-                        <li className="inner_title">
-                            <Link className="contact_icon icon_nav" to="/help">
-                                <ContactSupportOutlinedIcon />
-                            </Link>
-                            <span className="title" id="c_title">
-                                Trợ giúp
-                            </span>
-                        </li>
-                        <li className="inner_title">
-                            <Link className="policy_icon icon_nav" to="/policy">
-                                <PolicyOutlinedIcon />
-                            </Link>
-                            <span className="title" id="p_title">
-                                Điều khoản và dịch vụ
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                {navbar_right}
                 <div className="main_news">
                     <PostBlogMain />
                     <ViewBlogMain />

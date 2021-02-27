@@ -28,21 +28,20 @@ exports.listContact = (req, res) => {
         else {
             const { blockN } = result;
             if (blockN > 3) {
-                res.json({ message: "Ban da bi block" })
+                res.json({ message: "Bạn đã bị chặn" })
             } else {
                 const { start, end } = req.query
+                // ru: String of all room id the user in
                 let ru = await cm.get(id)
                 let arr = []
                 if (ru !== null) {
                     for (let value of ru.split(",").slice(start, end)) {
                         // a contain  users in that room
+                        // value: idRoom
                         if (value) {
-                            let allMessage = await cm.get(value)
-                            let a = allMessage[0].split(",")
-                            // b contaion message last in that room
-                            let b = allMessage[allMessage.length - 1]
+                            let allMessage = await cm.get(value) || [","]
                             let data = [
-                                a[0], a[1], b, value
+                                allMessage[0], allMessage[1], allMessage[allMessage.length - 1], value
                             ]
                             arr.push(data)
                         }

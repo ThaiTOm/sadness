@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import CryptoJS from 'crypto-js';
-import { getCookie } from '../../../helpers/auth';
+import { decryptWithAES, getCookie } from '../../../helpers/auth';
 import socketApp from '../../../socket';
 import classNames from "classnames";
 
@@ -16,78 +15,36 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
 
     const id = getCookie().token;
     //this message is last message when not online
-    let arr = message.split(",");
-    const decryptWithAES = ciphertext => {
-        const passphrase = '123nguyenduythaise1';
-        const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        let originalText
-        //if original text is defined that assign it
-        try {
-            originalText = bytes.toString(CryptoJS.enc.Utf8);
-        } catch (error) {
-            originalText = ""
+    let arr = message.split(",")
+    let sliceMess = (a, user) => {
+        if (a.length > 0) {
+            let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
+            setValue(user + mess)
         }
-        return originalText;
-    };
-    const sendData = () => {
-        onClick(idRoom + "," + user1 + ";" + user2 + ";" + id)
+        else {
+            setValue(user + "đã gửi hình ảnh")
+        }
     }
+
     useEffect(() => {
         //message contain when another not sending and that is the last time when message send
         socket.emit("joinChatBack", { idRoom })
-        if (arr[1] === id) {
-            let a = decryptWithAES(arr[0])
-            if (a.length > 0) {
-                let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
-                setValue("Bạn:  " + mess)
-            }
-            else {
-                setValue("Bạn: đã gửi hình ảnh")
-            }
-        } else {
-            let a = decryptWithAES(arr[0])
-            if (a.length > 0) {
-                let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
-                setValue("Đằng ấy:  " + mess)
-            }
-            else {
-                setValue("Đằng ấy: đã gửi hình ảnh")
-            }
+        let a = decryptWithAES(arr[0])
+        if (arr[1] === id) sliceMess(a, "Bạn: ")
+        else {
+            sliceMess(a, "Đăng ấy: ")
             // arr[2] contain true or false read
             if (arr[2] === "false") {
                 setRead(true)
             }
         }
-    }, [])
-    // and this is when socket on 
-    useEffect(() => {
         socket.on("message", msgs => {
             if (msgs.idRoom === idRoom) {
                 lu = msgs.user
-                // let a = msgs.text.split(",")
-                let a
-                if (msgs.text) {
-                    a = decryptWithAES(msgs.text)
-                } else {
-                    a = ""
-                }
-
-                if (lu === id) {
-                    if (a.length > 0) {
-                        let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
-                        setValue("Bạn:  " + mess)
-                    }
-                    else {
-                        setValue("Bạn: đã gửi hình ảnh")
-                    }
-                } else {
-                    if (a.length > 0) {
-                        let mess = a.length > 10 ? a.slice(0, 10) + "....." : a.split(",")[0]
-                        setValue("Đằng ấy:  " + mess)
-                    }
-                    else {
-                        setValue("Đằng ấy:  đã gửi hình ảnh")
-                    }
+                let a = msgs.text ? decryptWithAES(msgs.text) : ""
+                if (lu === id) sliceMess(a, "Bạn: ")
+                else {
+                    sliceMess(a, "Đằng ấy: ")
                     // arr[2] contain true or false read
                     if (arr[2] === "false") {
                         setRead(true)
@@ -95,7 +52,8 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
                 }
             }
         })
-    }, [])
+    }, [socket])
+
     useEffect(() => {
         if (target === idRoom) {
             setActive(true)
@@ -113,7 +71,7 @@ function ContactContain({ onClick, message, user1, user2, idRoom, target }) {
         "not_read_contact": read
     })
     return (
-        <div className={classN} onClick={sendData}>
+        <div className={classN} onClick={() => onClick(idRoom + "," + user1 + ";" + user2 + ";" + id)}>
             <div className="contact_contain_text">
                 <p>
                     {value}

@@ -1,102 +1,97 @@
-const { arrOfRegion } = require("../../region");
+const { arrOfRegion, regionGroup } = require("../../region");
 const { cutSpaceInString } = require("../../a-client/src/algorithm/algorithm");
-
-const memcachePlus = require("memcache-plus")
-const cm = new memcachePlus()
+const { cm } = require("../../nodeCache");
+const { User } = require("../../models/user.models");
 
 const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
     ipOfUser = cutSpaceInString(ipOfUser);
     for (let i = 0; i < arrOfRegion[ipOfUser].length; i++) {
         if (arrOfRegion[ipOfUser][i].room === id + len) {
+            arrOfRegion[ipOfUser].splice(i, i + 1)
             return { have: "have" }
         }
     }
     // Create new variable that handle name and room of someone
-    const user = { id: id, room: id + len };
-    const createRoom = (a, pos) => {
+    const user = { id: id, room: id + len }
+
+    const createRoom = async (arrOfRegion, a, pos) => {
         let name1 = a[0].id
         let name2 = a[1].id
-        let roomChatId = a[0].room
+        let roomChatId = a[0].room + "a"
         // we get first id in the room and set that id to id room
         // get 2 items first in the array
         arrOfRegion[pos].splice(0, 2)
         // First we need to add Room Id to their account to find faster
-        cm.add(name1, roomChatId + ",")
-            .then(() => {
-            })
-            .catch(() => {
-                cm.append(name1, roomChatId + ",")
-            })
-        cm.add(name2, roomChatId + ",")
-            .then(() => {
-            })
-            .catch(() => {
-                cm.append(name2, roomChatId + ",")
-            })
+        let arrN1 = await cm.get(name1) || ""
+        let arrN2 = await cm.get(name2) || ""
+
+        let arrOldN1 = arrN1 + roomChatId + ","
+        cm.set(name1, arrOldN1, 2592000)
+        let arrOldN2 = arrN2 + roomChatId + ","
+        cm.set(name2, arrOldN2, 2592000)
         // then move it to messSave
         let firstValue = [name1 + "," + name2]
-        cm.add(roomChatId, firstValue)
+        cm.set(roomChatId, firstValue, 2592000)
         // client.expire(roomChatId, 36600)
         return { idRoom: roomChatId }
     }
-    let x = 0;
+
+    // If user of this region have more than 0 then push new user in
+    const userInIp = async (arrOfRegion, ipOfUser) => {
+        arrOfRegion[ipOfUser].push(user);
+        // If that region has more than 1 people than we get that out
+        if (arrOfRegion[ipOfUser].length >= 2) {
+            // Use logic here
+            let a = arrOfRegion[ipOfUser].slice(0, 2);
+            // Check if 2 people here not block each other
+            let arr = await cm.get(a[0].id + "blackList")
+            //check if that one is not from the list
+            let arg = [a[0], a[1]]
+            if (arr === null) {
+                return createRoom(arrOfRegion, arg, ipOfUser)
+            } else if (arr.includes(a[1].id) === false) {
+                //pass data to createRoom function and return that
+                return createRoom(arrOfRegion, arg, ipOfUser)
+            }
+            return { idRoom: user.room + "a", yet: "yet" }
+        }
+        return { idRoom: user.room + "a" }
+    }
+
+    const userInDif = async (arrOfRegion, i, user) => {
+        // If user of this region have more than 0 then push new user in
+        arrOfRegion[i].push(user);
+        // If that region has more than 1 people than we get that out
+        if (arrOfRegion[i].length >= 2 && arrOfRegion[i][0].id !== arrOfRegion[i][1].id) {
+            // Use logic here
+            let a = arrOfRegion[i];
+            // Check if 2 people here not block each other
+            let arr = await cm.get(a[0].id + "blackList")
+            for (let x = 1; x < a.length; x++) {
+                //check if that one is not from the list
+                let arg = [a[0], a[x]]
+                if (arr === null) return createRoom(arg, x)
+                else if (arr.includes(a[x].id) === false) return createRoom(arg, x)
+            }
+            return { idRoom: user.room + "a", yet: "yet" }
+        }
+        return { idRoom: user.room + "a", yet: "yet" }
+    }
     // Wait of check when user if join to some room
     // Run until the user find partner
     for (let i in arrOfRegion) {
         // Find if have anyone in that state(IP) has alone join to this
         if (arrOfRegion[ipOfUser].length > 0) {
-            // If user of this region have more than 0 then push new user in
-            arrOfRegion[ipOfUser].push(user);
-            // If that region has more than 1 people than we get that out
-            if (arrOfRegion[ipOfUser].length >= 2) {
-                // Use logic here
-                let a = arrOfRegion[ipOfUser];
-                // Check if 2 people here not block each other
-                let arr = await cm.get(a[0].id + "blackList")
-                for (let i = 1; i < a.length; i++) {
-                    //check if that one is not from the list
-                    if (arr === null) {
-                        let arg = [a[0], a[i]]
-                        return createRoom(arg, ipOfUser)
-                    } else if (arr.includes(a[i].id) === false) {
-                        let arg = [a[0], a[i]]
-                        //pass data to createRoom function and return that
-                        return createRoom(arg)
-                    }
-                }
-                return { idRoom: user.room, yet: "yet" }
-            }
-            return { idRoom: user.room }
-        } else if (arrOfRegion[i].length > 0) {
-            // If user of this region have more than 0 then push new user in
-            arrOfRegion[i].push(user);
-            // If that region has more than 1 people than we get that out
-            if (arrOfRegion[i].length >= 2 && arrOfRegion[i][0].id !== arrOfRegion[i][1].id) {
-                // Use logic here
-                let a = arrOfRegion[i];
-                // Check if 2 people here not block each other
-                let arr = await cm.get(a[0].id + "blackList")
-                for (let x = 1; x < a.length; x++) {
-                    //check if that one is not from the list
-                    if (arr === null) {
-                        let arg = [a[0], a[x]]
-                        return createRoom(arg, x)
-                    } else if (arr.includes(a[x].id) === false) {
-                        let arg = [a[0], a[x]]
-                        //pass data to createRoom function and return that
-                        return createRoom(arg, x)
-                    }
-                }
-                return { idRoom: user.room, yet: "yet" }
-            }
-            return { idRoom: user.room, yet: "yet" }
+            return userInIp(arrOfRegion, ipOfUser)
+        }
+        else if (arrOfRegion[i].length > 0) {
+            return userInDif(arrOfRegion, i, user)
         }
     }
     // If no one is waiting than 
     arrOfRegion[ipOfUser].push(user)
-    x += 1
-    return { idRoom: user.room, yet: "yet" };
+    return { idRoom: user.room + "a", yet: "yet" };
 }
 
 const sendMessage = ({ room, message, id }) => {
@@ -107,6 +102,9 @@ const sendMessage = ({ room, message, id }) => {
             let arr = [...value]
             arr.push(mess)
             cm.replace(room, arr)
+        })
+        .catch((err) => {
+            cm.set(room, [mess])
         })
     return { roomMessage: room, messageMessage: message, memberMessage: id }
 }
@@ -129,7 +127,6 @@ const sendImageOff = ({ room, image, userId }) => {
             arr.push(mess)
             cm.replace(room, arr)
         })
-
     return { roomMessage: room, message: "image," + image, member: userId }
 }
 
@@ -142,7 +139,59 @@ const seenMessage = async ({ id, user1, user2 }) => {
         old[old.length - 1] = arr.join(",")
         cm.replace(id, old)
     }
-
 }
 
-module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff };
+const chatGorup = ({ id, len, ipOfUser }) => {
+    ipOfUser = cutSpaceInString(ipOfUser);
+
+    for (let i = 0; i < regionGroup[ipOfUser].length; i++) {
+        if (regionGroup[ipOfUser][i].room === id + len + "g") {
+            regionGroup[ipOfUser].splice(i, i + 1)
+            return { have: "have" }
+        }
+    }
+
+    const createRoom = async (a, pos) => {
+        // if we splice already have 5 user the splice it out
+        a.length < 5 ? {} : a.length === 5 ? regionGroup[pos].splice(0, a.length) : {}
+        let roomId = a[0].room
+        let roomCurrent = await cm.get(roomId) || []
+        let users = []
+
+        for await (value of a) {
+            let arr = await cm.get(value.id) || ""
+            users.push(value.id)
+            if (roomCurrent.indexOf(value.id) > -1) {
+                // check id room if idRoom is creating now already than 
+                let arra = arr.split(",") || []
+                // did not had 
+                if (arra.indexOf(roomId) === -1) {
+                    let arrOldN = arr + roomId + ","
+                    cm.set(value.id, arrOldN, 2592000)
+                }
+                // case if user is not in the room before 
+            } else {
+                let arrOldN = arr + roomId + ","
+                cm.set(value.id, arrOldN, 2592000)
+            }
+        }
+        console.log(users)
+        cm.set(roomId, users, 2592000)
+        return { idRoom: roomId, have: null }
+    }
+
+    const user = { id, room: id + len + "g" }
+    for (let i in regionGroup) {
+        if (regionGroup[i].length > 0) {
+            regionGroup[i].push(user)
+            if (regionGroup[i].length >= 2) {
+                let a = regionGroup[i].slice(0, 5)
+                return createRoom(a, ipOfUser)
+            }
+        }
+    }
+    regionGroup[ipOfUser].push(user)
+    return { idRoom: user.room, yet: "yet", have: null }
+}
+
+module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup };

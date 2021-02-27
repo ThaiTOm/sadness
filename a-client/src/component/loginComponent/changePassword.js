@@ -16,7 +16,7 @@ function ChangePassword({ match }) {
         if (token) {
             setFormData({ ...formData, token });
         }
-    }, [])
+    }, [token])
     const handleChange = text => e => {
         setFormData({ ...formData, [text]: e.target.value })
     }

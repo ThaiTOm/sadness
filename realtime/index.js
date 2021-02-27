@@ -1,16 +1,13 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff } = require("./controlleRealTime/messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
+const { cm } = require("../nodeCache")
 
 module.exports = {
     index: function (io, socket) {
         socket.on('joinChat', async ({ id, len, ipOfUser }, callback) => {
             const { yet, have, idRoom } = await addUser({ id, len, ipOfUser });
-            if (yet) {
-                callback("error")
-            }
-            else if (have) {
-                return callback("error")
-            }
+            if (yet) callback("error")
+            else if (have) return callback("error")
             else {
                 callback(idRoom)
                 socket.broadcast.to(idRoom).emit('message', { user: 'admin', roomId: idRoom });
@@ -18,6 +15,17 @@ module.exports = {
             socket.join(idRoom)
             callback();
         });
+        socket.on("joinChatGroup", async ({ id, len, ipOfUser }, callback) => {
+            const { have, idRoom, yet } = await chatGorup({ id, len, ipOfUser })
+            if (yet) callback("error")
+            else if (have) return callback("error")
+            else {
+                callback(idRoom)
+                socket.broadcast.to(idRoom).emit('message', { group: 'admin', roomId: idRoom });
+            }
+            socket.join(idRoom)
+            callback()
+        })
         socket.on("joinChatBack", ({ idRoom }) => {
             socket.join(idRoom)
         })
@@ -73,11 +81,14 @@ module.exports = {
                 io.to(user).emit("activities", { type, value: " người đã thích bình luận của bạn", number })
             }
         })
-        socket.on("chatVideo", ({ id, idRoom }) => {
+        socket.on("chatVideo", async ({ id, idRoom, g }, callback) => {
+            let fc = async () => {
+                let value = await cm.get(idRoom)
+                return value
+            }
+            let value = await fc()
+            callback(value)
             socket.to(idRoom).broadcast.emit("user-connect", { id, idRoom })
-        })
-        socket.on("user_dis", ({ idRoom, id }) => {
-            socket.to(idRoom).broadcast.emit("user-disc", { id })
         })
     }
 }

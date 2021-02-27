@@ -9,8 +9,8 @@ const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()
-var cache = require('memory-cache');
-var newCache = new cache.Cache();
+// var cache = require('memory-cache');
+// var newCache = new cache.Cache();
 const date = require("date-and-time")
 const responseTime = require("response-time");
 
@@ -45,20 +45,9 @@ app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
 app.get("/", (req, res) => {
     let now = Date.now()
-    console.log(now)
-
-
+    cm.flush()
     return res.json(now - 3600000)
 })
-app.get("/delete", (req, res) => {
-    cm.flush()
-    res.json("ok")
-})
-app.get("/delete/memory", (req, res) => {
-    res.json("ok")
-    newCache.clear()
-})
-
 app.use((req, res, next) => {
     res.status(404).json({
         succes: false,

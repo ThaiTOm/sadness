@@ -37,45 +37,44 @@ function ViewBlog() {
         }, 1500);
     }
     const handleValidateLogin = () => {
-        if (id) {
-            setLogin(null)
-        } else {
-            setLogin("ok")
-        }
+        if (id) setLogin(null)
+        else setLogin("ok")
+
     }
     useEffect(() => {
-        if (id) {
-            axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
-                .then(async res => {
-                    let a = res.data.data
-                    for await (let value of a) {
-                        setBlog(a => [...a, value])
-                    }
-                })
-                .catch(err => {
-                    return (
-                        <div>
-                            Có lỗi đả xảy ra bạn hãy thử lại sau
-                        </div>
-                    )
-                })
-        } else {
-            axios.get("http://localhost:2704/api/news/dataNo?start=" + start + "&end=" + end)
-                .then(async res => {
-                    console.log(res)
-                    let a = res.data.data
-                    for await (let value of a) {
-                        setBlog(a => [...a, value])
-                    }
-                })
-                .catch(err => {
-                    return (
-                        <div>
-                            Có lỗi đả xảy ra bạn hãy thử lại sau
-                        </div>
-                    )
-                })
+        let fn = () => {
+            const setBlogRes = async (res) => {
+                let a = res.data.data
+                for await (let value of a) {
+                    setBlog(a => [...a, value])
+                }
+            }
+            const handleError = () => {
+                return (
+                    <div>
+                        Có lỗi đả xảy ra bạn hãy thử lại sau
+                    </div>
+                )
+            }
+            if (id) {
+                axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
+                    .then(res => {
+                        setBlogRes(res)
+                    })
+                    .catch(err => {
+                        handleError()
+                    })
+            } else {
+                axios.get("http://localhost:2704/api/news/dataNo?start=" + start + "&end=" + end)
+                    .then(res => {
+                        setBlogRes(res)
+                    })
+                    .catch(err => {
+                        handleError()
+                    })
+            }
         }
+        fn()
     }, [end])
 
     const ImageRender = (cb) => {
@@ -264,8 +263,8 @@ function ViewBlog() {
                                             <span>Người tỏa sáng nhất là người cô độc nhất</span>
                                             <div className="text_blog">
                                                 {
-                                                    value.text.map(function (data) {
-                                                        return <p>{data}</p>
+                                                    value.text.map(function (data, i) {
+                                                        return <p key={i}>{data}</p>
                                                     })
                                                 }
                                             </div>

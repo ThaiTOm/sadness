@@ -44,7 +44,7 @@ function LoginForm() {
                 authenicate(res);
                 window.location.reload(false);
             }).catch(err => {
-                toast.error(err.response.data.error)
+                toast.error("Có lỗi đã xảy ra bạn hãy thử lại sau")
             })
         }
         else {

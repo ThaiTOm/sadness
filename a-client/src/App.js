@@ -25,28 +25,35 @@ function App() {
     socket.emit("join", { id })
   }
   useEffect(() => {
-    socket.on("activities", async (msg) => {
-      toast.info(
-        msg.number + msg.value
-      )
-    })
-  }, [])
-  useEffect(() => {
-    axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
-      .then(res => {
-        if (res.data.value !== undefined) {
-          for (let data of res.data.value) {
-            let arr = {
-              type: data.value,
-              value: data.type,
-              number: data.number
-            }
-            setValue(a => [...a, arr])
-          }
-        }
-      }).catch(err => {
-        console.log(err)
+    let fn = () => {
+      socket.on("activities", async (msg) => {
+        toast.info(
+          msg.number + msg.value
+        )
       })
+    }
+    fn()
+  }, [socket])
+  useEffect(() => {
+    let fn = () => {
+      axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
+        .then(res => {
+          let fnc = () => {
+            for (let data of res.data.value) {
+              let arr = {
+                type: data.value,
+                value: data.type,
+                number: data.number
+              }
+              setValue(a => [...a, arr])
+            }
+          }
+          res.data.value !== undefined && fnc()
+        }).catch(err => {
+          console.log(err)
+        })
+    }
+    fn()
   }, [id])
 
   return (
@@ -84,10 +91,6 @@ function App() {
             path="/posts/id=:id"
             render={props => <ViewOneBlog {...props} />}
           />
-          {/* <Route
-            path="/g"
-            render={props => < ChatGroup{...props} />}
-          /> */}
         </Notifications.Provider>
       </Switch>
     </BrowserRouter>

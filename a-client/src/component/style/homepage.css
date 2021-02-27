@@ -1,11 +1,11 @@
 /********************************** Same attribute *******************/
 
-body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container {
+body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .container_button {
     width: 100%;
     height: 100%;
 }
 
-.Toastify__toast, .form_post_blog, .form_ost_blog section, .google_login, .message_container ul::-webkit-scrollbar-track, .message_container ul::-webkit-scrollbar-thumb, .own_message_same_div, .other_message_same_div, .contact::-webkit-scrollbar-track, .contact::-webkit-scrollbar-thumb, .contact_container, .button_load_more button, .contain_block .bottom button, .block_page .paper .end button, .form_post_blog button, .contain_blog, .activities_blog .inner, .blog_skeleton_wrapper, .skeleton, .activities_blog label.activities_blog label .activities_blog label, .extension_blog .ex, .value_content_comment_a_blog div, .active_page, .extension_input {
+.Toastify__toast, .form_post_blog, .form_ost_blog section, .google_login, .message_container ul::-webkit-scrollbar-track, .message_container ul::-webkit-scrollbar-thumb, .own_message_same_div, .other_message_same_div, .contact::-webkit-scrollbar-track, .contact::-webkit-scrollbar-thumb, .contact_container, .button_load_more button, .contain_block .bottom button, .block_page .paper .end button, .form_post_blog button, .contain_blog, .activities_blog .inner, .blog_skeleton_wrapper, .skeleton, .activities_blog label.activities_blog label .activities_blog label, .extension_blog .ex, .value_content_comment_a_blog div, .active_page, .extension_input, #button_find_partner {
     border-radius: 10px !important
 }
 
@@ -17,13 +17,17 @@ body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container {
     display: flex
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list, .navbar_right ul li a, .formMessage {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list, .navbar_right ul li a, .formMessage, .part_1, .part_2, .activities_blog .inner {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /*******************************8* End ************************/
+
+.part_1, .part_2 {
+    width: 50%
+}
 
 .post_viewing {
     background-color: #242526;
@@ -435,14 +439,13 @@ button {
 
 .container {
     width: 100%;
-    height: 90%;
-    padding-top: 66px;
+    height: 100%;
     background-color: white
 }
 
 .navbar_right {
     height: 100%;
-    width: 4.4%
+    width: 5%
 }
 
 .navbar_right ul {
@@ -487,22 +490,16 @@ button {
 }
 
 .container_button {
-    text-align: center;
-    margin: 50% 0;
+    display: flex;
 }
 
 #button_find_partner {
-    outline: none;
-    height: 40px;
-    text-align: center;
+    height: 50px;
     width: 200px;
-    border-radius: 40px;
     background: #fff;
-    border: 2px solid #1ECD97;
     color: #1ECD97;
     letter-spacing: 1px;
-    text-shadow: 0;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
     -webkit-transition: all 0.25s ease;
     transition: all 0.25s ease;
@@ -518,7 +515,7 @@ button {
 }
 
 #button_find_partner:after {
-    content: "SUBMIT";
+    content: "Tìm cặp";
 }
 
 .onclic {
@@ -788,8 +785,9 @@ button {
 
 .menuMessage {
     padding-top: 10px;
-    margin-left: -40px;
-    padding-right: 10px;
+    width: max-content;
+    margin-left: auto;
+    margin-right: 10px;
 }
 
 .menuMessage .MuiButtonBase-root {
@@ -1098,4 +1096,71 @@ div.loaderBalls>div {
     right: 160px;
     bottom: 50px;
     z-index: 999;
+}
+
+.chat_button_group {
+    display: flex;
+    position: relative;
+}
+
+.chat_button_group .background {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2.1px 1.3px rgba(0, 0, 0, 0.044), 0 5.9px 4.2px rgba(0, 0, 0, 0.054), 0 12.6px 9.5px rgba(0, 0, 0, 0.061), 0 25px 20px rgba(0, 0, 0, 0.1);
+    height: 50px;
+    right: -35px;
+    position: absolute;
+    top: 25px;
+    width: 180px;
+}
+
+.chat_button_group .chat-bubble {
+    cursor: pointer;
+    position: relative;
+}
+
+.chat_button_group .bubble {
+    transform-origin: 50%;
+    transition: transform 500ms cubic-bezier(0.17, 0.61, 0.54, 0.9);
+}
+
+.chat_button_group .line {
+    fill: none;
+    stroke: black;
+    stroke-width: 2.75;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat_button_group .line1 {
+    stroke-dasharray: 60 90;
+    stroke-dashoffset: -20;
+}
+
+.chat_button_group .line2 {
+    stroke-dasharray: 67 87;
+    stroke-dashoffset: -18;
+}
+
+.chat_button_group .circle {
+    fill: black;
+    stroke: none;
+    transform-origin: 50%;
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.active .bubble {
+    transform: translateX(24px) translateY(4px) rotate(45deg);
+}
+
+.active .line1 {
+    stroke-dashoffset: 21;
+}
+
+.active .line2 {
+    stroke-dashoffset: 30;
+}
+
+.active .circle {
+    transform: scale(0);
 }
