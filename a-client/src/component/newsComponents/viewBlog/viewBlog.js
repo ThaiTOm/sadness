@@ -45,9 +45,14 @@ function ViewBlog() {
         let fn = () => {
             const setBlogRes = async (res) => {
                 let a = res.data.data
-                for await (let value of a) {
-                    setBlog(a => [...a, value])
+                try {
+                    for await (let value of a) {
+                        setBlog(a => [...a, value])
+                    }
+                } catch (error) {
+                    return
                 }
+
             }
             const handleError = () => {
                 return (
@@ -97,7 +102,6 @@ function ViewBlog() {
                             src={value.image[0]} />
                     </Link>
                 </div>
-
             case 2:
                 return <div className="two">
                     <Link to={"/posts/id=" + value.idBlog}>
@@ -178,7 +182,6 @@ function ViewBlog() {
                         </div>
                     </Link>
                 </div>
-
             default:
                 return <div className="three">
                     <Link to={"/posts/id=" + value.idBlog}>

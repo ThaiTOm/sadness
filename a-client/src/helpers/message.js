@@ -5,11 +5,7 @@ import DynamicFeedOutlinedIcon from '@material-ui/icons/DynamicFeedOutlined';
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
-
-
 let socket = socketApp.getSocket();
-
-
 export const handleFileUpload = (e, userId, id) => {
     let file = e.target.files;
     let reader = new FileReader()

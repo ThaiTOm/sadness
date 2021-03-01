@@ -18,6 +18,7 @@ const redis = require("redis");
 // const { User } = require("./models/user.models");
 const client = redis.createClient();
 const app = express();
+var ExpressPeerServer = require('peer').ExpressPeerServer;
 const server = http.createServer(app);
 
 require("dotenv").config({
@@ -27,6 +28,7 @@ require("dotenv").config({
 app.use(bodyParser.json({ limit: "100mb" }))
 app.use(cors())
 app.use(responseTime());
+app.use("/peerjs", ExpressPeerServer(server, { debug: true }))
 connectDB()
 
 const io = require("socket.io")(server, {

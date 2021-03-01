@@ -23,8 +23,8 @@
         {
             "type": "chrome",
             "request": "attach",
-            "name": "Attach to Chrome",
-            "port": 9222,
+            "name": "Launch Chrome against localhost",
+            "port": 3000,
             "webRoot": "${workspaceFolder}"
         }
   
