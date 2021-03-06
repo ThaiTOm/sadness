@@ -212,6 +212,7 @@ function ChatGroup(props) {
                 port: 2704,
                 path: "/peerjs"
             })
+            console.log(peerJS)
             setOldPeer(peerJS)
             peerJS.on("open", () => {
                 socket.emit("chatVideo", { idRoom: id, id: userId, g: "a" }, (callback) => { })

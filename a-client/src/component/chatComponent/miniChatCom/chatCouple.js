@@ -82,6 +82,7 @@ function ChatCouple(props) {
     }
     const createCall = (call) => {
         call.on("stream", async (userVideoStream) => {
+            console.log(userVideoStream)
             let audioStream = async () => {
                 const audioTrack = createEmptyAudioTrack();
                 const streamNull = new MediaStream([audioTrack]);
@@ -96,7 +97,7 @@ function ChatCouple(props) {
                     return <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull
                     } autoPlay />
                 } catch (error) {
-                    await createNullStream()
+                    createNullStream()
                 }
             }
             let a = await audioStream()
@@ -104,6 +105,7 @@ function ChatCouple(props) {
         })
     }
     const plus = (peer, stream) => {
+        console.log(stream, "stream")
         // check if that peer is destroyed or not destroy that mean that was created before
         if (peer.destroyed === false && mic === true) {
             // run normally
@@ -142,11 +144,11 @@ function ChatCouple(props) {
             const stream = new MediaStream([audioTrack]);
             plus(peerJS, stream)
         })
-    }, [id])
+    }, [socket])
 
     return (
         <div className="message_container">
-            <RenderChat id={props.id} />
+            <RenderChat id={props.id} userId={userId} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
                 <div className="main_mic">

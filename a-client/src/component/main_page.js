@@ -6,7 +6,7 @@ import ContactContain from './chatComponent/miniChatCom/contactContain.js';
 import { getCookie } from '../helpers/auth.js';
 import axios from "axios"
 import SendContact from './chatComponent/sendContact.js';
-import { navbar_right } from '../helpers/message.js';
+import { NavbarRight } from '../helpers/message.js';
 import socketApp from '../socket.js';
 
 
@@ -42,10 +42,10 @@ function Main_page() {
     return (
         <div className="main_page_auth">
             <div className="container">
-                {navbar_right}
+                <NavbarRight />
                 {
                     // id room id not exists than render chat component
-                    room ? <SendContact onClick={(value) => hanldeSetRoom(null)} id={room} name={(value) => setName(value)} /> : <Chat />
+                    room ? <SendContact onClick={(value) => hanldeSetRoom(value)} id={room} name={(value) => setName(value)} /> : <Chat />
                 }
                 <div className="contact" >
                     {

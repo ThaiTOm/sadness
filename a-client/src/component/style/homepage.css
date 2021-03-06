@@ -1,6 +1,6 @@
 /********************************** Same attribute *******************/
 
-body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .container_button {
+body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .container_button,.container {
     width: 100%;
     height: 100%;
 }
@@ -428,7 +428,7 @@ button {
     width: 100%;
     position: fixed;
     color: white;
-    background-color: rgb(2, 2, 7);
+    background-color: #333333;
     padding: 0 40px;
     z-index: 1
 }
@@ -438,8 +438,6 @@ button {
 }
 
 .container {
-    width: 100%;
-    height: 100%;
     background-color: white
 }
 
@@ -703,7 +701,6 @@ button {
     background: none;
     margin: 0;
     padding: 0;
-    line-height: 3
 }
 
 /* Custom recive message */
@@ -1080,8 +1077,8 @@ div.loaderBalls>div {
     background-color: hsl(0, 0%, 100%);
     padding: 10px;
     border-radius: 10px;
-    bottom: -550px;
-    right: 4px;
+    bottom: -970px;
+    right: 70px;
     z-index: 999;
     color: black
 }

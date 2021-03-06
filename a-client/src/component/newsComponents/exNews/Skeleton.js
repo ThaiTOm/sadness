@@ -3,7 +3,7 @@ import SkeletonShape from "./SkeletonShape"
 
 function Skeleton() {
     return (
-        <div>
+        <div className="skeleton_div">
             <div className="blog_skeleton_wrapper">
                 <SkeletonShape type="avatar" />
                 <SkeletonShape type="text" />

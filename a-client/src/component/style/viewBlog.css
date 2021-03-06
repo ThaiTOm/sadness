@@ -52,9 +52,8 @@
 
 .blog_skeleton_wrapper {
     margin-top: 10px;
-    background-color: whitesmoke;
-    width: 51%;
-    margin-left: 10%;
+    background-color: #2e406f;
+    width: 81%;
     padding: 10px 50px 50px 50px;
 }
 
@@ -518,7 +517,7 @@ input[type="checkbox"] {
 }
 
 .like svg, .night .like svg {
-    color: rgba(12, 85, 243, 0.822)
+    color: rgba(255, 255, 255, 0.822)
 }
 
 .comment svg {
@@ -532,4 +531,10 @@ input[type="checkbox"] {
 .inner a {
     color: white;
     text-decoration: none
+}
+.comment_a_blog .infinite-scroll-component {
+    overflow: inherit !important
+}
+.share .list img{
+    padding-right: 10px
 }

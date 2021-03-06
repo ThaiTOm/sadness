@@ -7,7 +7,7 @@ import ChangePassword from './component/loginComponent/changePassword';
 import HomePage from './component/HomePage';
 import Chat from './component/chatComponent/chat';
 import NewsMain from './component/newsComponents/newsMain';
-import Main_block from './component/blockComponent/main.block';
+import Main_block from './component/main.block';
 import ViewOneBlog from './component/newsComponents/viewBlog/viewOneBlog';
 import { Notifications } from './userContext';
 import axios from "axios"

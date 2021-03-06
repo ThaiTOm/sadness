@@ -4,14 +4,14 @@ import "../style/newspage.css"
 import PostBlogMain from "./exNews/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import socketApp from "../../socket"
-import { getCookie, signOut } from "../../helpers/auth"
+import { signOut } from "../../helpers/auth"
 import { ToastContainer } from "react-toastify";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MenuItem, Menu, Button } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { Notifications } from '../../userContext';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { navbar_right } from '../../helpers/message';
+import { NavbarRight } from '../../helpers/message';
 
 
 function NewsMain() {
@@ -123,7 +123,7 @@ function NewsMain() {
                 </div>
             </header>
             <div className="container" id="news">
-                {navbar_right}
+                <NavbarRight />
                 <div className="main_news">
                     <PostBlogMain />
                     <ViewBlogMain />

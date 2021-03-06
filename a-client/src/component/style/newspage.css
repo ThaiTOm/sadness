@@ -252,3 +252,7 @@
     filter: drop-shadow(2px 5px 5px rgba(10, 243, 150, 0.89));
     transition: all 0.3s ease 0s;
 }
+.skeleton_div{
+    width: 50%;
+    margin-left: 180px;
+}
