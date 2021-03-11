@@ -233,6 +233,7 @@ exports.viewOne = async (req, res) => {
 exports.viewComment = async (req, res) => {
     const { start, id, blog } = req.query
     let commentArr = await Blog.findById({ "_id": blog }, "comment", { skip: Number(start), limit: 10 }).exec()
+    console.log(commentArr)
     let likeArr = await nodeCache.get(id) || []
     let arr = []
     for await (let value of commentArr.comment) {

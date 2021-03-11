@@ -1,24 +1,20 @@
 const { User } = require("../models/user.models");
-const memcachePlus = require("memcache-plus")
+const memcachePlus = require("memcache-plus");
+const { Message } = require("../models/message.model");
+const { conforms } = require("lodash");
 const cm = new memcachePlus()
 
 
 exports.getIdRooms = async (req, res) => {
     const { id } = req.body;
-    const rooms = await cm.get(id)
-    if (rooms !== null) {
-        const arr = rooms.split(",")
-        return res.json({
-            len: arr.length,
-        })
-    }
+    let rooms = await User.findById({ "_id": id }).exec()
     return res.json({
-        len: 0
+        len: rooms.messageList.length
     })
 }
 exports.listContact = (req, res) => {
     //id is idRoom
-    const { id } = req.body
+    const { id, start, end } = req.body
     User.findById(id, async (err, result) => {
         if (err) {
             return res.json({
@@ -30,19 +26,29 @@ exports.listContact = (req, res) => {
             if (blockN > 3) {
                 res.json({ message: "Bạn đã bị chặn" })
             } else {
-                const { start, end } = req.query
                 // ru: String of all room id the user in
-                let ru = await cm.get(id)
+                let ru = await User.findById({ "_id": id }, "messageList").exec()
+                ru = ru.messageList
                 let arr = []
                 if (ru !== null) {
-                    for (let value of ru.split(",").slice(start, end)) {
+                    for (let value of ru.slice(start, end)) {
+                        // i is how many message user does not read
                         // a contain  users in that room
                         // value: idRoom
                         if (value) {
-                            let allMessage = await cm.get(value) || [","]
-                            let data = [
-                                allMessage[0], allMessage[1], allMessage[allMessage.length - 1], value
-                            ]
+                            let allMessage = await Message.findById({ "_id": value }).exec()
+                            let i = 0
+                            let oldArr = allMessage.data.reverse()
+                            for (let value of oldArr) {
+                                if (value.seen === false && value.id !== id) i++
+                                else if (value.seen === true && value.id !== id || value.id === id) break;
+                            }
+                            let data = {
+                                user: allMessage.user,
+                                data: allMessage.data,
+                                idRoom: allMessage._id,
+                                nread: i
+                            }
                             arr.push(data)
                         }
                     }
@@ -53,17 +59,14 @@ exports.listContact = (req, res) => {
     })
 }
 
+// get data chat in the room
 exports.sendContactRoom = async (req, res) => {
     const { id, start, end } = await req.query
-    const data = await cm.get(id)
-    let msg
-    if (data.length - end < 0) {
-        msg = await data.slice(1, data.length)
-    } else {
-        msg = await data.slice(data.length - end + 1, data.length)
-    }
-
-    res.json(msg)
+    Message.findById({ "_id": id }, "data").exec((err, value) => {
+        let data = value.data
+        data = data.length > 10 ? data.slice(data.length - 10, data.length) : data
+        return res.json(data)
+    })
 }
 
 exports.setBlock = async (req, res) => {

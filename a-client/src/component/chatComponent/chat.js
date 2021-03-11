@@ -6,8 +6,7 @@ import axios from "axios"
 import socketApp from '../../socket';
 import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
-import { handleFileUpload, messageLiRender, messageLiImageRender, executeScroll } from '../../helpers/message';
-
+import { handleFileUpload, messageLiRender, messageLiImageRender, executeScroll, Spinning } from '../../helpers/message';
 function Chat() {
     let socket = socketApp.getSocket();
     const id = getCookie().token;
@@ -121,6 +120,7 @@ function Chat() {
                         className={btnClassFind}
                         onClick={HanldeClickFind}
                     >
+                        {wait === true ? < Spinning /> : "Tìm cặp"}
                     </button>
                 </div>
                 <div

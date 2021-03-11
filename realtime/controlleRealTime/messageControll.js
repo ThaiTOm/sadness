@@ -1,7 +1,8 @@
 const { arrOfRegion, regionGroup } = require("../../region");
 const { cutSpaceInString } = require("../../a-client/src/algorithm/algorithm");
 const { cm } = require("../../nodeCache");
-const { User } = require("../../models/user.models");
+const { Message } = require("../../models/message.model");
+const { User } = require("../../models/user.models")
 
 const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
@@ -16,6 +17,11 @@ const addUser = async ({ id, ipOfUser, len }) => {
     const user = { id: id, room: id + len }
 
     const createRoom = async (arrOfRegion, a, pos) => {
+        let fnc = (value, arr) => {
+            User.findByIdAndUpdate({ "_id": value }, { $push: { "messageList": arr } }, (err, succes) => {
+                if (err) console.log(err)
+            })
+        }
         let name1 = a[0].id
         let name2 = a[1].id
         let roomChatId = a[0].room + "a"
@@ -23,16 +29,19 @@ const addUser = async ({ id, ipOfUser, len }) => {
         // get 2 items first in the array
         arrOfRegion[pos].splice(0, 2)
         // First we need to add Room Id to their account to find faster
-        let arrN1 = await cm.get(name1) || ""
-        let arrN2 = await cm.get(name2) || ""
-
-        let arrOldN1 = arrN1 + roomChatId + ","
-        cm.set(name1, arrOldN1, 2592000)
-        let arrOldN2 = arrN2 + roomChatId + ","
-        cm.set(name2, arrOldN2, 2592000)
-        // then move it to messSave
+        fnc(name1, roomChatId)
+        fnc(name2, roomChatId)
+        // then move it to message database
         let firstValue = [name1 + "," + name2]
-        cm.set(roomChatId, firstValue, 2592000)
+        // cm.set(roomChatId, firstValue, 2592000)
+        const obj = new Message({
+            _id: roomChatId,
+            user: [name1, name2],
+            data: []
+        })
+        obj.save((err, succes) => {
+            if (err) console.log(err)
+        })
         // client.expire(roomChatId, 36600)
         return { idRoom: roomChatId }
     }
@@ -83,9 +92,11 @@ const addUser = async ({ id, ipOfUser, len }) => {
     for (let i in arrOfRegion) {
         // Find if have anyone in that state(IP) has alone join to this
         if (arrOfRegion[ipOfUser].length > 0) {
+            // in the same local
             return userInIp(arrOfRegion, ipOfUser)
         }
         else if (arrOfRegion[i].length > 0) {
+            // in different
             return userInDif(arrOfRegion, i, user)
         }
     }
@@ -96,54 +107,57 @@ const addUser = async ({ id, ipOfUser, len }) => {
 
 const sendMessage = ({ room, message, id }) => {
     //mess contain message and id 
-    let mess = message + "," + id + "," + "false"
-    cm.get(room)
-        .then((value) => {
-            let arr = [...value]
-            arr.push(mess)
-            cm.replace(room, arr)
-        })
-        .catch((err) => {
-            cm.set(room, [mess])
-        })
-    return { roomMessage: room, messageMessage: message, memberMessage: id }
+    let mess = {
+        data: [message],
+        id,
+        seen: false
+    }
+    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
+    return { roomMessage: room, messageMessage: mess, memberMessage: id }
 }
 
-const sendMessageOff = ({ room, message, id }) => {
-    let mess = message + "," + id + "," + "false"
-    cm.get(room)
-        .then((value) => {
-            let arr = [...value]
-            arr.push(mess)
-            cm.replace(room, arr)
-        })
-    return { roomMessage: room, messageMessage: message, memberMessage: id }
+const sendMessageOff = async ({ room, message, id }) => {
+    let mess = {
+        data: [message],
+        id,
+        seen: false
+    }
+    let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
+    for await (value of messageUsers.user) {
+        let data = await User.findById({ "_id": value }, { "messageList": 1 }).exec()
+        let arr = [...data.messageList]
+        // find index of the that room in array
+        let index = arr.indexOf(room)
+        arr.splice(index, 1)
+        arr.unshift(room)
+        await User.findByIdAndUpdate({ "_id": value }, { $set: { "messageList": arr } }).exec()
+    }
+    return { roomMessage: room, messageMessage: mess, memberMessage: id }
 }
 const sendImageOff = ({ room, image, userId }) => {
-    let mess = "image," + image + ";" + userId
-    cm.get(room)
-        .then((value) => {
-            let arr = [...value]
-            arr.push(mess)
-            cm.replace(room, arr)
-        })
-    return { roomMessage: room, message: "image," + image, member: userId }
+    let mess = {
+        image,
+        id: userId
+    }
+    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } })
+    return { roomMessage: room, message: mess, member: userId }
 }
 
-const seenMessage = async ({ id, user1, user2 }) => {
-    let getM = await cm.get(id)
-    let arr = getM[getM.length - 1].split(",")
-    if (arr[2] === "false") {
-        arr[2] = "true"
-        let old = [...getM]
-        old[old.length - 1] = arr.join(",")
-        cm.replace(id, old)
+const seenMessage = async ({ id, userId }) => {
+    let fnc = (getM) => {
+        if (getM[getM.length - 1].seen === false && getM[getM.length - 1].id !== userId) {
+            let old = [...getM]
+            old[old.length - 1].seen = true
+            Message.findByIdAndUpdate({ "_id": id }, { $set: { "data": old } }).exec()
+        }
     }
+    // get message
+    let getM = await Message.findById({ "_id": id }).exec()
+    getM && getM.data.length > 0 && fnc(getM.data)
 }
 
 const chatGorup = ({ id, len, ipOfUser }) => {
     ipOfUser = cutSpaceInString(ipOfUser);
-
     for (let i = 0; i < regionGroup[ipOfUser].length; i++) {
         if (regionGroup[ipOfUser][i].room === id + len + "g") {
             regionGroup[ipOfUser].splice(i, i + 1)
@@ -155,31 +169,34 @@ const chatGorup = ({ id, len, ipOfUser }) => {
         // if we splice already have 5 user the splice it out
         a.length < 5 ? {} : a.length === 5 ? regionGroup[pos].splice(0, a.length) : {}
         let roomId = a[0].room
-        let roomCurrent = await cm.get(roomId) || []
+        // let roomCurrent = await cm.get(roomId) || []
         let users = []
-
+        let roomCurrent = await Message.findById({ "_id": roomId }).exec()
+        if (!roomCurrent) {
+            let obj = new Message({
+                _id: roomId,
+            })
+            obj.save((err, succes) => {
+                if (err) console.log(err)
+            })
+        }
         for await (value of a) {
-            let arr = await cm.get(value.id) || ""
-            users.push(value.id)
-            if (roomCurrent.indexOf(value.id) > -1) {
-                // check id room if idRoom is creating now already than 
-                let arra = arr.split(",") || []
-                // did not had 
-                if (arra.indexOf(roomId) === -1) {
-                    let arrOldN = arr + roomId + ","
-                    cm.set(value.id, arrOldN, 2592000)
-                }
-                // case if user is not in the room before 
-            } else {
-                let arrOldN = arr + roomId + ","
-                cm.set(value.id, arrOldN, 2592000)
+            if (roomCurrent && roomCurrent.user.indexOf(value.id) === -1) {
+                users.push(value.id)
+                User.findByIdAndUpdate({ "_id": value.id }, { $push: { "messageList": roomId } }).exec((err, succes) => {
+                    if (err) console.log(err)
+                })
+            }
+            // the condition here is stop users push in case already have room and id already too
+            else if (!roomCurrent) {
+                users.push(value.id)
             }
         }
-        console.log(users)
-        cm.set(roomId, users, 2592000)
+        if (users.length <= 0) return { idRoom: roomId, yet: "yet" }
+        users.length > 0 && Message.findByIdAndUpdate({ "_id": roomId }, { $set: { "user": users } }).exec()
         return { idRoom: roomId, have: null }
     }
-
+    // main structure
     const user = { id, room: id + len + "g" }
     for (let i in regionGroup) {
         if (regionGroup[i].length > 0) {

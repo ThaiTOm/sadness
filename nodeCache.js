@@ -6,7 +6,7 @@ var newCache = new cache.Cache();
 
 const memcachePlus = require("memcache-plus")
 const cm = new memcachePlus()
-// memcache save message
+// memcache save session data to generate name of user
 // newCache save post like
 // cacheNode save comment like, Notifications
 

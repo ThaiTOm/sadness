@@ -1,6 +1,7 @@
 const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
-const { cm } = require("../nodeCache")
+const { Message } = require("../models/message.model");
+
 
 module.exports = {
     index: function (io, socket) {
@@ -34,19 +35,29 @@ module.exports = {
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
-            io.to(roomMessage).emit('message', { user: memberMessage, text: messageMessage, idRoom: roomMessage });
+            io.to(roomMessage).emit('message', {
+                id: memberMessage,
+                data: messageMessage,
+                idRoom: roomMessage,
+                type: "message"
+            });
             callback();
         });
-        socket.on("sendMessageOff", ({ room, message, userId }) => {
-            const { roomMessage, messageMessage, memberMessage } = sendMessageOff({ room, message, id: userId })
-            io.to(roomMessage).emit("message", { user: memberMessage, text: messageMessage, idRoom: room })
+        socket.on("sendMessageOff", async ({ room, message, userId }) => {
+            const { roomMessage, messageMessage, memberMessage } = await sendMessageOff({ room, message, id: userId })
+            io.to(roomMessage).emit("message", {
+                id: memberMessage,
+                data: messageMessage,
+                idRoom: room,
+                type: "message"
+            })
         });
         socket.on("sendImageOff", ({ room, image, userId }) => {
             const { roomMessage, message, member } = sendImageOff({ room, image, userId });
             io.to(room).emit("message", { user: member, image: message, idRoom: room })
         })
-        socket.on("seenMessage", ({ id, user1, user2 }) => {
-            seenMessage({ id, user1, user2 })
+        socket.on("seenMessage", ({ id, userId }) => {
+            seenMessage({ id, userId })
         })
         socket.on("join", ({ id }) => {
             socket.join(id)
@@ -83,12 +94,15 @@ module.exports = {
         })
         socket.on("chatVideo", async ({ id, idRoom, g }, callback) => {
             let fc = async () => {
-                let value = await cm.get(idRoom)
-                return value
+                let value = await Message.findById({ "_id": idRoom }).exec()
+                return value.user
             }
             let value = await fc()
             callback(value)
             socket.to(idRoom).broadcast.emit("user-connect", { id, idRoom })
+        })
+        socket.on("offline", ({ id }) => {
+            console.log(id)
         })
     }
 }

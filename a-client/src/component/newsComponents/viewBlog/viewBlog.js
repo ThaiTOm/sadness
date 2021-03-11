@@ -12,6 +12,7 @@ import RequireLogin from '../../../helpers/requireLogin';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { TextField } from '@material-ui/core';
 import ShareBlog from '../exOne/shareBlog';
+import { ImageRender } from '../../../helpers/news';
 
 function ViewBlog() {
     let socket = socketApp.getSocket();
@@ -82,146 +83,6 @@ function ViewBlog() {
         fn()
     }, [end])
 
-    const ImageRender = (cb) => {
-        const { value } = cb.props
-        switch (value.image.length) {
-            case 0:
-                return <div></div>
-
-            case 1:
-                return <div className="one">
-                    <Link to={"/posts/id=" + value.idBlog}>
-                        <img
-                            alt={value.image[0].slice(100, 110)}
-                            style={{
-                                borderTopLeftRadius: "25px",
-                                borderBottomLeftRadius: "25px",
-                                borderTopRightRadius: "25px",
-                                borderBottomRightRadius: "25px"
-                            }}
-                            src={value.image[0]} />
-                    </Link>
-                </div>
-            case 2:
-                return <div className="two">
-                    <Link to={"/posts/id=" + value.idBlog}>
-                        <img
-                            alt={value.image[0].slice(100, 110)}
-                            style={{
-                                borderTopLeftRadius: "25px",
-                                borderBottomLeftRadius: "25px"
-                            }}
-                            src={value.image[0]}></img>
-                        <img
-                            alt={value.image[1].slice(100, 110)}
-                            style={{
-                                borderTopRightRadius: "25px",
-                                borderBottomRightRadius: "25px"
-                            }}
-                            src={value.image[1]}></img>
-                    </Link>
-                </div>
-
-            case 3:
-                return <div className="three">
-                    <Link to={"/posts/id=" + value.idBlog}>
-                        <div className="two">
-                            <img
-                                alt={value.image[0].slice(100, 110)}
-                                style={{
-                                    borderTopLeftRadius: "25px"
-                                }}
-                                src={value.image[0]}></img>
-                            <img
-                                style={{
-                                    borderTopRightRadius: "25px"
-                                }}
-                                alt={value.image[1].slice(100, 110)}
-                                src={value.image[1]}></img>
-                        </div>
-                        <img
-                            alt={value.image[2].slice(100, 110)}
-                            style={{
-                                borderBottomLeftRadius: "25px",
-                                borderBottomRightRadius: "25px"
-                            }}
-                            src={value.image[2]}></img>
-                    </Link>
-                </div>
-
-            case 4:
-                return <div className="three">
-                    <Link to={"/posts/id=" + value.idBlog}>
-                        <div className="two">
-                            <img
-                                alt={value.image[0].slice(100, 110)}
-                                style={{
-                                    borderTopLeftRadius: "25px",
-                                }}
-                                src={value.image[0]}></img>
-                            <img
-                                alt={value.image[1].slice(100, 110)}
-                                style={{
-                                    borderTopRightRadius: "25px",
-                                }}
-                                src={value.image[1]}></img>
-                        </div>
-                        <div className="two">
-                            <img
-                                alt={value.image[2].slice(100, 110)}
-                                style={{
-                                    borderBottomLeftRadius: "25px",
-                                }}
-                                src={value.image[2]}></img>
-                            <img
-                                alt={value.image[3].slice(100, 110)}
-                                style={{
-                                    borderBottomRightRadius: "25px",
-                                }}
-                                src={value.image[3]}></img>
-                        </div>
-                    </Link>
-                </div>
-            default:
-                return <div className="three">
-                    <Link to={"/posts/id=" + value.idBlog}>
-                        <div className="two">
-                            <img
-                                alt={value.image[0].slice(100, 110)}
-                                style={{
-                                    borderTopLeftRadius: "25px",
-                                }}
-                                src={value.image[0]}></img>
-                            <img
-                                style={{
-                                    borderTopRightRadius: "25px",
-                                }}
-                                src={value.image[1]}></img>
-                        </div>
-                        <div className="two" >
-                            <img
-                                alt={value.image[1].slice(100, 110)}
-                                style={{
-                                    borderBottomLeftRadius: "25px",
-                                }}
-                                src={value.image[2]}></img>
-                            <div style={{ position: "relative", width: "90%" }}>
-                                <img
-                                    alt={value.image[2].slice(100, 110)}
-                                    style={{
-                                        borderBottomRightRadius: "25px",
-                                    }}
-                                    className="more_image"
-                                    src={value.image[3]}></img>
-                                <span className="last_image">
-                                    + {value.image.length - 4}
-                                </span>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-        }
-    }
     const CommentRender = (cb) => {
         const { value, i } = cb.props
         return <>
@@ -261,7 +122,7 @@ function ViewBlog() {
                             <div className="viewBlog_li" key={i}>
                                 <div className="contain_blog" >
                                     <div className="profile">
-                                        <img src="./demo.jpeg"></img>
+                                        <img alt="profile_image" src="./demo.jpeg"></img>
                                         <div className="profile_text">
                                             <span>Người tỏa sáng nhất là người cô độc nhất</span>
                                             <div className="text_blog">

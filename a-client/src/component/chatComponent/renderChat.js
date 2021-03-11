@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { handleFileUpload, messageLiImageRender, messageLiRender } from '../../helpers/message';
 import { decryptWithAES, encryptTo } from '../../helpers/auth';
-import SendOutlinedIcon from '@material-ui/icons/Send';
 import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
@@ -50,9 +49,9 @@ function RenderChat(props) {
     useEffect(() => {
         socket.on("message", msg => {
             if (msg.image) {
-                setMsg(img => [...img, msg.image + ";" + msg.user])
+                setMsg(img => [...img, msg.image + ";" + msg.id])
             } else {
-                setMsg(msgs => [...msgs, msg.text + "," + msg.user])
+                setMsg(msgs => [...msgs, msg.data])
             }
             executeScroll(myRef)
         })
@@ -73,14 +72,13 @@ function RenderChat(props) {
                 {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
-                            let arr = item.split(",")
-                            if (arr[0] === "image") {
-                                let imgUrl = arr[1] + "," + arr[2].split(";")[0]
-                                if (arr[2].split(";")[1] === userId) return messageLiImageRender("mIOwn", i, imgUrl, myRef)
+                            if (item.image) {
+                                let imgUrl = item.image
+                                if (item.id === userId) return messageLiImageRender("mIOwn", i, imgUrl, myRef)
                                 else return messageLiImageRender("mIOther", i, imgUrl, myRef)
                             } else {
-                                let msgs = decryptWithAES(arr[0])
-                                if (arr[1] === userId) {
+                                let msgs = item.data[0] ? decryptWithAES(item.data[0]) : ""
+                                if (item.id === userId) {
                                     return messageLiRender("messageLiOwn", "own_message_same_div messageLiOwnm60", "own_message_same_div messageLiOwnl60", msgs, i, myRef)
                                 } else {
                                     return messageLiRender("messageLiOther", "other_message_same_div messageLiOtherm60", "other_message_same_div messageLiOtherl60", msgs, i, myRef)
@@ -118,7 +116,7 @@ function RenderChat(props) {
                     </div>
                 </div>
                 <button type="submit">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAABu0lEQVRoge2ZO0oDURSGvyOChYXaRVCitmJlbaWtC7ATUWzEJdjY6AZcgG5BC7W10p1Y+ETE528Rg3EymcmdzONemA9C4Mwk+T8yuTlzLtTU1ASNpZ0gaQHYBuaBF+AcODazx4KzDY6kXUmf6uZO0p6ksaoz9kTSiqTvmPBhiEi6TAnvt4ikeweBNk+SDiSNV52fDOH9EhlQoHqRnASqE8lZoHyRggTKEylYIDeRnq2EJGV90ww8A0fAgZk9uLzQF4E2ziJJApvAFDD7+5gDJoGhwXOm0rdIksBaTHkYaPBfqgmMZI6aTKqIq0AcQ7SkmsDM73MTyLMvugU2zOwseiAPgV6M8yfTlmskfWYK78CSmV13FosUiGMEmKYlMwMs4vZNnZrZamehbIEo08Chw/kPZjbRWShjRUnC9XLqWtqHcwrSL3GXkAtX0UKRAnn/iN+A/WgxD4GyltF1M7uJHnAV8O6PLElglMBbiSCaubJXoV5kbqerFsgcPBXf78SqEgj2pj7YsUqwgy0vRovBD3cvHIJ7OV5flvQVXPBOJO1I+vA5eD+bfPPAFq1NvlfgAjgJYpOvpqbGf34ADyqvY/et3aUAAAAASUVORK5CYII=" />
+                    <img alt="submit_button_image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAABu0lEQVRoge2ZO0oDURSGvyOChYXaRVCitmJlbaWtC7ATUWzEJdjY6AZcgG5BC7W10p1Y+ETE528Rg3EymcmdzONemA9C4Mwk+T8yuTlzLtTU1ASNpZ0gaQHYBuaBF+AcODazx4KzDY6kXUmf6uZO0p6ksaoz9kTSiqTvmPBhiEi6TAnvt4ikeweBNk+SDiSNV52fDOH9EhlQoHqRnASqE8lZoHyRggTKEylYIDeRnq2EJGV90ww8A0fAgZk9uLzQF4E2ziJJApvAFDD7+5gDJoGhwXOm0rdIksBaTHkYaPBfqgmMZI6aTKqIq0AcQ7SkmsDM73MTyLMvugU2zOwseiAPgV6M8yfTlmskfWYK78CSmV13FosUiGMEmKYlMwMs4vZNnZrZamehbIEo08Chw/kPZjbRWShjRUnC9XLqWtqHcwrSL3GXkAtX0UKRAnn/iN+A/WgxD4GyltF1M7uJHnAV8O6PLElglMBbiSCaubJXoV5kbqerFsgcPBXf78SqEgj2pj7YsUqwgy0vRovBD3cvHIJ7OV5flvQVXPBOJO1I+vA5eD+bfPPAFq1NvlfgAjgJYpOvpqbGf34ADyqvY/et3aUAAAAASUVORK5CYII=" />
                 </button>
             </form>
         </>

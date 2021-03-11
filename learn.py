@@ -1,19 +1,17 @@
-def parse_int(string):
-    arr = {
-        "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10",
-        "eleven": "11", "twelve": "12", "thirteen": "13", "fourteen": "14", "fifthteen": "15", "sixteen": "16", "seventeen": "17", "eighteen": "18",
-        "nineteen": "19", "twenty": "20", "thirty": "30", "forty": "40", "fifty": "50", "sixty": "60", "seventy": "70", "eighty": "80",
-        "ninety": "90", "hundred": "00", "thousand": "000"}
-    ans = ""
-    string = string.split(" ")
-    for value in string:
-        if value in arr:
-            ans += arr[value]
-        elif value != "and":
-            arra = value.split("-")
-            ans += str(int(arr[arra[0]]) + int(arr[arra[1]]))
-    # ans = ans.replace("0", "")
-    print(ans)
+def snail(arr):
+    result = []
+    i = 0
+    for x in range(len(arr)):
+        result.append(arr[i][x])
+        if x == len(arr) - 1:
+            for y in range(1, len(arr)):
+                result.append(arr[y][x])
+            for y in range(len(arr) - 1, 0, -1):
+                print(x, y)
+                result.append([x][y])
+    print(result)
 
 
-parse_int("two thousand forty-six")
+snail([[1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 9]])

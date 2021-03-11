@@ -20,7 +20,7 @@ function ChatCouple(props) {
     const userId = getCookie().token;
     const { id } = props;
     const [audio, setAudio] = useState(null);
-    const [mic, setMic] = useState(true)
+    const [mic, setMic] = useState(false)
     const [volumn, setVolumn] = useState(false)
     const [oldPeer, setOldPeer] = useState(null)
     const [user, setUser] = useState(null)
@@ -82,7 +82,6 @@ function ChatCouple(props) {
     }
     const createCall = (call) => {
         call.on("stream", async (userVideoStream) => {
-            console.log(userVideoStream)
             let audioStream = async () => {
                 const audioTrack = createEmptyAudioTrack();
                 const streamNull = new MediaStream([audioTrack]);
@@ -105,9 +104,8 @@ function ChatCouple(props) {
         })
     }
     const plus = (peer, stream) => {
-        console.log(stream, "stream")
         // check if that peer is destroyed or not destroy that mean that was created before
-        if (peer.destroyed === false && mic === true) {
+        if (peer.destroyed === false) {
             // run normally
             peer.on("call", call => {
                 call.answer(stream)
@@ -136,7 +134,7 @@ function ChatCouple(props) {
             })
         })
         // get user media
-        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
+        navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
             plus(peerJS, stream)
         }).catch(err => {
             // if user does not accept to stream then create new null stream

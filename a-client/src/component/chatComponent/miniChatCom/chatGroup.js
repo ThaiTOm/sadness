@@ -231,7 +231,7 @@ function ChatGroup(props) {
     }, [id])
     return (
         <div className="message_container">
-            <RenderChat id={props.id} />
+            <RenderChat id={props.id} userId={userId} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
                 <div className="main_mic">

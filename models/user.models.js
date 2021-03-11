@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     isOnline: {
         type: Boolean,
         default: true
+    },
+    messageList: {
+        type: Array,
+        default: []
     }
 }, { timeStamp: true })
 
