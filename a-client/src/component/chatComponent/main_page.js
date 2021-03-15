@@ -51,7 +51,7 @@ function Main_page() {
             })
         }
         value ? func() : console.log()
-    })
+    }, [])
     const hanldeSetRoom = value => {
         let id = value.split(",")
         setRoom(id[0])
@@ -65,11 +65,13 @@ function Main_page() {
                 <NavbarRight />
                 {
                     // id room id not exists than render chat component
-                    room ? <SendContact
-                        onClick={(value) => hanldeSetRoom(value)}
-                        id={room}
-                        name={(value) => setName(value)}
-                    /> : <Chat />
+                    room ?
+                        <SendContact
+                            onClick={(value) => hanldeSetRoom(value)}
+                            id={room}
+                            name={(value) => setName(value)}
+                        /> :
+                        <Chat />
                 }
                 <div className="contact">
                     {
@@ -83,9 +85,7 @@ function Main_page() {
                                 target={room}
                                 nread={val.nread}
                             />
-                        </div>
-                        )
-                            : console.log()
+                        </div>) : console.log()
                     }
                 </div>
             </div>

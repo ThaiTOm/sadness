@@ -35,10 +35,10 @@ const UserSchema = new mongoose.Schema({
     lastOffline: {
         type: String
     },
-    isOnline: {
-        type: Boolean,
-        default: true
-    },
+    // isOnline: {
+    //     type: Boolean,
+    //     default: true
+    // },
     messageList: {
         type: Array,
         default: []

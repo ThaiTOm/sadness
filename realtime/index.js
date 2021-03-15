@@ -1,7 +1,8 @@
 const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
 const { Message } = require("../models/message.model");
-
+const { cm } = require("../nodeCache");
+const date = require("date-and-time")
 
 module.exports = {
     index: function (io, socket) {
@@ -60,6 +61,7 @@ module.exports = {
             seenMessage({ id, userId })
         })
         socket.on("join", ({ id }) => {
+            cm.set(id, "online")
             socket.join(id)
         })
         socket.on("comment", async ({ idRecieve, idSent, value }, callback) => {
@@ -101,8 +103,11 @@ module.exports = {
             callback(value)
             socket.to(idRoom).broadcast.emit("user-connect", { id, idRoom })
         })
-        socket.on("offline", ({ id }) => {
-            console.log(id)
+        socket.on("offline", async ({ id }) => {
+            let d = new Date()
+            d = date.format(d, 'YYYY/MM/DD HH:mm:ss');
+            cm.set(id, d)
+                .then(() => { })
         })
     }
 }

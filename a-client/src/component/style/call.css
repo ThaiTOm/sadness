@@ -118,3 +118,66 @@
   background-color: #45423c;
   color: white
 }
+.dot{
+  padding: 5px;
+  height: 5px;
+  width: 5px;
+  border-radius: 10px;
+  background-color: rgba(1, 255, 153, 0.8);
+}
+
+.contact_contain_text .setting_chat{
+  background-color:rgba(212, 207, 207, 1);
+  position: absolute;
+  color: black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  transform: translate(-10%, 30%);
+  display: none;
+}
+.contact_container:hover{
+  background-color: rgba(245, 245, 245, 0.918) 
+}
+.setting_chat .MuiButton-root{
+  padding: 0;
+  min-width: 30px;
+}
+.contact_contain_text:hover .setting_chat{
+  display:block;
+}
+.setting_chat_modal{
+  min-height: 120px;
+  height: 300px;
+}
+.setting_chat_modal .MuiPaper-root{
+  min-width: 270px;
+}
+.setting_chat_modal .MuiPaper-root .MuiMenuItem-root{
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.setting_chat_modal .MuiPaper-root .MuiMenuItem-root img{
+  padding-right: 10px;
+
+}
+.comment_blog{
+  position: relative;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 10px
+}
+.comment_blog:before {
+  content : "";
+  position: absolute;
+  left    : 0;
+  bottom  : 0;
+  height  : 1px;
+  width   : 50%;  /* or 100px */
+  border-bottom:1px solid magenta;
+  transform: translate(50%, 30%);
+}
+.comment_blog:hover{
+  background-color: rgba(245, 245, 245, 0.171);
+
+}

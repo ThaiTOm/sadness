@@ -433,8 +433,8 @@ button {
     z-index: 1
 }
 
-.navbar_auth p {
-    font-size: 1.3rem;
+.navbar_auth #recal {
+    margin-top: 10px;
 }
 
 .container {
@@ -585,94 +585,18 @@ button {
 
 /****************************** Message input  *************************/
 
-.input {
-    width: 500px;
-    position: relative;
-    font-size: 1.5em;
-    background: linear-gradient(21deg, #10abff, #1beabd);
-    padding: 1.2px;
-    display: inline-block;
-    border-radius: 9999em;
-}
-
-.input *:not(span) {
-    position: relative;
-    display: inherit;
-    border-radius: inherit;
-    margin: 0;
-    border: none;
-    outline: none;
-    padding: 0 .325em;
-    z-index: 1;
-}
-
-.input *:not(span):focus+span {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-}
-
-.input span {
-    -webkit-transform: scale(0.993, 0.94);
-    transform: scale(0.993, 0.94);
-    -webkit-transition: opacity .25s, -webkit-transform .5s;
-    transition: opacity .25s, -webkit-transform .5s;
-    transition: transform .5s, opacity .25s;
-    transition: transform .5s, opacity .25s, -webkit-transform .5s;
-    opacity: 0;
-    position: absolute;
-    z-index: 0;
-    margin: 4px;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #fff, 3px -3px 30px #1beabd, -3px 3px 30px #10abff;
-}
-
-.input input {
-    height: 36px;
-    padding-left: 15px;
-    font-family: inherit;
-    line-height: inherit;
-    color: #2e3750;
-    width: 96.5%;
-}
-
-.input button {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    width: 24px;
-    height: 24px;
-    background-color: rgba(46, 229, 157, 0.4);
-}
-
 #icon_button_file {
     display: none
 }
-
-.extension_input {
-    width: max-content;
-    padding: 0 10px;
-    display: inline;
-    background-color: rgb(226, 221, 221);
-    margin-left: 10px;
-    margin-right: 5px;
-}
-
 .extension_input .MuiIconButton-root {
     padding: 0;
     font-size: 1rem;
-    height: 40px;
 }
 
 .extension_input .MuiIconButton-label .MuiSvgIcon-root {
     font-size: 2em;
     width: 1;
-    color: black
+    color: white;
 }
 
 /****************************** Message input  *************************/
@@ -694,7 +618,32 @@ button {
     position: absolute;
     bottom: 10px;
     width: 70%;
-    right: 0
+    right: 0;
+}
+.formMessage_div{
+    width: 90%;
+    position: relative;
+    bottom: 15px;
+}
+.formMessage .input{
+    width: 100%;
+    height: 35px;
+    border-radius: 5px;
+    border-style: none;
+    background-color: #333333;
+    color: white;
+    position: absolute;
+    font-size: 17px;
+    padding-left: 10px;
+}
+.formMessage .input:focus ,.formMessage .input:hover {
+    border-color: white;
+}
+.formMessage .extension_input{
+    position: absolute;
+    display: inline-flex;
+    right: 0;
+    top: 2px;
 }
 
 .formMessage button[type=submit] {
@@ -760,14 +709,14 @@ button {
 }
 
 .messageImage input[type=checkbox]:checked~label>img {
-    width: 100%;
-    height: 500px;
+    width: 110%;
+    height: 600px;
     cursor: zoom-out;
 }
 
 .messageImage img {
-    width: 300px;
-    height: 300px;
+    width:400px;
+    height: 400px;
     transition: transform 0.25s ease;
     cursor: zoom-in;
 }
@@ -836,7 +785,7 @@ button {
 
 .contact_container {
     height: 60px;
-    background-color: rgba(150, 232, 247, 0.9);
+    background-color: rgb(253, 253, 253);
     margin: 10px;
 }
 
@@ -845,18 +794,22 @@ button {
     padding-top: 5px;
     width: 90%;
     justify-content: space-between;
+    position: relative;
 }
 
 .contact_contain_text p {
     margin: 0;
     color: rgba(0, 0, 0, 0.9);
     padding-top: 10px;
+    width: 100%
 }
 
 .contact_contain_text img {
     width: 50px;
     height: 50px;
     border-radius: 100px;
+    margin-right: 0;
+    margin-left:auto
 }
 
 .send_container {
@@ -865,11 +818,15 @@ button {
 }
 
 /* custom button to load more */
-
+.comment_a_blog .button_load_more{
+    position:fixed;
+    bottom: 70px;
+    width: 41%;
+}
 .button_load_more {
-    width: 100%;
     height: 30px;
     padding-bottom: 5px;
+  
 }
 
 .button_load_more button {
@@ -879,7 +836,7 @@ button {
 }
 
 .button_load_more button:hover {
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    box-shadow: 0px 5px 20px rgba(46, 229, 157, 0.4);
 }
 
 :root {

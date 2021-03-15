@@ -6,7 +6,7 @@ function SendContact(props) {
     return (
         <>
             {props.id[props.id.length - 1] === "a" ?
-                < ChatCouple onClick={(value) => props.onClick(value)} id={props.id} /> :
+                <ChatCouple onClick={(value) => props.onClick(value)} id={props.id} /> :
                 <ChatGroup onClick={(value) => props.onClick(value)} id={props.id} />}
         </>
     )

@@ -44,7 +44,6 @@ function ChatCouple(props) {
     const handleSetMic = () => {
         // if value send from server is only one person return that else do another
         let userMic = typeof user === "string" ? user : user[0] === userId ? user[1] : user[0]
-        setMic(!mic)
         try {
             if (mic === true) {
                 const audioTrack = createEmptyAudioTrack();
@@ -61,8 +60,8 @@ function ChatCouple(props) {
                 })
             }
         } catch (error) {
-
         }
+        setMic(!mic)
     }
 
     let createNullStream = async () => {
@@ -130,7 +129,7 @@ function ChatCouple(props) {
         setOldPeer(peerJS)
         peerJS.on("open", () => {
             socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
-                setUser(callback[0].split(","))
+                setUser(callback)
             })
         })
         // get user media

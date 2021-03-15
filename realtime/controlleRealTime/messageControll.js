@@ -122,25 +122,28 @@ const sendMessageOff = async ({ room, message, id }) => {
         id,
         seen: false
     }
-    let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
-    for await (value of messageUsers.user) {
-        let data = await User.findById({ "_id": value }, { "messageList": 1 }).exec()
-        let arr = [...data.messageList]
-        // find index of the that room in array
-        let index = arr.indexOf(room)
-        arr.splice(index, 1)
-        arr.unshift(room)
-        await User.findByIdAndUpdate({ "_id": value }, { $set: { "messageList": arr } }).exec()
-    }
+    setTimeout(async () => {
+        let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
+        for await (value of messageUsers.user) {
+            let data = await User.findById({ "_id": value }, { "messageList": 1 }).exec()
+            let arr = [...data.messageList]
+            // find index of the that room in array
+            let index = arr.indexOf(room)
+            arr.splice(index, 1)
+            arr.unshift(room)
+            User.findByIdAndUpdate({ "_id": value }, { $set: { "messageList": arr } }).exec()
+        }
+    }, 1000)
     return { roomMessage: room, messageMessage: mess, memberMessage: id }
 }
 const sendImageOff = ({ room, image, userId }) => {
-    let mess = {
+    let data = {
         image,
-        id: userId
+        id: userId,
+        seen: false
     }
-    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } })
-    return { roomMessage: room, message: mess, member: userId }
+    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": data } }).exec()
+    return { roomMessage: room, message: data, member: userId }
 }
 
 const seenMessage = async ({ id, userId }) => {

@@ -8,7 +8,7 @@
 
 .contain_blog {
     background-color: #2e406f;
-    padding: 10% 10% 0% 10%;
+    padding: 5% 10% 0% 10%;
     width: 80%;
 }
 
@@ -103,11 +103,6 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: center;
 }
-
-.image-blog {
-    margin-bottom: 10px
-}
-
 .image-blog .one img {
     width: 100%;
     height: 400px;
@@ -143,24 +138,22 @@ input[type="checkbox"] {
 }
 
 .comment_blog_view .comment_blog img {
-    width: 50px;
-    height: 50px;
+    width:40px;
+    height: 40px;
     border-radius: 50%
 }
 
 .comment_blog_view .comment_blog .activities {
-    display: flex;
-    width: 30%;
-    margin-left: 70px;
+    margin-right: 10px;
+    margin-left: auto
 }
 
 .comment_blog_view .comment_blog .activities .list {
-    flex: 0 0 31.333333%;
+   
 }
 
 .comment_blog .content {
     align-items: center;
-    /* justify-content: center; */
     display: flex;
 }
 
@@ -211,6 +204,7 @@ input[type="checkbox"] {
     height: 500px;
     overflow-y: scroll;
     margin-bottom: auto;
+    position: relative;
 }
 
 .post_viewing .content .content_div {
@@ -218,11 +212,15 @@ input[type="checkbox"] {
     margin-left: 5px;
 }
 
+.post_viewing .content .content_div p {
+    margin: 1px 0px 0px 5px
+}
 .post_viewing .content .content_div img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+    margin-left: 10px;
 }
 
 .extension_blog {
@@ -232,7 +230,7 @@ input[type="checkbox"] {
 .extension_blog .ex {
     flex: 50;
     background-color: initial;
-    margin: 5px 11px 10px 0;
+    margin: 0px 11px 0px 0;
 }
 
 .extension_blog .ex .like {
@@ -265,7 +263,7 @@ input[type="checkbox"] {
     padding-left: 20px;
     padding-top: 10px;
     min-height: 3em;
-    /* overflow: auto; */
+    overflow: auto;
 }
 
 ::-webkit-textarea-placeholder {

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { errorHandler } = require("../helpers/dbErrorHandle");
 const sgEmail = require("@sendgrid/mail");
 const { User } = require("../models/user.models");
+const { cm } = require("../nodeCache");
 
 
 sgEmail.setApiKey("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")
@@ -87,6 +88,10 @@ exports.activationController = (req, res) => {
                     }
                 })
                 const token_send = user._id
+                cm.set(token_user, "online")
+                    .then(function () {
+
+                    })
                 return res.json({
                     token: token_send,
                     user: user.name,
@@ -254,6 +259,10 @@ exports.googleController = (req, res) => {
                                 })
                             }
                             const token = user._id
+                            cm.set(token_user, "online")
+                                .then(function () {
+
+                                })
                             const { email, name, _id } = data;
                             return res.json({
                                 token,
@@ -306,6 +315,10 @@ exports.facebookController = (req, res) => {
                                 })
                             }
                             const token = user._id
+                            cm.set(token_user, "online")
+                                .then(function () {
+
+                                })
                             const { name, email } = data;
                             return res.json({
                                 token,

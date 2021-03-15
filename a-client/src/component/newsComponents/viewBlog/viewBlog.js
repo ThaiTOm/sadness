@@ -87,21 +87,15 @@ function ViewBlog() {
         const { value, i } = cb.props
         return <>
             {
-                value.comment[i] !== undefined ? <div
-                    className="comment_blog"
-                >
+                value.comment[i] !== undefined ? <div className="comment_blog">
                     <div className="content">
-                        <img src="./demo.jpeg"></img>
+                        <img alt="avatart_user" src="./demo.jpeg"></img>
                         <span>{value.comment[i].value}</span>
-                    </div>
-                    <div className="activities">
-                        <LikeComment props={{ data: value.comment[i], i: value.comment[i].id + i, value: value.idBlog }} />
-                        <div className="comment list">
-                            <li >
-                                <ChatBubbleOutlineIcon /> comment
-                </li>
+                        <div className="activities">
+                            <LikeComment props={{ data: value.comment[i], i: value.comment[i].id + i, value: value.idBlog }} />
                         </div>
                     </div>
+
                 </div> : console.log()
             }
         </>

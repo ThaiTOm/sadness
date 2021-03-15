@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 var socketApp = (function () {
-    var socket = io("http://localhost:2704", {
+    var socket = io("http://localhost:2704/", {
         withCredentials: true,
     })
 

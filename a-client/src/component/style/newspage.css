@@ -256,3 +256,9 @@
     width: 50%;
     margin-left: 180px;
 }
+#recal{
+    margin-left: 0;
+    margin-right: auto;
+    font-size: 2rem;
+    font-weight: 600;
+}

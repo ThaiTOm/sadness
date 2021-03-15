@@ -16,6 +16,8 @@ function Comment(props) {
     const [end, setEnd] = useState(10)
     const [comment, setComment] = useState([])
     const [login, setLogin] = useState(null)
+    const [load, setLoad] = useState(false)
+
     const handleSubmit = (e) => {
         if (text.length > 0) {
             e.preventDefault()
@@ -30,10 +32,11 @@ function Comment(props) {
         }
     }
     const fetchData = () => {
+        setLoad(true)
         setTimeout(() => {
             setStart(start + 10)
             setEnd(end + 10)
-        }, 1500);
+        }, 1500)
     }
     const handleLoginValidate = () => {
         if (!id) {
@@ -42,14 +45,15 @@ function Comment(props) {
             setLogin(null)
         }
     }
+
     useEffect(() => {
-        setComment([])
         axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
             .then(async res => {
                 let a = res.data.data
                 for await (let value of a) {
                     setComment(a => [...a, value])
                 }
+                setLoad(false)
             })
             .catch(err => {
                 return (
@@ -58,23 +62,7 @@ function Comment(props) {
                     </div>
                 )
             })
-    }, [value.idBlog])
-    useEffect(() => {
-        axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
-            .then(async res => {
-                let a = res.data.data
-                for await (let value of a) {
-                    setComment(a => [...a, value])
-                }
-            })
-            .catch(err => {
-                return (
-                    <div>
-                        Có lỗi đả xảy ra bạn hãy thử lại sau
-                    </div>
-                )
-            })
-    }, [start])
+    }, [end])
     return (
         <div className="comment_a_blog">
             {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
@@ -92,42 +80,40 @@ function Comment(props) {
                     <ChatBubbleOutlineOutlinedIcon />
                 </button>
             </form>
-            <InfiniteScroll
-                dataLength={comment.length}
-                next={fetchData}
-                hasMore={true}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>het</b>
-                    </p>
-                }
-                loader={<SkeletonComment />}
-            >
-                {
-                    comment.length > 0 ? comment.map(function (vari, i) {
-                        return (
-                            <div key={i} className="content_comment_a_blog">
-                                <div className="value_content_comment_a_blog">
-                                    <img src="../demo.jpeg"></img>
-                                    <div>
-                                        {
-                                            vari.data.map(function (data) {
-                                                return <p>{data}</p>
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className="activities">
-                                    <LikeComment props={{ data: vari, i, value: value.idBlog }} />
-                                    <div className="comment list">
-                                        {/* <ChatBubbleOutlineIcon /> comment */}
-                                    </div>
+            {
+                comment.length > 0 ? comment.map(function (vari, i) {
+                    return (
+                        <div key={i} className="content_comment_a_blog">
+                            <div className="value_content_comment_a_blog">
+                                <img alt="avatar_user" src="../demo.jpeg"></img>
+                                <div>
+                                    {
+                                        vari.data.map(function (data, index) {
+                                            return <p key={index}>{data}</p>
+                                        })
+                                    }
                                 </div>
                             </div>
-                        )
-                    }) : console.log()
+                            <div className="activities">
+                                <LikeComment props={{ data: vari, i, value: value.idBlog }} />
+                                <div className="comment list">
+                                    {/* <ChatBubbleOutlineIcon /> comment */}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }) : console.log()
+            }
+            <div className="button_load_more">
+                {load === false ? <button onClick={fetchData}>Tải thêm</button>
+                    :
+                    <div className="loaderBalls">
+                        <div className="yellow"></div>
+                        <div className="red"></div>
+                        <div className="blue"></div>
+                    </div>
                 }
-            </InfiniteScroll>
+            </div>
         </div>
     )
 }

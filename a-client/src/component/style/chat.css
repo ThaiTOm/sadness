@@ -1,0 +1,17 @@
+#simple_menu_emoji .MuiPaper-root{    
+    max-height: 300px;
+    max-width: 1000px;
+}
+#simple_menu_emoji .MuiPopover-paper{
+    min-width: 300px;
+    max-width: 400px;
+}
+#simple_menu_emoji .MuiList-root{
+    word-break: break-all;
+    padding-right: 0 !important;
+    padding-left: 15px;
+    width: 100% !important;
+}
+#simple_menu_emoji .MuiList-root span{
+    padding-right: 5px;
+}

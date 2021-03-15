@@ -57,6 +57,7 @@ const comment = async ({ idRecieve, idSent, value }) => {
     let x = await Blog.findById({ "_id": idRecieve }, "comment").exec()
     let length = x.comment.length || 0
     let text = value.split(/\r\n|\r|\n/)
+    console.log(text)
     const data = {
         id: idSent + ";" + length + ";" + idRecieve,
         value: text,

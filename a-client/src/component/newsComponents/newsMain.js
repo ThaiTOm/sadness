@@ -36,7 +36,7 @@ function NewsMain() {
                 setValue(a => [...a, arr])
             }
         })
-    }, [socket])
+    }, [])
     return (
         <div className="news_page">
             <ToastContainer />

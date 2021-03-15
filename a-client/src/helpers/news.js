@@ -173,7 +173,7 @@ export const HeaderPage = (props) => {
     return (
         <header>
             <div className="navbar_auth">
-                <p> Recal </p>
+                <p id="recal"> Recal </p>
                 <div className="extension_auth">
                     <div className="inner_title">
                         <Button className="notify_icon" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickNoti}>

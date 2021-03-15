@@ -1,8 +1,6 @@
 const { User } = require("../models/user.models");
-const memcachePlus = require("memcache-plus");
 const { Message } = require("../models/message.model");
-const { conforms } = require("lodash");
-const cm = new memcachePlus()
+const { cm } = require("../nodeCache");
 
 
 exports.getIdRooms = async (req, res) => {
@@ -37,17 +35,18 @@ exports.listContact = (req, res) => {
                         // value: idRoom
                         if (value) {
                             let allMessage = await Message.findById({ "_id": value }).exec()
+                            let user = await cm.getMulti(allMessage.user)
                             let i = 0
-                            let oldArr = allMessage.data.reverse()
+                            let oldArr = allMessage.data.reverse().slice(0, 5)
                             for (let value of oldArr) {
                                 if (value.seen === false && value.id !== id) i++
                                 else if (value.seen === true && value.id !== id || value.id === id) break;
                             }
                             let data = {
-                                user: allMessage.user,
-                                data: allMessage.data,
+                                user,
+                                data: [allMessage.data[0]],
                                 idRoom: allMessage._id,
-                                nread: i
+                                nread: i == 5 ? "N" : i
                             }
                             arr.push(data)
                         }
@@ -62,10 +61,15 @@ exports.listContact = (req, res) => {
 // get data chat in the room
 exports.sendContactRoom = async (req, res) => {
     const { id, start, end } = await req.query
-    Message.findById({ "_id": id }, "data").exec((err, value) => {
+    Message.findById({ "_id": id }).exec(async (err, value) => {
         let data = value.data
-        data = data.length > 10 ? data.slice(data.length - 10, data.length) : data
-        return res.json(data)
+        data = data.length > 10 ? data.slice(data.length - end, data.length - start) : data
+        let users = []
+        for await (value of value.user) {
+            let state = await cm.get(value)
+            users.push(state)
+        }
+        return res.json({ data, users })
     })
 }
 
