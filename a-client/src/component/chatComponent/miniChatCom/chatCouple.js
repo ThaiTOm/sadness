@@ -5,7 +5,6 @@ import "../../style/call.css"
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import Peer from "peerjs"
 import { createEmptyAudioTrack } from '../../../helpers/audio';
 import SimpleMenu from '../miniChatCom/simpleMenu';
 import MicIcon from '@material-ui/icons/Mic';
@@ -18,14 +17,12 @@ import socketApp from '../../../socket';
 function ChatCouple(props) {
     let socket = socketApp.getSocket();
     const userId = getCookie().token;
-    const { id } = props;
+    const { id, peerJS } = props;
     const [audio, setAudio] = useState(null);
     const [mic, setMic] = useState(false)
     const [volumn, setVolumn] = useState(false)
-    const [oldPeer, setOldPeer] = useState(null)
     const [user, setUser] = useState(null)
     const [talk, setTalk] = useState(false)
-
     const handleSetVolumn = () => {
         if (audio) {
             setVolumn(!volumn)
@@ -47,13 +44,13 @@ function ChatCouple(props) {
         try {
             if (mic === true) {
                 const audioTrack = createEmptyAudioTrack();
-                let data = oldPeer.connections
+                let data = peerJS.connections
                 let sender = data[userMic][0].peerConnection.getSenders()[0]
                 sender.replaceTrack(audioTrack)
             }
             else {
                 navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-                    let data = oldPeer.connections
+                    let data = peerJS.connections
                     let sender = data[userMic][0].peerConnection.getSenders()[0]
                     sender.replaceTrack(stream.getAudioTracks()[0])
                 }).catch(err => {
@@ -111,22 +108,21 @@ function ChatCouple(props) {
                 createCall(call)
             })
             socket.on("user-connect", value => {
-                const call = peer.call(value.id, stream)
-                setUser(value.id)
-                createCall(call)
+                if (value.idRoom === id) {
+                    const call = peer.call(value.id, stream)
+                    setUser(value.id)
+                    createCall(call)
+                }
+
             })
         } else {
             createNullStream()
         }
     }
 
+    // if we join another room then delete old peer connections 
+
     useEffect(() => {
-        var peerJS = new Peer(userId, {
-            host: "/",
-            port: 2704,
-            path: "/peerjs"
-        })
-        setOldPeer(peerJS)
         peerJS.on("open", () => {
             socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
                 setUser(callback)
@@ -141,7 +137,7 @@ function ChatCouple(props) {
             const stream = new MediaStream([audioTrack]);
             plus(peerJS, stream)
         })
-    }, [socket])
+    }, [socket, id, peerJS])
 
     return (
         <div className="message_container">

@@ -5,6 +5,7 @@ import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { makeStyles } from '@material-ui/core/styles';
 import { ToastContainer, toast } from "react-toastify";
+import { authenicate } from "../../helpers/auth";
 import axios from "axios";
 
 
@@ -61,8 +62,18 @@ function RegisterForm() {
     const responseGoogle = (response) => {
         console.log(response);
     }
+    const sendFacebookToken = (userID, accessToken) => {
+        axios.post("http://localhost:2704/api/facebooklogin", {
+            userID, accessToken
+        }).then(res => {
+            authenicate(res)
+            window.location.reload(false);
+        }).catch(err => {
+            toast.error("Login with Facebook failed")
+        })
+    }
     const responseFacebook = (response) => {
-        console.log(response);
+        sendFacebookToken(response.userID, response.accessToken)
     }
     return (
         <form className="form_signIn" onSubmit={handleSubmit}>
@@ -137,9 +148,9 @@ function RegisterForm() {
                         cookiePolicy={'single_host_origin'}
                     />
                     <FacebookLogin
-                        appId="1088597931155576"
+                        appId="688117411891893"
                         fields="name,email,picture"
-                        onClick={responseFacebook}
+                        callback={responseFacebook}
                         cssClass="facebook_login"
                         icon="fa-facebook"
                     />

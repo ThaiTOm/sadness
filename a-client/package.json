@@ -38,7 +38,8 @@
     "simple-peer": "^9.9.3",
     "socket.io": "^3.0.2",
     "socket.io-client": "^3.0.2",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "ws": "^7.4.4"
   },
   "scripts": {
     "start": "react-scripts start",

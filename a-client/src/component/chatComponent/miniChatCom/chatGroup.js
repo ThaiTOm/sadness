@@ -6,7 +6,6 @@ import "../../style/call.css"
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import Peer from "peerjs"
 import { createEmptyAudioTrack } from '../../../helpers/audio';
 import SimpleMenu from '../miniChatCom/simpleMenu';
 import MicIcon from '@material-ui/icons/Mic';
@@ -18,13 +17,12 @@ import RenderChat from '../renderChat';
 function ChatGroup(props) {
     const userId = getCookie().token;
     let socket = socketApp.getSocket();
-    const { id } = props;
+    const { id, peerJS } = props;
     const [audio, setAudio] = useState([]);
-    const [mic, setMic] = useState(true)
+    const [mic, setMic] = useState(false)
     const [volumn, setVolumn] = useState(false)
     const [oldPeer, setOldPeer] = useState(null)
     const [talk, setTalk] = useState(false)
-
     // turn on or turn off own volumn
     const handleSetVolumn = async () => {
         // does any another user in the room
@@ -62,7 +60,7 @@ function ChatGroup(props) {
             let data = oldPeer.connections
             for (let i = 0; i < audio.length; i++) {
                 let userMic = Object.keys(data)[i]
-                let sender = data[userMic][0].peerConnection.getSenders()[0]
+                let sender = data[userMic][0].peerConnection.getSenders()[0] || []
                 sender.replaceTrack(audioTrack)
             }
         }
@@ -82,7 +80,7 @@ function ChatGroup(props) {
     const handleSetVolumnOther = (value, i) => {
         // get id the user want to muted
         let idMuted = Object.keys(oldPeer.connections)[i]
-        let sender = oldPeer.connections[idMuted][0].peerConnection.getSenders()[0]
+        let sender = oldPeer.connections[idMuted][0].peerConnection.getSenders()[0] || []
         const returnAudio = (stream, streamNull) => {
             let a = (
                 <audio ref={audio => audio ? audio.srcObject = stream : streamNull} playsInline autoPlay />
@@ -184,7 +182,7 @@ function ChatGroup(props) {
     // fisrt route of connect peer to peer 
     const plus = (peer, stream) => {
         // check if that peer is destroyed or not destroy that mean that was created before
-        if (peer.destroyed === false && mic === true) {
+        if (peer.destroyed === false) {
             // run normally
             peer.on("call", call => {
                 call.answer(stream)
@@ -192,27 +190,16 @@ function ChatGroup(props) {
             })
             // recieve from server
             socket.on("user-connect", value => {
-                const call = peer.call(value.id, stream)
-                createCall(call)
+                if (value.idRoom === id) {
+                    const call = peer.call(value.id, stream)
+                    createCall(call)
+                }
             })
-        } else {
-            let a = createNullStream()
-            let obj = {
-                stream: a,
-                audio: false,
-                mic: false
-            }
-            setAudio(value => [...value, obj])
         }
     }
+
     useEffect(() => {
         const fn = () => {
-            var peerJS = new Peer(userId, {
-                host: "/",
-                port: 2704,
-                path: "/peerjs"
-            })
-            console.log(peerJS)
             setOldPeer(peerJS)
             peerJS.on("open", () => {
                 socket.emit("chatVideo", { idRoom: id, id: userId, g: "a" }, (callback) => { })
@@ -228,7 +215,7 @@ function ChatGroup(props) {
             })
         }
         fn()
-    }, [id])
+    }, [id, peerJS])
     return (
         <div className="message_container">
             <RenderChat id={props.id} userId={userId} />

@@ -15,6 +15,7 @@ function Main_page() {
     const id = getCookie().token;
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
+    const [change, setChange] = useState(null)
     //value contain Rooms
     const [value, setValue] = useState(null);
     const [name, setName] = useState("Recal")
@@ -35,23 +36,25 @@ function Main_page() {
     }, [start])
 
     useEffect(() => {
-        let func = async () => {
-            let data = value
+        let func = () => {
+            let arr = [...value]
             socket.on("message", msgs => {
                 if (msgs.type === "message") {
-                    let arr = [...data]
                     for (let i = 0; i < arr.length; i++) {
-                        if (arr[i].idRoom === msgs.idRoom) {
+                        if (arr[i].idRoom === msgs.idRoom && i !== 0) {
                             arr.splice(i, 1)
                             arr.unshift(msgs)
-                            setValue(arr)
+                            setChange(null)
+                            return setValue(arr)
                         }
                     }
+                    // if the position of all value is not change
+                    return setChange("abc")
                 }
             })
         }
         value ? func() : console.log()
-    }, [])
+    })
     const hanldeSetRoom = value => {
         let id = value.split(",")
         setRoom(id[0])
@@ -78,8 +81,9 @@ function Main_page() {
                         // if value have then we can use this 
                         value && value.length > 0 ? value.map((val, i) => <div key={i}>
                             <ContactContain
+                                change={change}
                                 onClick={(value) => hanldeSetRoom(value)}
-                                message={val.data[val.data.length - 1]}
+                                message={val.data}
                                 users={val.user}
                                 idRoom={val.idRoom}
                                 target={room}

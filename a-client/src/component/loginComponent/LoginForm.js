@@ -75,6 +75,7 @@ function LoginForm() {
         sendGoogleToken(response.tokenId)
     }
     const responseFacebook = response => {
+        console.log(response)
         sendFacebookToken(response.userID, response.accessToken)
     }
     return (

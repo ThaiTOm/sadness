@@ -32,12 +32,16 @@ function RenderChat(props) {
     }, [id, start, end])
     useEffect(() => {
         socket.on("message", msg => {
-            if (msg.image) {
-                setMsg(img => [...img, msg.image])
-            } else {
-                setMsg(msgs => [...msgs, msg.data])
+            let fnc = () => {
+                if (msg.image) {
+                    setMsg(img => [...img, msg.image])
+                } else {
+                    setMsg(msgs => [...msgs, msg.data])
+                }
+                executeScroll(myRef)
             }
-            executeScroll(myRef)
+            msg.idRoom === id && fnc()
+
         })
     }, [socket])
     return (

@@ -13,7 +13,7 @@ let socket = socketApp.getSocket()
 
 ReactDOM.render(
   <React.StrictMode>
-    <Beforeunload onBeforeunload={() => socket.emit("offline", { id })}>
+    <Beforeunload onBeforeunload={() => id ? socket.emit("offline", { id }) : console.log()}>
       <App />
     </Beforeunload>
   </React.StrictMode>,

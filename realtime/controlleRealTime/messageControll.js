@@ -18,7 +18,7 @@ const addUser = async ({ id, ipOfUser, len }) => {
 
     const createRoom = async (arrOfRegion, a, pos) => {
         let fnc = (value, arr) => {
-            User.findByIdAndUpdate({ "_id": value }, { $push: { "messageList": arr } }, (err, succes) => {
+            User.findByIdAndUpdate({ "_id": value }, { $push: { "messageList": { "$each": [arr], "$position": 0 } } }, (err, succes) => {
                 if (err) console.log(err)
             })
         }
@@ -32,8 +32,6 @@ const addUser = async ({ id, ipOfUser, len }) => {
         fnc(name1, roomChatId)
         fnc(name2, roomChatId)
         // then move it to message database
-        let firstValue = [name1 + "," + name2]
-        // cm.set(roomChatId, firstValue, 2592000)
         const obj = new Message({
             _id: roomChatId,
             user: [name1, name2],
@@ -109,18 +107,33 @@ const sendMessage = ({ room, message, id }) => {
     //mess contain message and id 
     let mess = {
         data: [message],
-        id,
-        seen: false
+        seen: false,
+        idRoom: room,
+        type: "message",
+        id: id,
     }
-    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
+    setTimeout(async () => {
+        let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
+        for await (value of messageUsers.user) {
+            let data = await User.findById({ "_id": value }, { "messageList": 1 }).exec()
+            let arr = [...data.messageList]
+            // find index of the that room in array
+            let index = arr.indexOf(room)
+            arr.splice(index, 1)
+            arr.unshift(room)
+            User.findByIdAndUpdate({ "_id": value }, { $set: { "messageList": arr } }).exec()
+        }
+    }, 1000)
     return { roomMessage: room, messageMessage: mess, memberMessage: id }
 }
 
 const sendMessageOff = async ({ room, message, id }) => {
     let mess = {
         data: [message],
-        id,
-        seen: false
+        seen: false,
+        idRoom: room,
+        type: "message",
+        id: id,
     }
     setTimeout(async () => {
         let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()

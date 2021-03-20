@@ -44,7 +44,7 @@ exports.listContact = (req, res) => {
                             }
                             let data = {
                                 user,
-                                data: [allMessage.data[0]],
+                                data: allMessage.data[0],
                                 idRoom: allMessage._id,
                                 nread: i == 5 ? "N" : i
                             }

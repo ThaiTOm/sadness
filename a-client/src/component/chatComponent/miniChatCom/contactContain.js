@@ -10,7 +10,8 @@ var socket = socketApp.getSocket();
 
 // This function is use for render list of contact
 
-function ContactContain({ onClick, message, users, idRoom, target, nread }) {
+function ContactContain({ onClick, message, users, idRoom, target, nread, change }) {
+    const [room, setRoom] = useState(idRoom)
     // msg == new message send by real time, message == old message 
     const [read, setRead] = useState(false);
     const [active, setActive] = useState(false);
@@ -21,9 +22,19 @@ function ContactContain({ onClick, message, users, idRoom, target, nread }) {
     const [onl, setOnl] = useState(null)
     // lu last user, clu contain last user and message
     const id = getCookie().token;
-    let lu;
-    //this message is last message when not online
-    let sliceMess = (a, user) => {
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    let sliceMess = (a, user, value) => {
+        if (value.seen === "false") {
+            setRead(true)
+        }
         if (a.length > 0) {
             let mess = a.length > 10 ? a.slice(0, 10) + "....." : a
             setValue(user + mess)
@@ -32,47 +43,33 @@ function ContactContain({ onClick, message, users, idRoom, target, nread }) {
             setValue(user + "đã gửi hình ảnh")
         }
     }
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     const validateImage = (value) => {
-        if (value.image) {
-            let a = "đã gửi hình ảnh"
-            if (value.id === id) sliceMess(a, "Bạn: ")
-            else {
-                sliceMess(a, "Their: ")
-                if (value.seen === "false") {
-                    setRead(true)
-                }
-            }
-        } else {
-            let a = value.data[0] ? decryptWithAES(value.data[0]) : ""
-            if (value.id === id) sliceMess(a, "Bạn: ")
-            else {
-                sliceMess(a, "Their: ")
-                if (value.seen === "false") {
-                    setRead(true)
-                }
-            }
-        }
+        let a = value.data[0] ? decryptWithAES(value.data[0]) : value.data.data[0] ? decryptWithAES(value.data.data[0]) : "đã gửi hình ảnh"
+        if (value.id === id) sliceMess(a, "Bạn: ", value)
+        else sliceMess(a, "", value)
+    }
+    let some = (value) => {
+        socket.on("message", msgs => {
+            let x = value
+            msgs.idRoom === x && validateImage(msgs)
+            console.log(x)
+        })
     }
     useEffect(() => {
-        socket.on("message", msgs => {
-            msgs.idRoom === idRoom && validateImage(msgs)
-        })
-    }, [message])
+        let fnc = () => {
+            some(idRoom)
+        }
+        change && fnc()
+    }, [change])
+    useEffect(() => {
+
+        message && validateImage(message)
+
+    }, [idRoom])
 
     useEffect(() => {
-        //message contain when another not sending and that is the last time when message send
-        let fnc = () => {
-            socket.emit("joinChatBack", { idRoom })
-            validateImage(message)
-        }
-        message && fnc()
+        socket.emit("joinChatBack", { idRoom })
     }, [])
 
     useEffect(() => {
@@ -89,7 +86,6 @@ function ContactContain({ onClick, message, users, idRoom, target, nread }) {
     useEffect(() => {
         for (let value in users) {
             if (value !== id && users[value] === "online") {
-                console.log("run")
                 setOnl(true)
                 break;
             }

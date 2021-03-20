@@ -7,6 +7,7 @@ const { errorHandler } = require("../helpers/dbErrorHandle");
 const sgEmail = require("@sendgrid/mail");
 const { User } = require("../models/user.models");
 const { cm } = require("../nodeCache");
+var mongoose = require('mongoose');
 
 
 sgEmail.setApiKey("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")
@@ -87,10 +88,12 @@ exports.activationController = (req, res) => {
                         })
                     }
                 })
-                const token_send = user._id
-                cm.set(token_user, "online")
+                const token_send = user["_id"]
+                cm.set(token_send.toString(), "online")
                     .then(function () {
-
+                    })
+                    .catch(err => {
+                        console.log(err)
                     })
                 return res.json({
                     token: token_send,
@@ -251,15 +254,16 @@ exports.googleController = (req, res) => {
                         })
                     } else {
                         let password = email + process.env.JWT_SECRET;
-                        user = new User({ name, email, password })
+                        var id = mongoose.Types.ObjectId();
+                        user = new User({ "_id": id, name, email, password })
                         user.save((err, data) => {
                             if (err) {
                                 res.status(400).json({
                                     error: errorHandler(err)
                                 })
                             }
-                            const token = user._id
-                            cm.set(token_user, "online")
+                            const token = id
+                            cm.set(data.id, "online")
                                 .then(function () {
 
                                 })
@@ -288,46 +292,57 @@ exports.facebookController = (req, res) => {
             method: "GET"
         }).then(response => response.json())
             .then(response => {
-                const { email, name } = response;
-                // if (name && !email) {
-                //     User.findOne
-                // }
-                User.findOne({ email }).exec((err, user) => {
-                    if (user) {
-                        const token = user._id
-                        const { _id, name, email } = user;
-                        return res.json({
-                            token,
-                            _user_email: email,
-                            user: name
-                        })
-                    } else {
-                        let password = email + process.env.JWT_SECRET;
-                        if (email) {
-                            user = new User({ email, name, password })
-                        } else {
-                            user = new User({ name, password })
-                        }
-                        user.save(err, data => {
-                            if (err) {
-                                return res.status(400).json({
-                                    error: "Try again please"
-                                })
-                            }
-                            const token = user._id
-                            cm.set(token_user, "online")
-                                .then(function () {
+                const { email, name, id } = response
 
-                                })
-                            const { name, email } = data;
+                let fnc = (field, value) => {
+                    User.findById({ "_id": value }).exec((err, user) => {
+                        if (user) {
+                            const token = user._id
+                            const { _id, name } = user;
+                            const value = user[field]
                             return res.json({
                                 token,
-                                _user_email: email,
+                                _user_email: value,
                                 user: name
                             })
-                        })
-                    }
-                })
+                        } else {
+                            let password = field + process.env.JWT_SECRET;
+                            let user
+                            if (field === "_id") {
+                                user = new User({
+                                    _id: value,
+                                    name,
+                                    password
+                                })
+                            } else {
+                                user = new User({
+                                    email: value,
+                                    name,
+                                    password
+                                })
+                            }
+                            user.save((err, data) => {
+                                if (err) {
+                                    return res.status(400).json({
+                                        error: "Try again please"
+                                    })
+                                }
+                                const token = data._id
+                                cm.set(token.toString(), "online")
+                                    .then(function () {
+
+                                    })
+                                const { name, field } = data;
+                                return res.json({
+                                    token,
+                                    _user_email: field,
+                                    user: name
+                                })
+                            })
+                        }
+                    })
+                }
+                email ? fnc("email", email) : fnc("_id", id)
             }).catch(err => {
                 res.json({
                     error: "Login failed with Facebook"

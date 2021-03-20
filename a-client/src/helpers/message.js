@@ -4,7 +4,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
 import { encryptTo } from "./auth";
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import "../component/style/chat.css"
 import { emoji } from "./emoji";
 
@@ -40,11 +39,9 @@ export const messageLiRender = (li, one, two, msgs, i, myRef) => {
             ref={myRef}
         >
             { msgs.length > 60 ?
-                <div className={one}>
-                    {msgs}
+                <div className={one} dangerouslySetInnerHTML={{ __html: msgs }}>
                 </div> :
-                <div className={two}>
-                    {msgs}
+                <div className={two} dangerouslySetInnerHTML={{ __html: msgs }}>
                 </div>
             }
         </li>
@@ -73,6 +70,12 @@ export const FormSend = ({ id, userId }) => {
             let value = encryptTo(message)
             socket.emit('sendMessageOff', { room: id, message: value, userId });
         }
+    }
+    const emojiSubmit = (e, emo) => {
+        e.preventDefault()
+        let value = encryptTo("&#" + emo + ";")
+        socket.emit('sendMessageOff', { room: id, message: value, userId });
+        handleClose()
     }
     const useRefTrigger = () => {
         fileRef.current.click()
@@ -106,7 +109,7 @@ export const FormSend = ({ id, userId }) => {
                         />
                         <div className="inner_title">
                             <IconButton className="image_upload_message_icon" onClick={useRefTrigger}>
-                                <ImageIcon />
+                                <img alt="image_upload_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAADRUlEQVRIieWVz28bRRTHP7M7dvCPNg0kEWDTQ+khJ6SqF/4CqnIgElIlzsgK4sQBFSFOuXFAnHKJUg5ISOWHIqQQEaFarUoVVaitgdRBdROJipA6tfMDJ66drO2Z10NIm3XsOHZygq+02pk3b95n3uzbGfi/STUbSCQSrzmOMwQUlVJ3RWQWyIyNjVWPFHz+/IU+48gFgZOA7o6G3leKcJ2/sVbWrMiyMXZ5+y3LNWM29gRWbIniZnJy/EpT8Llzb7+kunRaKdUTCUeqIA4QaDMJASwoAZGaMZRK5QDCp8mp8U/qnTWA0e67IR048eEH7znRSLirTeDuJNzdhqvXp7l6ffrjRGJIKyU3YrHY1PDwsH0KViLxnp5uFY2EcSPHCL7Qh3KcDvlgvS22clnisZcRQVlrL2rtXMxms58BHwHsiR7s7UdpDY7T8eOEwujjJxqt6c2dhh+sFMp193h3IsfVjcwLjcGtgqmmf99Bld5pNFxWI0UDmng0RNVYHhTLWJG2qUqpp+ADZxzWLgoIug7a6Tjz9sFrXoWCVyW36VExFoCKNcyv5w8aohYMBjM7nQNvdc0KS+Utn+3aYoa59Tzdr4boDx9rFeL+yMiIt9NpmbEV29A+V8hx759HGGv5cSGNZ2qtQqV3d1qCLyd/4Ne5WZ+t4G2SXLzn7/+dqZ/aOXg6fYfbmbt8nZxkIZcFQET4aeEPKsb4fOfXc8ysLDaNtbui9wU/XMkxcSMJQMVUuTT5LYXHG9zM/clSeb3hnJ+X5smVix2ARRBr8aoVvpwap2KeXb0b5SJfXJvgdv6vplnt/t5ifTtSGh0d9U3cU9XV1Tzfz9wiX1j12V2t4cVepMXBse5tknr0gDM1X04Ztq/N5uBacYPBUwMMnhrYF7CvPEF4lrG1cr/epfO7rw2J0BwsIoe+AZqpVrPNwUqp9k/9A6pU8pqAHYy1jU+ow2inEMtiV+vHtovL8vvK6hq/zczS39d7JFBrLb/cSuG6TvX1MwMPr0z4xxXA2bNDgb5YYdwY+9aRUP+V6zocD3dd+u6br4bqxzRAKjVWJcXgG4PvvELN9HcKei6onw+FgqddR53WrorrgHvnZDz++WEW/9/REz15Yuu7CLn4AAAAAElFTkSuQmCC" />
                             </IconButton>
                         </div>
                         <IconButton aria-controls="simple_menu_emoji" aria-haspopup="true" onClick={handleClick}>
@@ -119,8 +122,8 @@ export const FormSend = ({ id, userId }) => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            {emoji.map(function (emo) {
-                                return (<span onClick={(e) => setMessage("&#" + emo + ";")} dangerouslySetInnerHTML={{ __html: "&#" + emo + ";" }}></span>)
+                            {emoji.map(function (emo, i) {
+                                return (<span key={i} onClick={(e) => emojiSubmit(e, emo)} dangerouslySetInnerHTML={{ __html: "&#" + emo + ";" }}></span>)
                             })}
                         </Menu>
                     </div>

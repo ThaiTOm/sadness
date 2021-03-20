@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
-import { getCookie, encryptTo, decryptWithAES } from '../../helpers/auth';
-import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import { getCookie, decryptWithAES } from '../../helpers/auth';
 import axios from "axios"
 import socketApp from '../../socket';
-import ImageIcon from '@material-ui/icons/Image';
-import IconButton from '@material-ui/core/IconButton';
-import { handleFileUpload, messageLiRender, messageLiImageRender, executeScroll, Spinning } from '../../helpers/message';
+import { messageLiRender, messageLiImageRender, executeScroll, Spinning, FormSend } from '../../helpers/message';
+
 function Chat() {
     let socket = socketApp.getSocket();
     const id = getCookie().token;
@@ -14,19 +12,17 @@ function Chat() {
     const [value, setValue] = useState([]);
     // len is len of rooms the user had join
     const [len, SetLen] = useState(0);
-    const fileRef = useRef(null)
+
     //This id room contain every id of the message that they have
     // waitG = wait group
     const [waitG, setWaitG] = useState(null);
-    const [message, setMessage] = useState("");
-    const [idRoom, setidRoom] = useState("");
+
+    const [idRoom, setidRoom] = useState(null);
     const [wait, setWait] = useState(false);
     const [finish, setFinish] = useState(false);
     const myRef = useRef(null)
 
-    const useRefTrigger = () => {
-        fileRef.current.click()
-    }
+
 
     const HanldeClickFind = (e) => {
         if (wait !== true) {
@@ -46,14 +42,6 @@ function Chat() {
                     setidRoom(error)
                 }
             })
-        }
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (message) {
-            let value = encryptTo(message)
-            socket.emit('sendMessage', { room: idRoom, message: value, id }, () => setMessage(""));
         }
     }
     //Fetch data to recive the idRoom
@@ -82,12 +70,12 @@ function Chat() {
                 setFinish(true)
                 setidRoom(msg.roomId)
             }
-            if (msg.image) {
+            if (msg.image && idRoom) {
                 // if message send is image
-                setValue(img => [...img, msg.image + ";" + msg.user])
+                setValue(img => [...img, msg.image])
             }
-            else if (msg.text) {
-                setValue(msgs => [...msgs, msg.text + "," + msg.user])
+            else if (msg.data && idRoom) {
+                setValue(msgs => [...msgs, msg.data])
                 executeScroll(myRef)
             }
         })
@@ -151,57 +139,21 @@ function Chat() {
             <ul
                 style={finish === false ? { display: "none" } : {}}>
                 {
-                    Object.values(value).map(function (item, i) {
-                        let arr = item.split(",")
-                        if (arr[0] === "image") {
-                            // get image url
-                            let imgUrl = arr[1] + "," + arr[2].split(";")[0]
-                            // check if message is current user
-                            if (arr[2].split(";")[1] === id) return messageLiImageRender("mIOwn", i, imgUrl)
-                            else return messageLiImageRender("mIOther", i, imgUrl)
-                        } else {
-                            // encrypt the message 
-                            let msgs = decryptWithAES(arr[0])
-                            if (arr[1] === id) return messageLiRender("messageLiOwn", "own_message_same_div messageLiOwnm60", "own_message_same_div messageLiOwnl60", msgs, i)
-                            else return messageLiRender("messageLiOther", "other_message_same_div messageLiOtherm60", "other_message_same_div messageLiOtherl60", msgs, i)
-                        }
-                    })
+                    value.length > 0 ?
+                        value.map(function (item, i) {
+                            if (item.image) {
+                                let imgUrl = item.image
+                                if (item.id === idRoom) return messageLiImageRender("mIOwn", i, imgUrl, myRef)
+                                else return messageLiImageRender("mIOther", i, imgUrl, myRef)
+                            } else {
+                                let msgs = item.data[0] ? decryptWithAES(item.data[0]) : ""
+                                if (item.id === id) return messageLiRender("messageLiOwn", "own_message_same_div messageLiOwnm60", "own_message_same_div messageLiOwnl60", msgs, i, myRef)
+                                else return messageLiRender("messageLiOther", "other_message_same_div messageLiOtherm60", "other_message_same_div messageLiOtherl60", msgs, i, myRef)
+                            }
+                        }) : console.log()
                 }
             </ul>
-            <form
-                className="formMessage"
-                style={finish === false ? { display: "none" } : {}}
-                onSubmit={handleSubmit}>
-                <span className="input">
-                    <input
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        type="text"
-                        placeholder="Enter text" >
-                    </input>
-                    <span></span>
-                </span>
-                <div className="extension_input">
-                    <input
-                        id="icon_button_file"
-                        type="file"
-                        onChange={(e) => handleFileUpload(e, id, idRoom)}
-                        ref={fileRef}
-
-                    />
-                    <div className="inner_title">
-                        <IconButton className="image_upload_message_icon" onClick={useRefTrigger}>
-                            <ImageIcon />
-                        </IconButton>
-                        <span className="title" id="image_upload_message_title">
-                            Đăng tải ảnh
-                    </span>
-                    </div>
-                </div>
-                <button type="submit">
-                    <SendOutlinedIcon />
-                </button>
-            </form>
+            { idRoom ? <FormSend id={idRoom} userId={id} /> : console.log()}
         </div>
     )
 }

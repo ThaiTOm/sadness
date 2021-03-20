@@ -24,9 +24,7 @@ export default function SimpleMenu({ id, onClick }) {
     };
 
     const handleClickBlock = () => {
-        if (id.length > 2) {
-            setOpen(true)
-        }
+        setOpen(true)
     }
     // handleAB = handle Agree block
     const handleAB = () => {

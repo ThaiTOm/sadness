@@ -13,7 +13,6 @@ const cm = new memcachePlus()
 // var newCache = new cache.Cache();
 const responseTime = require("response-time");
 
-const redis = require("redis");
 // const { User } = require("./models/user.models");
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -31,7 +30,7 @@ connectDB()
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "https://localhost:3000",
         methods: ["GET", "POST", "PUT", "OPTIONS"],
         credentials: true
     }

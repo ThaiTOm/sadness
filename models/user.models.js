@@ -3,20 +3,18 @@ const crypto = require("crypto");
 
 
 const UserSchema = new mongoose.Schema({
+    _id: {
+        type: String
+    },
     email: {
         type: String,
-        trim: true,
-        require: true,
-        unique: true,
     },
     name: {
         type: String,
         trim: true,
-        require: true
     },
     hased_password: {
         type: String,
-        require: true,
     },
     salt: String,
     resetPasswordLink: {
@@ -35,10 +33,6 @@ const UserSchema = new mongoose.Schema({
     lastOffline: {
         type: String
     },
-    // isOnline: {
-    //     type: Boolean,
-    //     default: true
-    // },
     messageList: {
         type: Array,
         default: []

@@ -36,21 +36,24 @@ module.exports = {
                 messageMessage,
                 memberMessage
             } = sendMessage({ room, message, id });
+
             io.to(roomMessage).emit('message', {
-                id: memberMessage,
-                data: messageMessage,
-                idRoom: roomMessage,
-                type: "message"
+                data: messageMessage.data,
+                seen: false,
+                idRoom: room,
+                type: "message",
+                id: id,
             });
             callback();
         });
         socket.on("sendMessageOff", async ({ room, message, userId }) => {
             const { roomMessage, messageMessage, memberMessage } = await sendMessageOff({ room, message, id: userId })
             io.to(roomMessage).emit("message", {
-                id: memberMessage,
                 data: messageMessage,
+                seen: false,
                 idRoom: room,
-                type: "message"
+                type: "message",
+                id: userId,
             })
         });
         socket.on("sendImageOff", ({ room, image, userId }) => {
@@ -108,6 +111,9 @@ module.exports = {
             d = date.format(d, 'YYYY/MM/DD HH:mm:ss');
             cm.set(id, d)
                 .then(() => { })
+                .catch(() => {
+                    console.log(id)
+                })
         })
     }
 }
