@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import socketApp from '../../../socket';
 import { ToastContainer, toast } from "react-toastify";
-import SkeletonComment from "../exNews/SkeletonComment"
-import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios"
 import LikeComment from "./likeComment"
 import RequireLogin from '../../../helpers/requireLogin';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
+import { IconButton } from '@material-ui/core';
 
 function Comment(props) {
     const { value, id } = props.props
@@ -17,6 +16,7 @@ function Comment(props) {
     const [comment, setComment] = useState([])
     const [login, setLogin] = useState(null)
     const [load, setLoad] = useState(false)
+    const [buttonFind, setButtonfind] = useState(true)
 
     const handleSubmit = (e) => {
         if (text.length > 0) {
@@ -45,11 +45,25 @@ function Comment(props) {
             setLogin(null)
         }
     }
+    let loadMoreButton = <div className="button_load_more">
+        {load === false ? <button onClick={fetchData}>Tải thêm</button>
+            :
+            <div className="loaderBalls">
+                <div className="yellow"></div>
+                <div className="red"></div>
+                <div className="blue"></div>
+            </div>
+        }
+    </div>
 
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
             .then(async res => {
                 let a = res.data.data
+                if (a.length >= 4) {
+                    setButtonfind(false)
+                    return setLoad(false)
+                }
                 for await (let value of a) {
                     setComment(a => [...a, value])
                 }
@@ -76,9 +90,9 @@ function Comment(props) {
                     onInput={e => setText(e.target.innerText)}
                 >
                 </div>
-                <button type="submit" id="btnSearch" className="comment">
+                <IconButton type="submit" id="btnSearch" className="comment">
                     <ChatBubbleOutlineOutlinedIcon />
-                </button>
+                </IconButton>
             </form>
             {
                 comment.length > 0 ? comment.map(function (vari, i) {
@@ -92,28 +106,15 @@ function Comment(props) {
                                             return <p key={index}>{data}</p>
                                         })
                                     }
+                                    <LikeComment props={{ data: vari, i, value: value.idBlog }} />
                                 </div>
                             </div>
-                            <div className="activities">
-                                <LikeComment props={{ data: vari, i, value: value.idBlog }} />
-                                <div className="comment list">
-                                    {/* <ChatBubbleOutlineIcon /> comment */}
-                                </div>
-                            </div>
+
                         </div>
                     )
                 }) : console.log()
             }
-            <div className="button_load_more">
-                {load === false ? <button onClick={fetchData}>Tải thêm</button>
-                    :
-                    <div className="loaderBalls">
-                        <div className="yellow"></div>
-                        <div className="red"></div>
-                        <div className="blue"></div>
-                    </div>
-                }
-            </div>
+            {buttonFind === true && comment.length > 5 ? loadMoreButton : console.log()}
         </div>
     )
 }

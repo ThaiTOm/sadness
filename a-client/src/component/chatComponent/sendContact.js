@@ -8,7 +8,6 @@ import Peer from "peerjs"
 function SendContact(props) {
     const [peer, setPeer] = useState(null)
     const userId = getCookie().token;
-
     let newNull = () => {
         peer.destroy()
     }

@@ -23,6 +23,12 @@ function ChatCouple(props) {
     const [volumn, setVolumn] = useState(false)
     const [user, setUser] = useState(null)
     const [talk, setTalk] = useState(false)
+    const [accor, setAccor] = useState(false)
+
+    const handleOpenAccor = () => {
+        setAccor(!accor)
+    }
+
     const handleSetVolumn = () => {
         if (audio) {
             setVolumn(!volumn)
@@ -76,6 +82,7 @@ function ChatCouple(props) {
         let a = await audioStream()
         setAudio(a)
     }
+
     const createCall = (call) => {
         call.on("stream", async (userVideoStream) => {
             let audioStream = async () => {
@@ -99,6 +106,7 @@ function ChatCouple(props) {
             setAudio(a)
         })
     }
+
     const plus = (peer, stream) => {
         // check if that peer is destroyed or not destroy that mean that was created before
         if (peer.destroyed === false) {
@@ -109,6 +117,7 @@ function ChatCouple(props) {
             })
             socket.on("user-connect", value => {
                 if (value.idRoom === id) {
+                    console.log(id)
                     const call = peer.call(value.id, stream)
                     setUser(value.id)
                     createCall(call)
@@ -141,23 +150,24 @@ function ChatCouple(props) {
 
     return (
         <div className="message_container">
-            <RenderChat id={props.id} userId={userId} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
                 <div className="main_mic">
-                    <p>Voice Chat</p>
-                    <div className="user_device">
-                        <img
-                            alt="demom"
-                            src="../demo.jpeg"></img>
-                        <div className="icon_device">
-                            {audio}
-                            <IconButton onClick={(e) => handleSetMic(!mic)}>
-                                {mic === true ? <MicIcon /> : <MicOffIcon />}
-                            </IconButton>
-                            <IconButton onClick={(e) => handleSetVolumn()}>
-                                {volumn === false ? talk === true ? <VolumeUpIcon /> : <VolumeMuteIcon /> : <VolumeOffIcon />}
-                            </IconButton>
+                    <p onClick={handleOpenAccor} className={accor === true ? "accordion active" : "accordion"}>Voice Chat</p>
+                    <div style={accor === true ? { maxHeight: "200px" } : { maxHeight: null }} className="panel">
+                        <div className="user_device">
+                            <img
+                                alt="demom"
+                                src="../demo.jpeg"></img>
+                            <div className="icon_device">
+                                {audio}
+                                <IconButton onClick={(e) => handleSetMic(!mic)}>
+                                    {mic === true ? <MicIcon /> : <MicOffIcon />}
+                                </IconButton>
+                                <IconButton onClick={(e) => handleSetVolumn()}>
+                                    {volumn === false ? talk === true ? <VolumeUpIcon /> : <VolumeMuteIcon /> : <VolumeOffIcon />}
+                                </IconButton>
+                            </div>
                         </div>
                     </div>
                     {
@@ -175,6 +185,9 @@ function ChatCouple(props) {
                         </div> : <></>
                     }
                 </div>
+            </div>
+            <div className="message_container_div">
+                <RenderChat id={id} userId={userId} />
             </div>
         </div >
     )

@@ -13,6 +13,7 @@ function RenderChat(props) {
     const [load, setLoad] = useState(false);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
+    const [render, setRender] = useState(null)
     const myRef = useRef(null);
 
     const handleClickLoad = () => {
@@ -30,20 +31,21 @@ function RenderChat(props) {
                 return <div>Oops, bạn hãy thử lại sau</div>
             })
     }, [id, start, end])
-    useEffect(() => {
-        socket.on("message", msg => {
-            let fnc = () => {
-                if (msg.image) {
-                    setMsg(img => [...img, msg.image])
-                } else {
-                    setMsg(msgs => [...msgs, msg.data])
-                }
-                executeScroll(myRef)
-            }
-            msg.idRoom === id && fnc()
+    let func = (msg) => {
+        if (msg.image) setMsg(img => [...img, msg.image])
+        else setMsg(msgs => [...msgs, msg.data])
+        executeScroll(myRef)
+    }
 
-        })
-    }, [socket])
+    useEffect(() => {
+        let fnc = (value) => {
+            socket.once("message", msg => {
+                setRender(msg)
+                return msg.idRoom === value && func(msg)
+            })
+        }
+        fnc(id)
+    }, [id, socket, render])
     return (
         <>
             <ul>

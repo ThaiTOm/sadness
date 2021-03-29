@@ -2,14 +2,11 @@
     width: 25%;
     height: 100%;
     border-right: 1px solid rgba(248, 248, 255, 0.322);
-    position: absolute;
-    left: 2px;
+    overflow-y: scroll;
 }
 
 .main_mic {
     border-top: 1px solid rgba(248, 248, 255, 0.322);
-    position: absolute;
-    bottom: 10px;
     width: 100%;
     padding: 5px 0;
     height: 50%
@@ -45,6 +42,7 @@
          /* for navbar right */
 .active_title{
     background-color: rgba(255, 255, 240, 0.233);
+    border-left: 4px solid rgb(90, 189, 228)
 }
 
 /* customize spinning waiting */
@@ -165,19 +163,38 @@
   position: relative;
   margin-bottom: 10px;
   cursor: pointer;
-  border-radius: 10px
+  /* border-radius: 10px */
 }
-.comment_blog:before {
-  content : "";
-  position: absolute;
-  left    : 0;
-  bottom  : 0;
-  height  : 1px;
-  width   : 50%;  /* or 100px */
-  border-bottom:1px solid magenta;
-  transform: translate(50%, 30%);
+.comment_blog {  
+  border-left: 2px solid magenta;
 }
 .comment_blog:hover{
   background-color: rgba(245, 245, 245, 0.171);
+}
+.comment_blog img{
+  padding-left: 10px;
+}
+ /* accordion for mic chat */
+.accordion {
+  cursor: pointer;
+  text-align: left;
+  font-size: 17px;
+  transition: 0.4s;
+}
 
+.accordion:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out
 }

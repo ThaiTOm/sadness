@@ -5,7 +5,7 @@ const { cm } = require("../nodeCache");
 
 exports.getIdRooms = async (req, res) => {
     const { id } = req.body;
-    let rooms = await User.findById({ "_id": id }).exec()
+    let rooms = await User.findById({ "_id": id }).exec() || []
     return res.json({
         len: rooms.messageList.length
     })

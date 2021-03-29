@@ -55,6 +55,7 @@ exports.viewBlog = async (req, res) => {
         time = Number(time[0])
     }
     var data = []
+
     const getItem = async (gthan, lthan) => {
         let arr = await Blog.find({ "createdAt": { $gt: gthan, $lt: lthan } }).exec()
         arr.sort((a, b) => {
@@ -65,37 +66,28 @@ exports.viewBlog = async (req, res) => {
         if (start > arr.length) {
             return []
         }
-        if (end > arr.length) {
-            return arr.slice(Number(start), arr.length)
-        } else {
-            return arr.slice(Number(start), Number(end))
-        }
+        return end > arr.length ? arr.slice(Number(start), arr.length) : arr.slice(Number(start), Number(end))
     }
-
     const switchFunction = async (value) => {
-        let x = 1
+        let fnc = async (start, xV, end) => {
+            let tenA = await getItem(time - xV * start, time - xV * end)
+            return tenA
+        }
         switch (value) {
             case 0:
-                let tenA = await getItem(time - x, time)
-                return tenA
+                return await fnc(1, 1, 0)
             case 1:
-                let twenE = await getItem(time - x * 2, time - x)
-                return twenE
+                return await fnc(2, 1, 1)
             case 2:
-                let thirdE = await getItem(time - x * 3, time - x * 2)
-                return thirdE
+                return await fnc(3, 1, 2)
             case 3:
-                let fourE = await getItem(time - x * 4, time - x * 3)
-                return fourE
+                return await fnc(4, 1, 3)
             case 4:
-                let fiveE = await getItem(time - x * 5, time - x * 4)
-                return fiveE
+                return await fnc(5, 1, 4)
             case 5:
-                let sixE = await getItem(time - x * 6, time - x * 5)
-                return sixE
+                return await fnc(6, 1, 5)
             case 6:
-                let sevenE = await getItem(time - x * 7, time - x * 6)
-                return sevenE
+                return await fnc(7, 1, 6)
             default:
                 let e = await Blog.find({}, null).exec()
                 e.sort((a, b) => {
@@ -117,80 +109,60 @@ exports.viewBlog = async (req, res) => {
                 let promiseRedis = promisify(client.hgetall).bind(client)
                 let a = await promiseRedis(idBlog)
                 var comment = []
+                // push data to comment array
+                let fnc = (bool, value) => {
+                    let newArr = {
+                        likes: value.likes,
+                        isLiked: bool,
+                        id: value.id,
+                        value: value.value
+                    }
+                    comment.push(newArr)
+                }
+                let likeFnc = (bool, value) => {
+                    let newArr = {
+                        likes: value.likes,
+                        isLiked: bool,
+                        idBlog,
+                        text: JSON.parse(a.contentText),
+                        image: JSON.parse(a.contentImg),
+                        comment: comment.slice(0, 3)
+                    }
+                    data.push(newArr)
+                }
                 let arr = await nodeCache.get(id) || ""
-                if (arr.length === 0) {
-                    arr = arr
-                } else {
-                    arr = arr.split(",")
-                }
+                arr.length === 0 ? arr = arr : arr = arr.split(",")
+
                 for await (let value of commentTop) {
-                    if (arr.indexOf(value.id) > -1) {
-                        let newArr = {
-                            likes: value.likes,
-                            isLiked: true,
-                            id: value.id,
-                            value: value.value
-                        }
-                        comment.push(newArr)
-                    } else {
-                        let newArr = {
-                            likes: value.likes,
-                            isLiked: false,
-                            id: value.id,
-                            value: value.value
-                        }
-                        comment.push(newArr)
-                    }
+                    arr.indexOf(value.id) > -1 ? fnc(true, value) : fnc(false, value)
                 }
-                if (isLiked > -1) {
-                    let newArr = {
-                        likes: value.likes,
-                        isLiked: true,
-                        idBlog,
-                        text: JSON.parse(a.contentText),
-                        image: JSON.parse(a.contentImg),
-                        comment: comment.slice(0, 3)
-                    }
-                    data.push(newArr)
-                } else {
-                    let newArr = {
-                        likes: value.likes,
-                        isLiked: false,
-                        idBlog,
-                        text: JSON.parse(a.contentText),
-                        image: JSON.parse(a.contentImg),
-                        comment: comment.slice(0, 3)
-                    }
-                    data.push(newArr)
-                }
+
+                isLiked > -1 ? likeFnc(true, value) : likeFnc(false, value)
             }
             return res.json({
                 data: data
             })
         } else {
-            //if in last 2 hours does not have any new post then plush more to get
+            //if in last 2 hours does not have any new post then push more to get
             if (ed > 8) {
                 return res.json({
                     end: "uh"
                 })
-            } else {
-
-                ret(ed + 1)
-            }
+            } else await ret(ed + 1)
         }
     }
     if (0 <= start < 10) {
-        return ret(0)
+        return await ret(0)
     } else if (10 <= start < 20) {
-        return ret(1)
+        return await ret(1)
     } else if (20 <= start < 30) {
-        return ret(2)
+        return await ret(2)
     } else if (30 <= start < 40) {
-        return ret(3)
+        return await ret(3)
     } else if (40 <= start < 50) {
-        return ret(4)
+        return await ret(4)
     } else if (50 <= start < 60) {
-        return ret(5)
+        return await ret(5)
     }
 }
 exports.viewOne = async (req, res) => {
@@ -204,23 +176,11 @@ exports.viewOne = async (req, res) => {
     let hl = now - createdAt
     hl = new Date(hl);
     hl = date.format(hl, 'DD-MM-YYYY');
-    if (arr.indexOf(id) > -1) {
+    let fnc = async (bool) => {
         let promiseRedis = promisify(client.hgetall).bind(client)
         let a = await promiseRedis(id)
         let data = {
-            isLiked: true,
-            text: JSON.parse(a.contentText),
-            img: JSON.parse(a.contentImg),
-            likes: value.likes,
-            time: hl,
-            idBlog: value.id
-        }
-        return res.json(data)
-    } else {
-        let promiseRedis = promisify(client.hgetall).bind(client)
-        let a = await promiseRedis(id)
-        let data = {
-            isLiked: false,
+            isLiked: bool,
             text: JSON.parse(a.contentText),
             img: JSON.parse(a.contentImg),
             likes: value.likes,
@@ -229,6 +189,7 @@ exports.viewOne = async (req, res) => {
         }
         return res.json(data)
     }
+    arr.indexOf(id) > -1 ? await fnc(true) : await fnc(false)
 }
 exports.viewComment = async (req, res) => {
     const { start, id, blog, end } = req.query

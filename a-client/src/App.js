@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import './App.css';
+import { useHistory } from 'react-router-dom';
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import ActivatePage from './component/loginComponent/activate';
 import Forget from './component/loginComponent/forget';
@@ -9,89 +10,117 @@ import Chat from './component/chatComponent/chat';
 import NewsMain from './component/newsComponents/newsMain';
 import Main_block from './component/main.block';
 import ViewOneBlog from './component/newsComponents/viewBlog/viewOneBlog';
-import { Notifications } from './userContext';
+import { Notifications, MessageList } from './userContext';
 import axios from "axios"
 import { getCookie } from './helpers/auth';
-// import ChatGroup from './component/chatGroupComponent/chatGroup';
 import socketApp from './socket';
 import { toast } from "react-toastify"
+import Policy from './component/policy/policy';
 
 function App() {
   let socket = socketApp.getSocket()
   const id = getCookie().token
   const [value, setValue] = useState([]);
+  const [listMessage, setListMessage] = useState(null)
   const notifications = useMemo(() => ({ value, setValue }), [value, setValue]);
-  if (id) {
-    socket.emit("join", { id })
+  const messageList = useMemo(() => ({ listMessage, setListMessage }), [listMessage, setListMessage])
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(10);
+  const history = useHistory()
+
+  let forLoop = (arr, msgs) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].idRoom === msgs.idRoom && i !== 0) {
+        arr.splice(i, 1)
+        arr.unshift(msgs)
+        return setListMessage(arr)
+      }
+      else if (arr[i].idRoom === msgs.idRoom && i === 0) {
+        arr[0] = msgs
+        return setListMessage(arr)
+      }
+    }
   }
+  let fnc = () => {
+    let arr = [...listMessage]
+    socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
+  }
+
   useEffect(() => {
-    let fn = () => {
-      socket.on("activities", async (msg) => {
-        toast.info(
-          msg.number + msg.value
-        )
-      })
-    }
-    fn()
-  }, [socket])
+    id && socket.emit("join", { id })
+    socket.on("activities", msg => toast.info(msg.number + msg.value))
+  }, [socket, id])
+
   useEffect(() => {
-    let fn = () => {
-      axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
-        .then(res => {
-          let fnc = () => {
-            for (let data of res.data.value) {
-              let arr = {
-                type: data.value,
-                value: data.type,
-                number: data.number
-              }
-              setValue(a => [...a, arr])
+    axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
+      .then(res => {
+        let fnc = () => {
+          for (let data of res.data.value) {
+            let arr = {
+              type: data.value,
+              value: data.type,
+              number: data.number
             }
+            setValue(a => [...a, arr])
           }
-          res.data.value !== undefined && fnc()
-        }).catch(err => {
-          console.log(err)
-        })
-    }
-    fn()
+        }
+        res.data.value !== undefined && fnc()
+      }).catch(err => { })
+
+    axios.post("http://localhost:2704/api/msgC/contactL?start=" + start + "&end=" + end, { id })
+      .then(res => {
+        if (res.data.message) history.push("/report")
+        else setListMessage(res.data)
+      }).catch(err => { })
   }, [id])
+
+  useEffect(() => {
+    listMessage && fnc()
+  }, [listMessage])
 
   return (
     <BrowserRouter >
       <Switch>
-        <Notifications.Provider value={notifications}>
-          <Route exact path="/" >
-            <HomePage />
-          </Route>
-          <Route
-            path="/users/active/:token"
-            exact
-            render={props => <ActivatePage {...props} />}
-          />
-          <Route
-            path="/users/forget"
-            exact
-            render={props => <Forget {...props} />}
-          />
-          <Route
-            path="/users/password/forget/:token"
-            exact
-            render={props => <ChangePassword {...props} />}
-          />
-          <Route
-            path="/chat"
-            component={Chat} />
-          <Route
-            path="/news"
-            component={NewsMain} />
-          <Route
-            path="/report"
-            component={Main_block} />
-          <Route
-            path="/posts/id=:id"
-            render={props => <ViewOneBlog {...props} />}
-          />
-        </Notifications.Provider>
+        <MessageList.Provider value={messageList}>
+          <Notifications.Provider value={notifications}>
+            {
+              listMessage ? <Route exact path="/" >
+                <HomePage />
+              </Route> : console.log()
+            }
+            <Route
+              path="/users/active/:token"
+              exact
+              render={props => <ActivatePage {...props} />}
+            />
+            <Route
+              path="/users/forget"
+              exact
+              render={props => <Forget {...props} />}
+            />
+            <Route
+              path="/users/password/forget/:token"
+              exact
+              render={props => <ChangePassword {...props} />}
+            />
+            <Route
+              path="/chat"
+              component={Chat} />
+            <Route
+              path="/news"
+              component={NewsMain} />
+            <Route
+              path="/report"
+              component={Main_block} />
+            <Route
+              path="/posts/id=:id"
+              render={props => <ViewOneBlog {...props} />}
+            />
+            <Route path="/policy"
+              render={props => <Policy {...props} />}
+            />
+          </Notifications.Provider>
+        </MessageList.Provider >
       </Switch>
     </BrowserRouter>
   );

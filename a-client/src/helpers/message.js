@@ -1,11 +1,13 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useContext } from "react"
 import socketApp from "../socket";
-import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
 import { encryptTo } from "./auth";
 import Menu from '@material-ui/core/Menu';
 import "../component/style/chat.css"
 import { emoji } from "./emoji";
+import { MessageList } from "../userContext";
+import ContactContain from "../component/chatComponent/miniChatCom/contactContain";
+
 
 let socket = socketApp.getSocket();
 
@@ -58,7 +60,8 @@ export const Spinning = () => {
         <div className="spinner"></div>
     )
 }
-export const FormSend = ({ id, userId }) => {
+export const FormSend = (props) => {
+    let { id, userId } = props
     const fileRef = useRef(null);
     const [message, setMessage] = useState("")
     const [anchorEl, setAnchorEl] = useState(null);
@@ -129,10 +132,33 @@ export const FormSend = ({ id, userId }) => {
                     </div>
                 </>
             </div>
-
-            {/* <button type="submit">
-                <img alt="submit_button_image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAABu0lEQVRoge2ZO0oDURSGvyOChYXaRVCitmJlbaWtC7ATUWzEJdjY6AZcgG5BC7W10p1Y+ETE528Rg3EymcmdzONemA9C4Mwk+T8yuTlzLtTU1ASNpZ0gaQHYBuaBF+AcODazx4KzDY6kXUmf6uZO0p6ksaoz9kTSiqTvmPBhiEi6TAnvt4ikeweBNk+SDiSNV52fDOH9EhlQoHqRnASqE8lZoHyRggTKEylYIDeRnq2EJGV90ww8A0fAgZk9uLzQF4E2ziJJApvAFDD7+5gDJoGhwXOm0rdIksBaTHkYaPBfqgmMZI6aTKqIq0AcQ7SkmsDM73MTyLMvugU2zOwseiAPgV6M8yfTlmskfWYK78CSmV13FosUiGMEmKYlMwMs4vZNnZrZamehbIEo08Chw/kPZjbRWShjRUnC9XLqWtqHcwrSL3GXkAtX0UKRAnn/iN+A/WgxD4GyltF1M7uJHnAV8O6PLElglMBbiSCaubJXoV5kbqerFsgcPBXf78SqEgj2pj7YsUqwgy0vRovBD3cvHIJ7OV5flvQVXPBOJO1I+vA5eD+bfPPAFq1NvlfgAjgJYpOvpqbGf34ADyqvY/et3aUAAAAASUVORK5CYII=" />
-            </button> */}
         </form>
+    )
+}
+
+export const MessageContainer = () => {
+    const { listMessage, setListMessage } = useContext(MessageList)
+    const [open, setOpen] = useState(false)
+
+    return (
+        <div className="accordion_div">
+            <div onClick={e => setOpen(!open)} className="accordion_message">
+                <IconButton>
+                    Message
+                        {open === false ?
+                        <span className="sympol">
+                            &#5123;
+                            </span> :
+                        <span className="sympol">
+                            &#5121;
+                            </span>
+                    }
+
+                </IconButton>
+            </div>
+            <div style={open === true ? { display: "block" } : { display: "none" }} className="accordion_data">
+                {/* <ContactContain/> */}
+            </div>
+        </div >
     )
 }

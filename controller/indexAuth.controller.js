@@ -76,13 +76,16 @@ exports.activationController = (req, res) => {
                 })
             } else {
                 const { name, email, password } = jwt.decode(token);
+                var id = mongoose.Types.ObjectId();
                 const user = new User({
+                    _id: id,
                     name,
                     email,
                     password
                 })
                 user.save((err, user) => {
                     if (err) {
+                        console.log(err)
                         return res.status(401).json({
                             error: errorHandler(err)
                         })

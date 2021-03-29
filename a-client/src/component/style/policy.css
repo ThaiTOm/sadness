@@ -1,0 +1,34 @@
+.policy_div{
+    width: 100%;
+    height: 100%;
+
+    color: white;
+}
+.policy_div .navbar_auth{
+    height: 73px;
+}
+.policy_div .navbar_right{
+    height: 90%;
+    position:fixed;
+    margin-top: auto
+}
+.policy_div .policy{
+    width: 100%;
+    height: max-content;
+    background-color: #181818;
+    padding-top:69px;
+}
+.policy_div .policy .content{
+    padding: 20px 200px
+}
+.policy_div .policy p{
+    margin: 1em 0px;
+}
+.policy_div .policy h3{
+    font-size: 1.5rem;
+    color: #4A7D93;
+}
+.policy_div .policy h1{
+    text-align: center;
+    color: #CE5D40
+}

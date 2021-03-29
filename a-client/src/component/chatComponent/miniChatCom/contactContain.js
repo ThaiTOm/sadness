@@ -11,7 +11,7 @@ var socket = socketApp.getSocket();
 // This function is use for render list of contact
 
 function ContactContain({ onClick, message, users, idRoom, target, nread, change }) {
-    const [room, setRoom] = useState(idRoom)
+    // const [room, setRoom] = useState(idRoom)
     // msg == new message send by real time, message == old message 
     const [read, setRead] = useState(false);
     const [active, setActive] = useState(false);
@@ -49,24 +49,11 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, change
         if (value.id === id) sliceMess(a, "Bạn: ", value)
         else sliceMess(a, "", value)
     }
-    let some = (value) => {
-        socket.on("message", msgs => {
-            let x = value
-            msgs.idRoom === x && validateImage(msgs)
-            console.log(x)
-        })
-    }
+    // if position change call this
+    // else validate this
     useEffect(() => {
-        let fnc = () => {
-            some(idRoom)
-        }
-        change && fnc()
-    }, [change])
-    useEffect(() => {
-
-        message && validateImage(message)
-
-    }, [idRoom])
+        message && message.idRoom === idRoom && validateImage(message)
+    }, [idRoom, message])
 
     useEffect(() => {
         socket.emit("joinChatBack", { idRoom })
@@ -82,7 +69,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, change
         else {
             setActive(false)
         }
-    }, [target, value])
+    }, [target, idRoom])
     useEffect(() => {
         for (let value in users) {
             if (value !== id && users[value] === "online") {
@@ -115,18 +102,20 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, change
                     >
                         <MenuItem onClick={handleClose}>
                             <img alt="out_image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAoklEQVRIie2VQQ6CMBBFn56GhexceQKI9zacgxKNrPAEdVPATKShzLBA+clsOvn/tzPTFnYk4go0gF8YDihjBk4h3kf9KXgQBj7xxFMYdI9GgpPQGlTAK4WQUutb4JyAp8iZGHRB/JuJiYEHWiAP3Ay4LzG4xAgCZ2kwp8lylFXQlujBlpq8+ph6xosm1wf83lvUGGi6WLJE9yfUQGGwyX/CG5rJq/ywf6OxAAAAAElFTkSuQmCC" />
-                        Thoát cuộc trò chuyện</MenuItem>
+                            Thoát cuộc trò chuyện
+                        </MenuItem>
                         <MenuItem onClick={handleClose}>
                             <img alt="delete_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAkklEQVRIie2UUQrDIBBEX3OafNhD1Fwsn72fP71Biz2E+dnARoUWbWqLGViQUWcWhxV6wQyEqK7vXDxluFDZzEZzqBTrALkMoDyHRG/3DH7C4AZcgIfinsAEuFJjPVBWOAN4KSOcjc4WGWhBE639JwxWk7PaH4F75lyCZpP81SfaPWQnQrpbL5x7ZXB8Fe0N/h8LhlVEflv4ChYAAAAASUVORK5CYII=" />
-                            Xóa cuộc trò chuyện</MenuItem>
+                            Xóa cuộc trò chuyện
+                        </MenuItem>
                         <MenuItem onClick={handleClose}>
                             <img alt="seen_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA1ElEQVRIie3VOwrCQBRA0SvuwJW4AkvRUhHtVCzE1v8fwc4fbsSFuAIXYqNoYiycwCNFJo4TbHLbvJw3DIFA0h/LAal0THgbOAGZOPAW4AIeMLGNNwU+tY03BD6zjdeAp8LntvGqwBe28YrAl2GDWQNcnjwUXwMOUP8CLwMPha90w2M16PD5EnSVBL6JeqKResHVLCkCdzW7jYr7DTVLCgLffYv7DRTwAjoB/Kae7U1xv35gSV7gh19xP3ldxneuq6tgDziaImH/gzNwBS5Az3RBkrY3LltA/9XJVDYAAAAASUVORK5CYII=" />
-                            Đánh dấu là đã đọc</MenuItem>
+                            Đánh dấu là đã đọc
+                        </MenuItem>
                     </Menu>
                 </div>
                 <p onClick={() => onClick(idRoom, users, id)}>
-                    <span className="content">
-                        {value}
+                    <span className="content" dangerouslySetInnerHTML={{ __html: value }}>
                     </span>
                     {count > 0 ? <span className="count"> {count}</span> : ""}
                 </p>

@@ -1,42 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { getCookie, signOut } from '../../../helpers/auth';
+import React, { useState, useEffect } from 'react'
+import { getCookie } from '../../../helpers/auth';
 import axios from "axios"
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 import LikePost from "../exNews/seeLike"
 import Comment from "../exOne/comment"
 import { Link } from "react-router-dom";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { MenuItem, Menu, Button } from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { Notifications } from '../../../userContext';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import ShareBlog from '../exOne/shareBlog';
+import { HeaderPage } from '../../../helpers/news';
+import { IconButton } from '@material-ui/core';
+
 
 function ViewOneBlog(props) {
     const id = getCookie().token
     const [data, setData] = useState(null)
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(null)
-    let arr = props.location.pathname.split("/")
-    const { value } = useContext(Notifications);
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const handleLogOut = () => {
-        signOut();
-        window.location.reload(false);
-    }
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClickNoti = (e) => {
-        setOpen(e.currentTarget)
-    };
-    const handleCloseNoti = () => {
-        setOpen(null);
-    };
+    let arr = props.location.pathname.split("/")
 
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/post?" + arr[2] + "&user=" + id)
@@ -71,53 +51,7 @@ function ViewOneBlog(props) {
 
     return (
         <div className="post_viewing">
-            <header>
-                <div className="navbar_auth">
-                    <p> Recal </p>
-                    <div className="extension_auth">
-                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickNoti}>
-                            <NotificationsIcon />
-                        </Button>
-                        <Menu
-                            id="menuContainerMessage"
-                            anchorEl={open}
-                            keepMounted
-                            open={Boolean(open)}
-                            onClose={handleCloseNoti}
-                        >
-                            {
-                                value.map(
-                                    function (x) {
-                                        let value = x.type.split("/")
-                                        return <Link to={value[1]}>
-                                            <MenuItem className="notifications_span">
-                                                <span className="simple_menu_span">
-                                                    {x.number}{x.value}
-                                                </span>
-                                            </MenuItem>
-                                        </Link>
-                                    })
-                            }
-                        </Menu>
-                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                            <AccountCircleIcon />
-                        </Button>
-                        <Menu
-                            id="menuContainerMessage"
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleLogOut}>
-                                <span className="simple_menu_span">
-                                    Đăng xuất
-                                </span>
-                            </MenuItem>
-                        </Menu>
-                    </div>
-                </div>
-            </header>
+            <HeaderPage />
             <Link className="go_to_previous" to="/news">
                 <ArrowBackIosOutlinedIcon />
                 <span>
@@ -132,6 +66,9 @@ function ViewOneBlog(props) {
                             </div>
                     }
                     <div className="content flex">
+                        <IconButton className="menu">
+                            <span>&#8942;</span>
+                        </IconButton>
                         <div className="content_div">
                             <img alt="this is your avatar" src="/demo.jpeg"></img>
                             <span>{data.time}</span>
@@ -140,8 +77,8 @@ function ViewOneBlog(props) {
                                     return <p key={i}>{value}</p>
                                 })
                             }
-
                         </div>
+
                         <div className="extension_blog">
                             <LikePost props={{ value: data, i: "1", className: "ex night" }} />
                             <div className="ex night">

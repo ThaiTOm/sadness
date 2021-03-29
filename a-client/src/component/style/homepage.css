@@ -4,6 +4,9 @@ body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .cont
     width: 100%;
     height: 100%;
 }
+p{
+    margin:0
+}
 
 .Toastify__toast, .form_post_blog, .form_ost_blog section, .google_login, .message_container ul::-webkit-scrollbar-track, .message_container ul::-webkit-scrollbar-thumb, .own_message_same_div, .other_message_same_div, .contact::-webkit-scrollbar-track, .contact::-webkit-scrollbar-thumb, .contact_container, .button_load_more button, .contain_block .bottom button, .block_page .paper .end button, .form_post_blog button, .contain_blog, .activities_blog .inner, .blog_skeleton_wrapper, .skeleton, .activities_blog label.activities_blog label .activities_blog label, .extension_blog .ex, .value_content_comment_a_blog div, .active_page, .extension_input, #button_find_partner {
     border-radius: 10px !important
@@ -17,7 +20,7 @@ body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .cont
     display: flex
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list, .navbar_right ul li a, .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list,  .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner,.search_div, .navbar_right ul li a div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,6 +30,9 @@ body, #root, .App, .homepage, .post_viewing, .viewBlog, .forget_container, .cont
 
 .part_1, .part_2 {
     width: 50%
+}
+.part_2{
+    position: relative;
 }
 
 .post_viewing {
@@ -438,13 +444,17 @@ button {
 }
 
 .container {
-    background-color: white
+    background-color: #181818
 }
 
 .navbar_right {
+    z-index: 1;
     height: 90%;
-    width: 5%;
-    margin-top: auto;
+    margin-top: 30px;
+    margin-left: 20px;
+    background-color:inherit;
+    width: 20%;
+    position:fixed
 }
 
 .navbar_right ul {
@@ -452,21 +462,34 @@ button {
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: rgb(2, 2, 7);
+    background-color: inherit
 }
 
 .navbar_right ul li {
-    padding: 15px 0px;
+    list-style: none;
+    padding: 15px 0px 15px 10px;
+    margin-bottom: 10px;
+    border-radius: 0 5px 5px 0 
 }
 
 .navbar_right ul li a {
     color: white;
     transition: 0.1s;
-    font-size: 20px;
-    line-height: 24px;
-    text-decoration: none;
+    font-size: 16px;
+    line-height: 20px;
+    text-decoration: none;   
 }
-
+.navbar_right ul li a div{
+    position: relative;   
+}
+.navbar_right ul li a div img{
+    position: absolute;
+    left: 0
+}
+.navbar_right ul li a div span{
+    width: 80%;
+    margin-left: auto
+}
 .navbar_right ul li a .MuiSvgIcon-root {
     font-size: 2em
 }
@@ -477,15 +500,17 @@ button {
     font-size: 25px;
 }
 
-.navbar_right ul li:hover {
-    background-color: rgba(161, 158, 158, 0.212)
+.navbar_right ul .inner_title:hover {
+    background-color: rgba(161, 158, 158, 0.212);
+    border-left: 4px solid rgb(90, 189, 228)
 }
 
 .message_container {
+    margin-top:auto;
+    height: 100%;
     position: relative;
-    width: 80%;
-    height: 90%;
-    margin-top: auto;
+    width: 60%;
+    left: 20%;
     background-color: #181818;
 }
 
@@ -559,27 +584,23 @@ button {
 /******************************** Custom message output ***************************/
 
 .message_container ul {
-    position: absolute;
-    top: 10px;
-    height: 83%;
-    width: 70%;
+    height: 85%;
     overflow-y: scroll;
-    margin: 2px 0;
-    right: 0
+    padding: 0 10px;
 }
 
-.message_container ul::-webkit-scrollbar-track {
+.message_container ul::-webkit-scrollbar-track, .call_div_container::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey !important;
 }
 
 /* Handle */
 
-.message_container ul::-webkit-scrollbar-thumb {
-    background-color: #8EC5FC !important;
-    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)!important;
+.message_container ul::-webkit-scrollbar-thumb,.call_div_container::-webkit-scrollbar-thumb {
+    background-color: grey !important;
+    background-image: grey !important;
 }
 
-.message_container ul::-webkit-scrollbar {
+.message_container ul::-webkit-scrollbar,.call_div_container::-webkit-scrollbar {
     width: 5px;
 }
 
@@ -614,11 +635,13 @@ button {
 }
 
 .formMessage {
-    height: 7%;
-    position: absolute;
-    bottom: 10px;
-    width: 70%;
+    width: 90%;
     right: 0;
+    height: 7%;
+}
+.message_container_div{
+    width: 75%;
+    height: 100%;
 }
 .formMessage_div{
     width: 90%;
@@ -776,10 +799,9 @@ button {
 /* thiet ke phan danh ba */
 
 .contact {
+    margin-left:auto;
     overflow-y: scroll;
     width: 20%;
-    height: 90%;
-    margin-top: auto;
     background-color: #242526
 }
 
@@ -819,16 +841,16 @@ button {
 
 /* custom button to load more */
 .comment_a_blog .button_load_more{
-    position:fixed;
-    bottom: 70px;
-    width: 41%;
+    width: 100%;
 }
 .button_load_more {
     height: 30px;
     padding-bottom: 5px;
-  
 }
-
+.container{
+    margin-top: 66px;
+    height:91%;
+}
 .button_load_more button {
     width: 100%;
     height: 100%;
@@ -1006,18 +1028,6 @@ div.loaderBalls>div {
     display: none
 }
 
-.message_icon:hover+#m_title, .home_icon:hover+#h_title, .feedback_icon:hover+#f_title, .contact_icon:hover+#c_title, .policy_icon:hover+#p_title {
-    display: block;
-    position: absolute;
-    width: max-content;
-    background-color: hsl(0, 0%, 100%);
-    padding: 10px;
-    border-radius: 10px;
-    left: 70px;
-    top: 10px;
-    z-index: 999;
-}
-
 .notify_icon:hover+#notify_title, .account_icon:hover+#account_title {
     display: block;
     position: absolute;
@@ -1069,6 +1079,7 @@ div.loaderBalls>div {
     position: absolute;
     top: 25px;
     width: 180px;
+    cursor: pointer;
 }
 
 .chat_button_group .chat-bubble {

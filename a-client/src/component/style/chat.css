@@ -14,4 +14,54 @@
 }
 #simple_menu_emoji .MuiList-root span{
     padding-right: 5px;
+    cursor:pointer
+}
+#group_icon{
+    color: white;
+    height: max-content;
+    position: absolute;
+    right:5px
+}
+/*****************************************8* Message accordion  ***************************/
+.accordion_div{
+    position: fixed;
+    bottom:0;
+    background-color: #333333;
+    width:max-content;
+    height: max-content;
+    z-index: 2;
+    right: 6%;
+    border-radius: 10px 10px 0 0;
+
+}
+.accordion_div button span{
+    font-size: 1.4rem;
+    color: white;
+}
+.accordion_div .accordion_message{
+    width: 300px;
+    cursor:pointer;
+}
+.accordion_div .accordion_message .MuiIconButton-root:hover{
+    border-radius: 10px 10px 0 0 ;
+    background-color:#242323;
+}
+.accordion_div .accordion_message .MuiIconButton-root{
+    border-radius:10px 10px 0 0 
+}
+.accordion_div .accordion_data{
+    display: none;
+    width: 300px;
+    height: 400px;
+    transition: 0.2s ease-out
+}
+.accordion_message button{
+    width: 100%;
+}
+.accordion_message  .MuiIconButton-label{
+    width: 100%;
+
+}
+.accordion_message  .MuiIconButton-label  .sympol{
+    margin-left: auto
 }

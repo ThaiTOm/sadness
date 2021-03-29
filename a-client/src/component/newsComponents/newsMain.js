@@ -7,7 +7,6 @@ import { ToastContainer } from "react-toastify";
 import { Notifications } from '../../userContext';
 import { HeaderPage, NavbarRight } from '../../helpers/news'
 
-
 function NewsMain() {
     // const id = getCookie().token || ""
     const { value, setValue } = useContext(Notifications);
@@ -41,7 +40,7 @@ function NewsMain() {
         <div className="news_page">
             <ToastContainer />
             <HeaderPage value={value} />
-            <div className="container" id="news">
+            <div className="container" id="news" style={{ height: "max-content" }}>
                 <NavbarRight />
                 <div className="main_news">
                     <PostBlogMain />

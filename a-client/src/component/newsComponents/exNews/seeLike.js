@@ -12,6 +12,7 @@ const SeeLike = (cb) => {
     const [isLiked, setIsLiked] = useState(value.isLiked)
     const id = getCookie().token
     const [login, setLogin] = useState(false)
+
     const handleLike = (data) => {
         if (!id) {
             setLogin(true)

@@ -5,67 +5,59 @@ import Skeleton from "../exNews/Skeleton"
 import InfiniteScroll from "react-infinite-scroll-component";
 import "../../style/viewBlog.css"
 import { getCookie } from '../../../helpers/auth';
-import socketApp from '../../../socket';
 import SeeLike from '../exNews/seeLike';
 import LikeComment from '../exOne/likeComment';
 import RequireLogin from '../../../helpers/requireLogin';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import { TextField } from '@material-ui/core';
 import ShareBlog from '../exOne/shareBlog';
 import { ImageRender } from '../../../helpers/news';
+import { IconButton } from '@material-ui/core';
+import { MessageContainer } from '../../../helpers/message';
 
 function ViewBlog() {
-    let socket = socketApp.getSocket();
     const [start, setStart] = useState(0)
     const [end, setEnd] = useState(3)
     const [blog, setBlog] = useState([])
-    const [comment, setComment] = useState("")
+    const [hasmore, setHasmore] = useState(true)
 
     const id = getCookie().token
     const [login, setLogin] = useState(false)
 
-
-    const handleSubmit = (e, value) => {
-        e.preventDefault()
-        setComment("")
-        socket.emit("comment", { idRecieve: value.idBlog, idSent: id, value: comment }, (error) => {
-        })
-    }
     const fetchData = () => {
         setTimeout(() => {
             setStart(start + 3)
             setEnd(end + 3)
         }, 1500);
     }
-    const handleValidateLogin = () => {
-        if (id) setLogin(null)
-        else setLogin("ok")
+    // const handleValidateLogin = () => {
+    //     if (id) setLogin(null)
+    //     else setLogin("ok")
+    // }
+    const setBlogRes = async (res) => {
+        let a = res.data.data
+        try {
+            for await (let value of a) {
+                setBlog(a => [...a, value])
+            }
+        } catch (error) {
+            return
+        }
 
+    }
+    const handleError = () => {
+        return (
+            <div>
+                Có lỗi đả xảy ra bạn hãy thử lại sau
+            </div>
+        )
     }
     useEffect(() => {
         let fn = () => {
-            const setBlogRes = async (res) => {
-                let a = res.data.data
-                try {
-                    for await (let value of a) {
-                        setBlog(a => [...a, value])
-                    }
-                } catch (error) {
-                    return
-                }
-
-            }
-            const handleError = () => {
-                return (
-                    <div>
-                        Có lỗi đả xảy ra bạn hãy thử lại sau
-                    </div>
-                )
-            }
             if (id) {
                 axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
                     .then(res => {
-                        setBlogRes(res)
+                        if (res.data.data !== undefined) setBlogRes(res)
+                        else setHasmore(false)
                     })
                     .catch(err => {
                         handleError()
@@ -104,10 +96,11 @@ function ViewBlog() {
         <div className="viewBlog">
             {blog.length === 0 && <Skeleton />}
             {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
+            <MessageContainer />
             <InfiniteScroll
                 dataLength={blog.length}
                 next={fetchData}
-                hasMore={true}
+                hasMore={hasmore}
                 loader={<Skeleton />}
             >
                 {
@@ -115,6 +108,9 @@ function ViewBlog() {
                         return (
                             <div className="viewBlog_li" key={i}>
                                 <div className="contain_blog" >
+                                    <IconButton className="menu">
+                                        <span>&#8942;</span>
+                                    </IconButton>
                                     <div className="profile">
                                         <img alt="profile_image" src="./demo.jpeg"></img>
                                         <div className="profile_text">
@@ -128,7 +124,6 @@ function ViewBlog() {
                                             </div>
                                         </div>
                                     </div>
-
                                     {/* Render Image */}
                                     <div className="image-blog">
                                         <ImageRender props={{ value }} />
@@ -147,17 +142,9 @@ function ViewBlog() {
                                         </div>
                                     </div>
                                     <div className="comment_blog_view">
-                                        {/* Render comment */}
                                         <CommentRender props={{ value, i: 0 }} />
                                         <CommentRender props={{ value, i: 1 }} />
                                         <CommentRender props={{ value, i: 2 }} />
-                                        <form onSubmit={e => { handleSubmit(e, value) }}>
-                                            <TextField
-                                                onClick={handleValidateLogin}
-                                                onChange={e => setComment(e.target.value)}
-                                                value={comment}
-                                                label="Comment" />
-                                        </form>
                                     </div>
                                 </div>
                             </div>

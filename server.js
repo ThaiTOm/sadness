@@ -30,7 +30,7 @@ connectDB()
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "https://localhost:3000",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST", "PUT", "OPTIONS"],
         credentials: true
     }
