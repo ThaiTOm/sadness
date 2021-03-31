@@ -15,7 +15,9 @@ import axios from "axios"
 import { getCookie } from './helpers/auth';
 import socketApp from './socket';
 import { toast } from "react-toastify"
-import Policy from './component/policy/policy';
+import Policy from './component/anotherPage/policy';
+import SuggestPage from './component/anotherPage/suggestPage';
+
 
 function App() {
   let socket = socketApp.getSocket()
@@ -27,6 +29,7 @@ function App() {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(10);
   const history = useHistory()
+
 
   let forLoop = (arr, msgs) => {
     for (let i = 0; i < arr.length; i++) {
@@ -118,6 +121,9 @@ function App() {
             />
             <Route path="/policy"
               render={props => <Policy {...props} />}
+            />
+            <Route path="/suggest"
+              render={props => <SuggestPage {...props} />}
             />
           </Notifications.Provider>
         </MessageList.Provider >

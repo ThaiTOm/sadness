@@ -28,6 +28,7 @@ function Chat() {
                 if (error === "error") {
                     setWait(true)
                 } else {
+                    console.log(error)
                     setFinish(true)
                     setidRoom(error)
                 }
@@ -36,6 +37,7 @@ function Chat() {
             setWait(false)
             socket.emit("joinChat", { id, len, ipOfUser }, (error) => {
                 if (error !== "error") {
+                    console.log(error)
                     setFinish(true)
                     setidRoom(error)
                 }
@@ -64,24 +66,26 @@ function Chat() {
         socket.on("message", msg => {
             if (msg.roomId) {
                 // If we have a couple together than we start to chat
+                console.log(msg)
                 setWait(false)
                 setFinish(true)
                 setidRoom(msg.roomId)
             }
-            if (msg.image && idRoom) {
+            if (msg.image && idRoom === msg.idRoom) {
                 // if message send is image
                 setValue(img => [...img, msg.image])
             }
-            else if (msg.data && idRoom) {
+            else if (msg.data && idRoom === msg.idRoom) {
                 setValue(msgs => [...msgs, msg.data])
                 executeScroll(myRef)
             }
         })
-    }, [socket])
+    }, [socket, idRoom])
     //defined button find partner classname
     var btnClassFind = classNames({
         "onclic": wait,
     })
+    console.log(idRoom)
     const changeStateWaitGroup = () => {
         if (waitG === null) {
             setWaitG("active")
@@ -98,10 +102,10 @@ function Chat() {
     }
     return (
         <div className="message_container">
-            <div className="container_button">
+            <div className="container_button" style={finish === true ? { display: "none" } : {}}>
                 <div className="part_1">
                     <button
-                        style={finish === true ? { display: "none" } : {}}
+
                         id="button_find_partner"
                         className={btnClassFind}
                         onClick={HanldeClickFind}
@@ -109,8 +113,7 @@ function Chat() {
                         {wait === true ? < Spinning /> : "Tìm cặp"}
                     </button>
                 </div>
-                <div style={finish === true ? { display: "none" } : {}}
-                    className="part_2">
+                <div className="part_2">
                     <div className={"chat_button_group " + waitG}>
                         <span id="group_icon">
                             Tham gia nhóm
@@ -129,25 +132,26 @@ function Chat() {
                 </div>
 
             </div>
-            <ul
-                style={finish === false ? { display: "none" } : {}}>
-                {
-                    value.length > 0 ?
-                        value.map(function (item, i) {
-                            if (item.image) {
-                                let imgUrl = item.image
-                                if (item.id === idRoom) return messageLiImageRender("mIOwn", i, imgUrl, myRef)
-                                else return messageLiImageRender("mIOther", i, imgUrl, myRef)
-                            } else {
-                                let msgs = item.data[0] ? decryptWithAES(item.data[0]) : ""
-                                if (item.id === id) return messageLiRender("messageLiOwn", "own_message_same_div messageLiOwnm60", "own_message_same_div messageLiOwnl60", msgs, i, myRef)
-                                else return messageLiRender("messageLiOther", "other_message_same_div messageLiOtherm60", "other_message_same_div messageLiOtherl60", msgs, i, myRef)
-                            }
-                        }) : console.log()
-                }
-            </ul>
-            { idRoom ? <FormSend id={idRoom} userId={id} /> : console.log()}
-        </div>
+            <div className="message_container_div" style={finish === false ? { display: "none" } : { display: "block" }}>
+                <ul>
+                    {
+                        value.length > 0 ?
+                            value.map(function (item, i) {
+                                if (item.image) {
+                                    let imgUrl = item.image
+                                    if (item.id === idRoom) return messageLiImageRender("mIOwn", i, imgUrl, myRef)
+                                    else return messageLiImageRender("mIOther", i, imgUrl, myRef)
+                                } else {
+                                    let msgs = item.data[0] ? decryptWithAES(item.data[0]) : ""
+                                    if (item.id === id) return messageLiRender("messageLiOwn", "own_message_same_div messageLiOwnm60", "own_message_same_div messageLiOwnl60", msgs, i, myRef)
+                                    else return messageLiRender("messageLiOther", "other_message_same_div messageLiOtherm60", "other_message_same_div messageLiOtherl60", msgs, i, myRef)
+                                }
+                            }) : console.log()
+                    }
+                </ul>
+                {idRoom ? <FormSend id={idRoom} userId={id} /> : console.log()}
+            </div>
+        </div >
     )
 }
 

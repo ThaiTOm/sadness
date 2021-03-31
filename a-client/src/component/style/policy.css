@@ -32,3 +32,49 @@
     text-align: center;
     color: #CE5D40
 }
+.navbar_modal{
+    color: rgba(255, 255, 255, 0.692)
+}
+.navbar_modal span{
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+.navbar_modal form{
+    background-color: #242526;
+    width: 45%;
+    height: 90%;
+    border-radius: 10px;
+    position: relative
+}
+.navbar_modal_header{
+    margin-top: 10px;
+    display:flex;
+    border-bottom: 1px solid white
+}
+.navbar_modal_header .MuiButtonBase-root{
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 30px;
+    color: white
+}
+.navbar_modal_header p{
+    font-size: 25px;
+    margin-left: 70px;
+}
+.navbar_modal_body{
+    margin-top: 20px;
+    padding: 0 30px;
+}
+.navbar_modal_body section{
+    margin-top: 20px;
+}
+.navbar_modal_body #txtSearch{
+    width:100%;
+    margin: 20px 0;
+}
+.navbar_modal form #MuiIconButton-root{
+    position:absolute;
+    right: 10px;
+    bottom: 10px;
+    color: white
+}

@@ -3,11 +3,11 @@ import { getCookie } from '../../../helpers/auth';
 import axios from "axios"
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
-import LikePost from "../exNews/seeLike"
-import Comment from "../exOne/comment"
+import LikePost from "../../../helpers/seeLike"
+import Comment from "../../../helpers/comment"
 import { Link } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import ShareBlog from '../exOne/shareBlog';
+import ShareBlog from "../../../helpers/shareBlog"
 import { HeaderPage } from '../../../helpers/news';
 import { IconButton } from '@material-ui/core';
 

@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import Chat from './chat.js';
 import ContactContain from './miniChatCom/contactContain.js';
 import SendContact from './sendContact.js';
 import { HeaderPage, NavbarRight } from '../../helpers/news.js';
-import socketApp from '../../socket.js';
 import { MessageList } from '../../userContext.js';
 
 function Main_page() {
-    const { listMessage, setListMessage } = useContext(MessageList)
-    var socket = socketApp.getSocket();
+    const { listMessage } = useContext(MessageList)
     const [room, setRoom] = useState("");
-    const [change, setChange] = useState(null)
     //value contain Rooms
     const [name, setName] = useState("Recal")
     // user contain 2 user 
@@ -40,7 +37,6 @@ function Main_page() {
                         // if value have then we can use this 
                         listMessage && listMessage.length > 0 ? listMessage.map((val, i) => <div key={i}>
                             <ContactContain
-                                change={change}
                                 onClick={(value) => hanldeSetRoom(value)}
                                 message={val.data}
                                 users={val.user}

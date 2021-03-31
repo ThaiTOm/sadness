@@ -1,14 +1,18 @@
 import { useRef, useState, useContext } from "react"
 import socketApp from "../socket";
 import IconButton from '@material-ui/core/IconButton';
-import { encryptTo } from "./auth";
+import { encryptTo, getCookie } from "./auth";
 import Menu from '@material-ui/core/Menu';
 import "../component/style/chat.css"
 import { emoji } from "./emoji";
 import { MessageList } from "../userContext";
 import ContactContain from "../component/chatComponent/miniChatCom/contactContain";
+import RenderChat from "../component/chatComponent/renderChat";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-
+const userId = getCookie().token;
 let socket = socketApp.getSocket();
 
 export const handleFileUpload = (e, userId, id) => {
@@ -137,27 +141,49 @@ export const FormSend = (props) => {
 }
 
 export const MessageContainer = () => {
-    const { listMessage, setListMessage } = useContext(MessageList)
+    const [room, setRoom] = useState(null)
+    const { listMessage } = useContext(MessageList)
     const [open, setOpen] = useState(false)
 
-    return (
-        <div className="accordion_div">
-            <div onClick={e => setOpen(!open)} className="accordion_message">
-                <IconButton>
-                    Message
-                        {open === false ?
-                        <span className="sympol">
-                            &#5123;
-                            </span> :
-                        <span className="sympol">
-                            &#5121;
-                            </span>
-                    }
+    const hanldeSetRoom = value => {
+        let id = value.split(",")
+        setRoom(id[0])
+    }
 
-                </IconButton>
+    return (
+        <div className="accordion_div" style={open === true ? { height: "450px" } : { height: "initial" }}>
+            <div className="accordion_header">
+                {room ? <IconButton onClick={e => setRoom(null)}>
+                    <ArrowBackIosIcon />
+                </IconButton> : console.log()}
+                <div onClick={e => setOpen(!open)} className="accordion_message">
+                    <IconButton>
+                        Message
+                        {open === false ?
+                            <span className="sympol">
+                                <ExpandLessIcon />
+                            </span> :
+                            <span className="sympol">
+                                <ExpandMoreIcon />
+                            </span>
+                        }
+
+                    </IconButton>
+                </div>
             </div>
             <div style={open === true ? { display: "block" } : { display: "none" }} className="accordion_data">
-                {/* <ContactContain/> */}
+                {room ? <RenderChat id={room} userId={userId} /> : listMessage && listMessage.length > 0 ? listMessage.map((val, i) => <div key={i}>
+                    <ContactContain
+                        onClick={(value) => hanldeSetRoom(value)}
+                        message={val.data}
+                        users={val.user}
+                        idRoom={val.idRoom}
+                        target={room}
+                        nread={val.nread}
+                    />
+                </div>
+                ) : console.log()
+                }
             </div>
         </div >
     )

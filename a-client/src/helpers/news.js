@@ -5,6 +5,11 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { signOut } from './auth';
 import IconButton from '@material-ui/core/IconButton';
+import Modal from '@material-ui/core/Modal';
+import Dropzone from 'react-dropzone'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import axios from "axios"
+import { toast } from 'react-toastify';
 
 
 export const ImageRender = (cb) => {
@@ -206,7 +211,43 @@ export const HeaderPage = (props) => {
 
 }
 export const NavbarRight = () => {
+    const [open, setOpen] = useState(false);
+    const [file, setFile] = useState([])
+    const [text, setText] = useState(null)
+
     let arr = window.location.href.split("/")
+
+    const dragFile = (file) => {
+        let data = file[0];
+        let reader = new FileReader()
+        reader.readAsDataURL(data)
+        reader.onloadend = () => {
+            setFile(value => [...value, reader.result])
+        }
+    }
+    const handleDeleteImamge = (index) => {
+        const arr = [...file]
+        arr.splice(index, 1)
+        setFile(arr)
+    }
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post("http://localhost:2704/api/idea", { text, file }).then(res => {
+            toast.success(res.data.message)
+            setText(null)
+            setFile([])
+            handleClose()
+        }).catch(err => {
+            console.log(err)
+        })
+    }
     return (
         <div className="navbar_right">
             <ul>
@@ -230,16 +271,16 @@ export const NavbarRight = () => {
                         </div>
                     </Link>
                 </li>
-                <li className={arr[3] === "feedback" ? "active_title inner_title" : "inner_title"}>
-                    <Link className="feedback_icon icon_nav" to="/feedback">
+                <li className={arr[3] === "feedback" ? "active_title inner_title" : "inner_title"} onClick={handleOpen}>
+                    <Link className="feedback_icon icon_nav" >
                         <div>
                             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABmJLR0QA/wD/AP+gvaeTAAADr0lEQVRYhe2YMWwcRRSGv5k9m4SgmDQHUuCEkgIpUhpS0hxNJArr7mQdFBGKnCCBaFCaCEGTdGkJkp0oRIgCRYplClxEQSAoACGlxGkoXDjK+pTCJiTEye3u/BS3lzvfztq34WIk8N/MvJl5b/99782b2YUd7GB41G7rbO22zo7Sph2pMcOUNUyN1GaRxVWp1GipnDcvw6Iz/JY332ipXJVKRZ5ZCLVQs/VQd2otHS6s29Lheqg79VAzRfQKedAYvgH2GvFJIXZAqrMXw0JR3UKohzrSXNVEUb3mqibqoY48DU7/KkzeRGX+xAESuw+i3mC0cU1ElBnrrYuyKlFmBCKIXLB299T80tAEX5k7eQH0niQkQEJS2mblXl/gk+nJefYcmr374cIHg1xyNommt5OcJIzTSR8TL0FJ49tJLpXHfVy8RdNLpp3g2tEAucHWT44Be4wFEJjsy+YRPHhl+uUoCMqPE9hl3/Slsef5+fh5AvPPTsdEjtdmT7AcrWYi4SV48Ov3y3HSXjJKSpLNDcO9eJ2F33/BGkvHJV1393XUP9MT1CcncvzZfgB40sQDgzCVuekriLc3zREnXOQ2zTl8OYfHngVhMvr3Tl/LVBWLQcvcP4b01aYbIhEkCYpjiLtt3JOTTt/FMS6dd3GMogQXORQ5JNfJPQ+5fA92cbUZVOJdXzqZY77dWnbP8sWbpzeG2GOzP5yDmPl1nqtLPyGDNxL3P7ru8WAXb80ly6WHx3EbPZnNkScj1wn3FqXJg+xJ8kO1tP/W/ihDLhGuHYNzQ9S5bqnqhi4ds4LA5ubwXx9/u4kHu3jjxzhDrkvGGGQt2AACi7EWUtlY2xkLuq2BAEwAWIPSzFCUDJSxPvse5BTqbBgmkmc4V32XwNgtS0mfoQ1VCCBxCaeufcYfrGciMTRBX448N7aLyVdfp2QDr8qwiF3Cme8vs/boQfbEGZagL0dura/y4vmp3OPLW5rS/Otfj4RKnTTI5PCwBL1FeMxgS6UMOZMaNwMyj/vC5OX0wAbzIe82097K2KhvOcCjoQkacXmbyWGkz71cvH4FXpiZOpCM2X251/R+wbMEIIp83wPAwLhzwdrDM995r/z/PdRWdOhoS3uK6h1taU9tRYeK6hW6fdZXVDXixm7HxaIP2u24aMSN+oqqRfSKXo/fAdqB4dOCeqQ67dTG00HzpsYnQ1Xy5huhLjVCXcqbnwxVad6U9+NoW9AItdgItThKmyP9FSa4Pkp7O/hf4G8ClYGTqswhlAAAAABJRU5ErkJggg==" />
-
                             <span>
                                 Góp ý và cải thiện
                     </span>
                         </div>
                     </Link>
+
                 </li>
                 <li className={arr[3] === "help" ? "active_title inner_title" : "inner_title"}>
                     <Link className="contact_icon icon_nav" to="/help">
@@ -262,8 +303,61 @@ export const NavbarRight = () => {
                     </Link>
 
                 </li>
-
             </ul>
+            <Modal
+                className="navbar_modal"
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <form>
+                    <div className="navbar_modal_header">
+                        <p>Đăng tải ý kiến của bạn </p>
+                        <IconButton onClick={handleClose}>x</IconButton>
+                    </div>
+                    <div className="navbar_modal_body">
+                        <span>Ý kiến giúp chúng tôi phát triển hơn</span>
+                        <div
+                            suppressContentEditableWarning={true}
+                            contentEditable
+                            id="txtSearch"
+                            onInput={e => setText(e.target.innerText)}
+                        >
+                        </div>
+                        <span>Thêm ảnh chụp màn hình</span>
+                        <Dropzone
+                            style={{ marginTop: "20px" }}
+                            className="inner_title"
+                            onDrop={acceptedFiles => dragFile(acceptedFiles)}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section >
+                                    <div className="drag_file" {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <div className="icon">
+                                            <CloudUploadIcon />
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
+                        <div>
+                            <div className="image_post_news">
+                                {
+                                    typeof file !== 'undefined' ? Object.values(file).map(function (value, index) {
+                                        return <li key={index}>
+                                            <img alt="image_upload" src={value}></img>
+                                            <span onClick={() => handleDeleteImamge(index)}>&#10005;</span>
+                                        </li>
+                                    }) : {}}
+                            </div>
+                        </div>
+                    </div>
+                    <IconButton id="MuiIconButton-root" onClick={handleSubmit}>
+                        Gửi
+                    </IconButton>
+                </form>
+            </Modal>
         </div >
     )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import "../style/newspage.css"
-import PostBlogMain from "./exNews/postBlog"
+import PostBlogMain from "../../helpers/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import socketApp from "../../socket"
 import { ToastContainer } from "react-toastify";

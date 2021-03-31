@@ -12,7 +12,7 @@ function RenderChat(props) {
     const [msg, setMsg] = useState([]);
     const [load, setLoad] = useState(false);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const [end, setEnd] = useState(30);
     const [render, setRender] = useState(null)
     const myRef = useRef(null);
 
@@ -61,6 +61,7 @@ function RenderChat(props) {
                 {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
+                            console.log(item)
                             if (item.image) {
                                 let imgUrl = item.image
                                 if (item.id === userId) return messageLiImageRender("mIOwn", i, imgUrl, myRef)

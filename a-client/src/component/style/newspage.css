@@ -68,7 +68,7 @@
 .form_post_blog .input_extension button{
     padding:0
 }
-.form_post_blog section {
+.form_post_blog section, .navbar_modal_body section {
     height: 100px;
     border-style: dashed;
     border-color: rgb(100, 100, 241);
@@ -166,7 +166,7 @@
 .image_post_news {
     padding-bottom: 5px;
     overflow-x: scroll;
-    width: 500px;
+    width: 100%;
     margin-top: 10px;
 }
 
@@ -208,8 +208,6 @@
 .comment_a_blog .infinite-scroll-component {
     background-color: inherit;
 }
-
-
 
 .profile img {
     width: 50px;

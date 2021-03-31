@@ -26,12 +26,19 @@
 .accordion_div{
     position: fixed;
     bottom:0;
-    background-color: #333333;
+    background-color: #18191a;
     width:max-content;
-    height: max-content;
     z-index: 2;
     right: 6%;
-    border-radius: 10px 10px 0 0;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 1px 1px 5px white;
+
+}
+.accordion_header{
+    width: 350px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    background-color:#242323
 
 }
 .accordion_div button span{
@@ -39,7 +46,9 @@
     color: white;
 }
 .accordion_div .accordion_message{
-    width: 300px;
+    border-radius: 15px 15px 0 0;
+    width: 80%;
+    margin-left:auto;
     cursor:pointer;
 }
 .accordion_div .accordion_message .MuiIconButton-root:hover{
@@ -51,9 +60,10 @@
 }
 .accordion_div .accordion_data{
     display: none;
-    width: 300px;
+    width: 350px;
     height: 400px;
-    transition: 0.2s ease-out
+    transition: 0.2s ease-out;
+    overflow-y: scroll;
 }
 .accordion_message button{
     width: 100%;
@@ -65,3 +75,11 @@
 .accordion_message  .MuiIconButton-label  .sympol{
     margin-left: auto
 }
+.accordion_data ul{
+    height: 81%;
+    overflow-y:scroll
+}
+.accordion_data .formMessage{
+    width: 95%;
+}
+ 

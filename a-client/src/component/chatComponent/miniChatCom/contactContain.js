@@ -10,7 +10,7 @@ var socket = socketApp.getSocket();
 
 // This function is use for render list of contact
 
-function ContactContain({ onClick, message, users, idRoom, target, nread, change }) {
+function ContactContain({ onClick, message, users, idRoom, target, nread }) {
     // const [room, setRoom] = useState(idRoom)
     // msg == new message send by real time, message == old message 
     const [read, setRead] = useState(false);
@@ -115,8 +115,10 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, change
                     </Menu>
                 </div>
                 <p onClick={() => onClick(idRoom, users, id)}>
-                    <span className="content" dangerouslySetInnerHTML={{ __html: value }}>
-                    </span>
+                    {value.slice(0, 4) === "Bạn:" ? <span className="content">
+                        <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
+                        <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length - 1) }} /></span>
+                        : <span dangerouslySetInnerHTML={{ __html: value }} />}
                     {count > 0 ? <span className="count"> {count}</span> : ""}
                 </p>
                 <img onClick={() => onClick(idRoom, users, id)} alt="avatar" src="./demo.jpeg" />

@@ -20,7 +20,7 @@ p{
     display: flex
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list,  .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner,.search_div, .navbar_right ul li a div {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list,  .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner,.search_div, .navbar_right ul li a div,.navbar_modal,.navbar_modal_header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -589,18 +589,18 @@ button {
     padding: 0 10px;
 }
 
-.message_container ul::-webkit-scrollbar-track, .call_div_container::-webkit-scrollbar-track {
+.message_container ul::-webkit-scrollbar-track, .call_div_container::-webkit-scrollbar-track,.accordion_data ul::-webkit-scrollbar-track,.contact::-webkit-scrollbar-track,.accordion_div .accordion_data::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey !important;
 }
 
 /* Handle */
 
-.message_container ul::-webkit-scrollbar-thumb,.call_div_container::-webkit-scrollbar-thumb {
+.message_container ul::-webkit-scrollbar-thumb,.call_div_container::-webkit-scrollbar-thumb,.accordion_data ul::-webkit-scrollbar-thumb,.contact::-webkit-scrollbar-thumb,.accordion_div .accordion_data::-webkit-scrollbar-thumb {
     background-color: grey !important;
     background-image: grey !important;
 }
 
-.message_container ul::-webkit-scrollbar,.call_div_container::-webkit-scrollbar {
+.message_container ul::-webkit-scrollbar,.call_div_container::-webkit-scrollbar,.accordion_data ul::-webkit-scrollbar,.contact::-webkit-scrollbar,.accordion_div .accordion_data::-webkit-scrollbar {
     width: 5px;
 }
 
@@ -806,9 +806,9 @@ button {
 }
 
 .contact_container {
-    height: 60px;
-    background-color: rgb(253, 253, 253);
-    margin: 10px;
+    height: 70px;
+    background-color: inherit ;
+    margin: 5px;
 }
 
 .contact_contain_text {
@@ -821,7 +821,7 @@ button {
 
 .contact_contain_text p {
     margin: 0;
-    color: rgba(0, 0, 0, 0.9);
+    color: rgba(255, 255, 255, 0.9);
     padding-top: 10px;
     width: 100%
 }

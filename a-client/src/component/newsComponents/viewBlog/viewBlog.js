@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import axios from "axios"
-import Skeleton from "../exNews/Skeleton"
+import Skeleton from "../../../helpers/Skeleton"
 import InfiniteScroll from "react-infinite-scroll-component";
 import "../../style/viewBlog.css"
 import { getCookie } from '../../../helpers/auth';
-import SeeLike from '../exNews/seeLike';
-import LikeComment from '../exOne/likeComment';
+import SeeLike from "../../../helpers/seeLike"
+import LikeComment from "../../../helpers/likeComment"
+
 import RequireLogin from '../../../helpers/requireLogin';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import ShareBlog from '../exOne/shareBlog';
+import ShareBlog from "../../../helpers/shareBlog"
 import { ImageRender } from '../../../helpers/news';
 import { IconButton } from '@material-ui/core';
 import { MessageContainer } from '../../../helpers/message';
