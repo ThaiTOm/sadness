@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { decryptWithAES, getCookie } from '../../../helpers/auth';
 import classNames from "classnames";
-import socketApp from '../../../socket';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-var socket = socketApp.getSocket();
-
 // This function is use for render list of contact
 
-function ContactContain({ onClick, message, users, idRoom, target, nread }) {
+function ContactContain({ onClick, message, users, idRoom, target, nread, socket }) {
     // const [room, setRoom] = useState(idRoom)
     // msg == new message send by real time, message == old message 
     const [read, setRead] = useState(false);

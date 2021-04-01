@@ -1,11 +1,12 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import "../style/newspage.css"
-import PostBlogMain from "../../helpers/postBlog"
+import PostBlogMain from "../../helpers/news/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import socketApp from "../../socket"
 import { ToastContainer } from "react-toastify";
 import { Notifications } from '../../userContext';
-import { HeaderPage, NavbarRight } from '../../helpers/news'
+import { HeaderPage, NavbarRight } from '../../helpers/news/news'
+
 
 function NewsMain() {
     // const id = getCookie().token || ""
@@ -36,6 +37,7 @@ function NewsMain() {
             }
         })
     }, [])
+
     return (
         <div className="news_page">
             <ToastContainer />

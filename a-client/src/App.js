@@ -18,11 +18,11 @@ import { toast } from "react-toastify"
 import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
 
-
 function App() {
   let socket = socketApp.getSocket()
   const id = getCookie().token
   const [value, setValue] = useState([]);
+  const [title, setTitle] = useState(null)
   const [listMessage, setListMessage] = useState(null)
   const notifications = useMemo(() => ({ value, setValue }), [value, setValue]);
   const messageList = useMemo(() => ({ listMessage, setListMessage }), [listMessage, setListMessage])
@@ -34,11 +34,13 @@ function App() {
   let forLoop = (arr, msgs) => {
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].idRoom === msgs.idRoom && i !== 0) {
+        setTitle("Bạn có 1 tin nhắn mới")
         arr.splice(i, 1)
         arr.unshift(msgs)
         return setListMessage(arr)
       }
       else if (arr[i].idRoom === msgs.idRoom && i === 0) {
+        setTitle("Bạn có 1 tin nhắn mới")
         arr[0] = msgs
         return setListMessage(arr)
       }
@@ -54,6 +56,7 @@ function App() {
     socket.on("activities", msg => toast.info(msg.number + msg.value))
   }, [socket, id])
 
+  // fetch data
   useEffect(() => {
     axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
       .then(res => {
@@ -81,6 +84,9 @@ function App() {
     listMessage && fnc()
   }, [listMessage])
 
+  useEffect(() => {
+    document.title = title
+  }, [title])
   return (
     <BrowserRouter >
       <Switch>

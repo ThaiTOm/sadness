@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import axios from "axios"
-import Skeleton from "../../../helpers/Skeleton"
+import Skeleton from "../../../helpers/news/Skeleton"
 import InfiniteScroll from "react-infinite-scroll-component";
 import "../../style/viewBlog.css"
 import { getCookie } from '../../../helpers/auth';
-import SeeLike from "../../../helpers/seeLike"
-import LikeComment from "../../../helpers/likeComment"
-
-import RequireLogin from '../../../helpers/requireLogin';
+import SeeLike from "../../../helpers/news/seeLike"
+import LikeComment from "../../../helpers/news/likeComment"
+import RequireLogin from '../../../helpers/news/requireLogin';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import ShareBlog from "../../../helpers/shareBlog"
-import { ImageRender } from '../../../helpers/news';
+import ShareBlog from "../../../helpers/news/shareBlog"
+import { ImageRender } from '../../../helpers/news/news';
 import { IconButton } from '@material-ui/core';
-import { MessageContainer } from '../../../helpers/message';
+import { MessageContainer } from '../../../helpers/message/message';
+import socketApp from '../../../socket';
+
 
 function ViewBlog() {
     const [start, setStart] = useState(0)
     const [end, setEnd] = useState(3)
     const [blog, setBlog] = useState([])
     const [hasmore, setHasmore] = useState(true)
-
+    const socket = socketApp.getSocket()
     const id = getCookie().token
     const [login, setLogin] = useState(false)
 
@@ -85,7 +86,7 @@ function ViewBlog() {
                         <img alt="avatart_user" src="./demo.jpeg"></img>
                         <span>{value.comment[i].value}</span>
                         <div className="activities">
-                            <LikeComment props={{ data: value.comment[i], i: value.comment[i].id + i, value: value.idBlog }} />
+                            <LikeComment props={{ data: value.comment[i], i: value.comment[i].id + i, value: value.idBlog, socket, idUser: id }} />
                         </div>
                     </div>
 
@@ -97,12 +98,19 @@ function ViewBlog() {
         <div className="viewBlog">
             {blog.length === 0 && <Skeleton />}
             {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}
+
+            {/* for message */}
             <MessageContainer />
+            {/* for message */}
             <InfiniteScroll
                 dataLength={blog.length}
                 next={fetchData}
                 hasMore={hasmore}
-                loader={<Skeleton />}
+                loader={<div className="loaderBalls" id="ball_load">
+                    <div className="yellow"></div>
+                    <div className="red"></div>
+                    <div className="blue"></div>
+                </div>}
             >
                 {
                     blog !== undefined ? blog.map(function (value, i) {
@@ -130,7 +138,7 @@ function ViewBlog() {
                                         <ImageRender props={{ value }} />
                                     </div>
                                     <div className="activities_blog">
-                                        <SeeLike props={{ value, i, className: "inner" }} />
+                                        <SeeLike props={{ value, i, className: "inner", socket, id }} />
                                         <div className="inner">
                                             <Link to={"/posts/id=" + value.idBlog}>
                                                 <li className="comment list">

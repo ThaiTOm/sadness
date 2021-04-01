@@ -67,7 +67,7 @@
 
 .blog_skeleton_wrapper {
     background-color: #242526;
-    width: 81%;
+    width: 80%;
     padding: 10px 50px 50px 50px;
 }
 
@@ -531,4 +531,7 @@ input[type="checkbox"] {
 }
 .share .list img{
     padding-right: 10px
+}
+#ball_load{
+    margin: 50px 0 50px -180px
 }

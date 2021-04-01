@@ -5,19 +5,17 @@ import "../../style/call.css"
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import { createEmptyAudioTrack } from '../../../helpers/audio';
+import { createEmptyAudioTrack } from '../../../helpers/message/audio';
 import SimpleMenu from '../miniChatCom/simpleMenu';
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import hark from "hark"
 import RenderChat from '../renderChat';
-import socketApp from '../../../socket';
 
 // This function is use for send and view message
 function ChatCouple(props) {
-    let socket = socketApp.getSocket();
     const userId = getCookie().token;
-    const { id, peerJS } = props;
+    const { id, peerJS, socket } = props;
     const [audio, setAudio] = useState(null);
     const [mic, setMic] = useState(false)
     const [volumn, setVolumn] = useState(false)
@@ -187,7 +185,7 @@ function ChatCouple(props) {
                 </div>
             </div>
             <div className="message_container_div">
-                <RenderChat id={id} userId={userId} />
+                <RenderChat id={id} userId={userId} socket={socket} />
             </div>
         </div >
     )

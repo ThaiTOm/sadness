@@ -6,7 +6,7 @@ import "../../style/call.css"
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import { createEmptyAudioTrack } from '../../../helpers/audio';
+import { createEmptyAudioTrack } from '../../../helpers/message/audio';
 import SimpleMenu from '../miniChatCom/simpleMenu';
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
@@ -218,7 +218,7 @@ function ChatGroup(props) {
     }, [id, peerJS])
     return (
         <div className="message_container">
-            <RenderChat id={props.id} userId={userId} />
+            <RenderChat id={props.id} userId={userId} socket={socket} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
                 <div className="main_mic">

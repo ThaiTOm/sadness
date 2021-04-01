@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { FormSend, messageLiImageRender, messageLiRender } from '../../helpers/message';
+import { FormSend, messageLiImageRender, messageLiRender } from '../../helpers/message/message';
 import { decryptWithAES } from '../../helpers/auth';
 import axios from 'axios';
 import socketApp from '../../socket';
-import { executeScroll } from "../../helpers/message"
+import { executeScroll } from "../../helpers/message/message"
 
 
 function RenderChat(props) {
-    let socket = socketApp.getSocket();
-    let { id, userId } = props
+    let { id, userId, socket } = props
     const [msg, setMsg] = useState([]);
     const [load, setLoad] = useState(false);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(30);
+    const [end, setEnd] = useState(15);
     const [render, setRender] = useState(null)
     const myRef = useRef(null);
 
@@ -61,7 +60,6 @@ function RenderChat(props) {
                 {
                     msg.length > 0 ?
                         msg.map(function (item, i) {
-                            console.log(item)
                             if (item.image) {
                                 let imgUrl = item.image
                                 if (item.id === userId) return messageLiImageRender("mIOwn", i, imgUrl, myRef)

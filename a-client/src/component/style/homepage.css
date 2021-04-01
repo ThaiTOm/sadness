@@ -692,6 +692,10 @@ button {
 
 .messageLiOwnl60 {
     width: max-content;
+    border-top-width: 0px;
+    border-right-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
 }
 
 .messageLiOwnm60 {

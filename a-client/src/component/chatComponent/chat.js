@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { getCookie, decryptWithAES } from '../../helpers/auth';
 import axios from "axios"
 import socketApp from '../../socket';
-import { messageLiRender, messageLiImageRender, executeScroll, Spinning, FormSend } from '../../helpers/message';
+import { messageLiRender, messageLiImageRender, executeScroll, Spinning, FormSend } from '../../helpers/message/message';
 
 function Chat() {
     let socket = socketApp.getSocket();
@@ -28,7 +28,6 @@ function Chat() {
                 if (error === "error") {
                     setWait(true)
                 } else {
-                    console.log(error)
                     setFinish(true)
                     setidRoom(error)
                 }
@@ -37,7 +36,6 @@ function Chat() {
             setWait(false)
             socket.emit("joinChat", { id, len, ipOfUser }, (error) => {
                 if (error !== "error") {
-                    console.log(error)
                     setFinish(true)
                     setidRoom(error)
                 }
@@ -81,11 +79,11 @@ function Chat() {
             }
         })
     }, [socket, idRoom])
+
     //defined button find partner classname
     var btnClassFind = classNames({
         "onclic": wait,
     })
-    console.log(idRoom)
     const changeStateWaitGroup = () => {
         if (waitG === null) {
             setWaitG("active")
@@ -105,19 +103,19 @@ function Chat() {
             <div className="container_button" style={finish === true ? { display: "none" } : {}}>
                 <div className="part_1">
                     <button
-
                         id="button_find_partner"
-                        className={btnClassFind}
+                        className={`${btnClassFind} tooltip`}
                         onClick={HanldeClickFind}
                     >
+                        <span className="tooltiptext">
+                            Tìm cặp
+                        </span>
                         {wait === true ? < Spinning /> : "Tìm cặp"}
                     </button>
+
                 </div>
-                <div className="part_2">
-                    <div className={"chat_button_group " + waitG}>
-                        <span id="group_icon">
-                            Tham gia nhóm
-                        </span>
+                <div className="part_2 ">
+                    <div className={"chat_button_group tooltip " + waitG}>
                         <div onClick={changeStateWaitGroup} className="background"></div>
                         <svg className="chat-bubble" width="100" height="100" viewBox="0 0 100 100">
                             <g className="bubble">
@@ -128,6 +126,9 @@ function Chat() {
                             <circle className="circle circle2" cx="49.9" cy="50.7" r="1.9" />
                             <circle className="circle circle3" r="1.9" cy="50.7" cx="57.3" />
                         </svg>
+                        <span className="tooltiptext">
+                            Ghép nhóm
+                        </span>
                     </div>
                 </div>
 

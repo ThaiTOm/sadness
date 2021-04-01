@@ -3,18 +3,20 @@ import { getCookie } from '../../../helpers/auth';
 import axios from "axios"
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
-import LikePost from "../../../helpers/seeLike"
-import Comment from "../../../helpers/comment"
+import LikePost from "../../../helpers/news/seeLike"
+import Comment from "../../../helpers/news/comment"
 import { Link } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import ShareBlog from "../../../helpers/shareBlog"
-import { HeaderPage } from '../../../helpers/news';
+import ShareBlog from "../../../helpers/news/shareBlog"
+import { HeaderPage } from '../../../helpers/news/news';
 import { IconButton } from '@material-ui/core';
+import socketApp from '../../../socket';
 
 
 function ViewOneBlog(props) {
     const id = getCookie().token
     const [data, setData] = useState(null)
+    let socket = socketApp.getSocket()
 
     let arr = props.location.pathname.split("/")
 
@@ -80,12 +82,12 @@ function ViewOneBlog(props) {
                         </div>
 
                         <div className="extension_blog">
-                            <LikePost props={{ value: data, i: "1", className: "ex night" }} />
+                            <LikePost props={{ value: data, i: "1", className: "ex night", socket, id }} />
                             <div className="ex night">
                                 <ShareBlog />
                             </div>
                         </div>
-                        <Comment props={{ value: data, id: id }} />
+                        <Comment props={{ value: data, id: id, socket: socket }} />
                     </div>
                 </div> : console.log()
             }
