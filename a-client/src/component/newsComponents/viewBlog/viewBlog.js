@@ -75,7 +75,7 @@ function ViewBlog() {
             }
         }
         fn()
-    }, [end])
+    }, [end, id])
 
     const CommentRender = (cb) => {
         const { value, i } = cb.props

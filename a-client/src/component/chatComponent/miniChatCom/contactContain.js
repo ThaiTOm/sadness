@@ -54,7 +54,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
 
     useEffect(() => {
         socket.emit("joinChatBack", { idRoom })
-    }, [])
+    }, [idRoom, socket])
 
     useEffect(() => {
         if (target === idRoom) {
@@ -66,7 +66,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
         else {
             setActive(false)
         }
-    }, [target, idRoom])
+    }, [target, idRoom, id, socket])
     useEffect(() => {
         for (let value in users) {
             if (value !== id && users[value] === "online") {
@@ -74,7 +74,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                 break;
             }
         }
-    }, [])
+    }, [id, users])
 
     //if last people send is who then assign that
     var classN = classNames({

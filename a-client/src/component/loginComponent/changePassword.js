@@ -13,10 +13,9 @@ function ChangePassword({ match }) {
     const { password1, password2, token } = formData;
     useEffect(() => {
         let token = match.params.token;
-        if (token) {
-            setFormData({ ...formData, token });
-        }
-    }, [token])
+        if (token) setFormData({ ...formData, token });
+
+    }, [formData, match.params.token])
     const handleChange = text => e => {
         setFormData({ ...formData, [text]: e.target.value })
     }

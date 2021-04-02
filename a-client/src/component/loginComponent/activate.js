@@ -10,13 +10,15 @@ function ActivatePage(props) {
     name: "",
     token: "",
   });
+
   useEffect(() => {
     let token = props.match.params.token;
     let name = jwt.decode(token);
     if (token) {
       setFormData({ ...formData, name, token });
     }
-  }, []);
+  }, [formData, props.match.params.token]);
+
   const { token } = formData;
   const hanldeSubmit = (e) => {
     e.preventDefault();

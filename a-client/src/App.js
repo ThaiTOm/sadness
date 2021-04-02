@@ -30,19 +30,20 @@ function App() {
   const [end, setEnd] = useState(10);
   const history = useHistory()
 
-
+  let changeTitle = (idMessage, arr) => {
+    if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
+    return setListMessage(arr)
+  }
   let forLoop = (arr, msgs) => {
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].idRoom === msgs.idRoom && i !== 0) {
-        setTitle("Bạn có 1 tin nhắn mới")
         arr.splice(i, 1)
         arr.unshift(msgs)
-        return setListMessage(arr)
+        return changeTitle(msgs.data.id, arr)
       }
       else if (arr[i].idRoom === msgs.idRoom && i === 0) {
-        setTitle("Bạn có 1 tin nhắn mới")
         arr[0] = msgs
-        return setListMessage(arr)
+        return changeTitle(msgs.data.id, arr)
       }
     }
   }
@@ -78,7 +79,7 @@ function App() {
         if (res.data.message) history.push("/report")
         else setListMessage(res.data)
       }).catch(err => { })
-  }, [id])
+  }, [id, end])
 
   useEffect(() => {
     listMessage && fnc()

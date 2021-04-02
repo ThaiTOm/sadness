@@ -12,14 +12,14 @@ function Main_page() {
     const { listMessage } = useContext(MessageList)
     const [room, setRoom] = useState("");
     //value contain Rooms
-    const [name, setName] = useState("Recal")
+    // const [name, setName] = useState("Recal")
     // user contain 2 user 
-    const [user, setUser] = useState("")
+    // const [user, setUser] = useState("")
 
     const hanldeSetRoom = value => {
         let id = value.split(",")
         setRoom(id[0])
-        setUser(id[1])
+        // setUser(id[1])
     }
     return (
         <div className="main_page_auth">
@@ -33,7 +33,7 @@ function Main_page() {
                             socket={socket}
                             onClick={(value) => hanldeSetRoom(value)}
                             id={room}
-                            name={(value) => setName(value)}
+                        // name={(value) => setName(value)}
                         /> : <Chat />
                 }
                 <div className="contact">

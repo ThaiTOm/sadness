@@ -27,7 +27,7 @@ function ViewOneBlog(props) {
             }).catch(err => {
                 console.log(err)
             })
-    }, [arr[2]])
+    }, [arr, id])
 
     const Slideshow = () => {
         const zoomInProperties = {

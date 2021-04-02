@@ -74,7 +74,7 @@ function Comment(props) {
                     </div>
                 )
             })
-    }, [end])
+    }, [end, id])
     return (
         <div className="comment_a_blog">
             {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}

@@ -23,7 +23,8 @@ function SendContact(props) {
         peer && newNull()
         let peerJS = createPeer()
         setPeer(peerJS)
-    }, [props.id])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>

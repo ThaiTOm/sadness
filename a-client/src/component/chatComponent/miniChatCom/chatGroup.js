@@ -215,7 +215,8 @@ function ChatGroup(props) {
             })
         }
         fn()
-    }, [id, peerJS])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <div className="message_container">
             <RenderChat id={props.id} userId={userId} socket={socket} />

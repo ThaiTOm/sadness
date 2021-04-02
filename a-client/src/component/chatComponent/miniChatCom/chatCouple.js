@@ -130,21 +130,25 @@ function ChatCouple(props) {
     // if we join another room then delete old peer connections 
 
     useEffect(() => {
-        peerJS.on("open", () => {
-            socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
-                setUser(callback)
+        let fnc = () => {
+            peerJS.on("open", () => {
+                socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
+                    setUser(callback)
+                })
             })
-        })
-        // get user media
-        navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
-            plus(peerJS, stream)
-        }).catch(err => {
-            // if user does not accept to stream then create new null stream
-            const audioTrack = createEmptyAudioTrack();
-            const stream = new MediaStream([audioTrack]);
-            plus(peerJS, stream)
-        })
-    }, [socket, id, peerJS])
+            // get user media
+            navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
+                plus(peerJS, stream)
+            }).catch(err => {
+                // if user does not accept to stream then create new null stream
+                const audioTrack = createEmptyAudioTrack();
+                const stream = new MediaStream([audioTrack]);
+                plus(peerJS, stream)
+            })
+        };
+        fnc();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className="message_container">

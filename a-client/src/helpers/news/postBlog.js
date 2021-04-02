@@ -71,11 +71,11 @@ function Index() {
     const handleCloseEmo = () => {
         setAnchorEl(null);
     };
-    const emojiSubmit = (e, emo) => {
-        let value = text + " &#" + emo + ";"
-        handleChangeText(value)
-        handleCloseEmo()
-    }
+    // const emojiSubmit = (e, emo) => {
+    //     let value = text + " &#" + emo + ";"
+    //     handleChangeText(value)
+    //     handleCloseEmo()
+    // }
 
     return (
         <div className="post_data ">

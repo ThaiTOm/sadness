@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { FormSend, messageLiImageRender, messageLiRender } from '../../helpers/message/message';
 import { decryptWithAES } from '../../helpers/auth';
 import axios from 'axios';
-import socketApp from '../../socket';
 import { executeScroll } from "../../helpers/message/message"
 
 
