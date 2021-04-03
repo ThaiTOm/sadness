@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function LoginForm() {
+function LoginForm({ onClick }) {
     const classes = useStyles();
     const history = useHistory();
     const [formData, setFormData] = useState({
@@ -75,13 +75,15 @@ function LoginForm() {
         sendGoogleToken(response.tokenId)
     }
     const responseFacebook = response => {
-        console.log(response)
         sendFacebookToken(response.userID, response.accessToken)
     }
     return (
         <form className="form_signIn" onSubmit={handleSubmit}>
             <ToastContainer />
-            <p className="sign_in_title">Sign In</p>
+            <div className="sign_in_title">
+                <p >Sign In</p>
+                <span onClick={e => onClick("hoho")}>x</span>
+            </div>
             <div className="inputField">
                 <TextField
                     value={email}
@@ -93,8 +95,6 @@ function LoginForm() {
                         className: classes.floatingLabelFocusStyle,
                     }}
                 />
-            </div>
-            <div className="inputField">
                 <TextField
                     value={password}
                     onChange={handleChange("password")}
@@ -112,23 +112,23 @@ function LoginForm() {
                     <button className="treat-button" type="submit">Đăng nhập</button>
                 </div>
             </div>
-            <div className="divider"></div>
-            <GoogleLogin
-                className="google_login"
-                clientId="583969708221-h0kl5ki0e91mkb3mafoecak1sj8b4ih3.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-            />
-            <FacebookLogin
-                appId="688117411891893"
-                fields="name,email,picture"
-                callback={responseFacebook}
-                cssClass="facebook_login"
-                icon="fa-facebook"
-            />
+            <div className="button_login">
+                <GoogleLogin
+                    className="google_login"
+                    clientId="583969708221-h0kl5ki0e91mkb3mafoecak1sj8b4ih3.apps.googleusercontent.com"
+                    buttonText="Login with Google"
+                    onSuccess={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+                <FacebookLogin
+                    appId="688117411891893"
+                    fields="name,email,picture"
+                    callback={responseFacebook}
+                    cssClass="facebook_login"
+                    icon="fa-facebook"
+                />
+            </div>
         </form>
-
     )
 }
 

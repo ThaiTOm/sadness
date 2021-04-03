@@ -5,7 +5,7 @@ import axios from "axios"
 import socketApp from '../../socket';
 import { messageLiRender, messageLiImageRender, executeScroll, Spinning, FormSend } from '../../helpers/message/message';
 
-function Chat() {
+function Chat({ handleRoom }) {
     let socket = socketApp.getSocket();
     const id = getCookie().token;
     const ipOfUser = "Dong nai";
@@ -33,6 +33,7 @@ function Chat() {
                 }
             })
         } else {
+            handleRoom(null)
             setWait(false)
             socket.emit("joinChat", { id, len, ipOfUser }, (error) => {
                 if (error !== "error") {
@@ -86,6 +87,7 @@ function Chat() {
     })
     const changeStateWaitGroup = () => {
         if (waitG === null) {
+            handleRoom("yes")
             setWaitG("active")
             socket.emit("joinChatGroup", { id, len, ipOfUser }, (callback) => {
                 if (callback !== "error") {
@@ -95,6 +97,7 @@ function Chat() {
             })
         }
         else {
+            handleRoom(null)
             setWaitG(null)
         }
     }
@@ -115,8 +118,8 @@ function Chat() {
 
                 </div>
                 <div className="part_2 ">
-                    <div className={"chat_button_group tooltip " + waitG}>
-                        <div onClick={changeStateWaitGroup} className="background"></div>
+                    <div onClick={changeStateWaitGroup} className={"chat_button_group tooltip " + waitG}>
+                        <div className="background"></div>
                         <svg className="chat-bubble" width="100" height="100" viewBox="0 0 100 100">
                             <g className="bubble">
                                 <path className="line line1" d="M 30.7873,85.113394 30.7873,46.556405 C 30.7873,41.101961          36.826342,35.342 40.898074,35.342 H 59.113981 C 63.73287,35.342          69.29995,40.103201 69.29995,46.784744" />

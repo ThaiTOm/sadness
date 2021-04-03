@@ -103,14 +103,32 @@
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
-    z-index: 1;
+    z-index: 99;
     bottom: 125%;
     left: 50%;
     margin-left: -60px;
     opacity: 0;
     transition: opacity 0.3s;
+    font-size: 1rem;
 }
-  
+.menuMessage .tooltip .tooltiptext{
+    top: 100%;
+    left: 50%;
+    bottom:0;
+    height: max-content;
+    width: 90px;
+}
+.menuMessage .tooltip .tooltiptext::after{
+    content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  top:initial;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #333333 transparent;
+}
 .tooltip .tooltiptext::after {
     content: "";
     position: absolute;

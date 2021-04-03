@@ -180,6 +180,9 @@
   text-align: left;
   font-size: 17px;
   transition: 0.4s;
+  background-color: #333333;
+  padding: 10px 0;
+  border-radius: 10px;
 }
 
 .accordion:after {
@@ -187,10 +190,6 @@
   color: white;
   font-weight: bold;
   float: right;
-}
-
-.active:after {
-  content: "\2212";
 }
 
 .panel {

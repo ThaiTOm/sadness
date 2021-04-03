@@ -1,4 +1,4 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup } = require("./controlleRealTime/messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup, outChat } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
 const { Message } = require("../models/message.model");
 const { cm } = require("../nodeCache");
@@ -114,6 +114,9 @@ module.exports = {
                 .catch(() => {
                     console.log(id)
                 })
+        })
+        socket.on("outJoinChat", ({ id }) => {
+            return outChat({ id })
         })
     }
 }

@@ -1,7 +1,7 @@
-.news_page {
+.news_page,.main_page {
     width: 100%;
     height: 100%;
-    text-overflow: scroll;
+    background-color: #181818
 }
 
 .infinite-scroll-component__outerdiv{

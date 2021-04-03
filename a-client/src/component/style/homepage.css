@@ -20,7 +20,7 @@ p{
     display: flex
 }
 
-.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list,  .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner,.search_div, .navbar_right ul li a div,.navbar_modal,.navbar_modal_header {
+.content_comment_a_blog .activities .list, .extension_blog .ex, .post_viewing_div, .modal_post_blog, .form_post_blog p, .drag_file .icon, .message_container, div.loaderBalls, .contain_block .middle, .block_page, .extension_auth, .like, .inner .list, #share-menu .MuiMenu-list li, .share .list,  .formMessage, .part_1, .part_2, .activities_blog .inner,#button_find_partner,.search_div, .navbar_right ul li a div,.navbar_modal,.navbar_modal_header,.button-navbar {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,7 +78,8 @@ p{
 }
 
 .active_contact {
-    background-color: #b8b8c5 !important;
+    background-color: #181818 !important;
+    border: 1px solid rgb(56, 148, 209)
 }
 
 .not_read_contact {
@@ -109,12 +110,15 @@ p{
 
 .button-navbar {
     margin-top: 50px;
-    width: 500px;
-    margin-left: 36%;
 }
-
+.paper_res{
+    background-color: #333333;
+    padding: 30px 20px 20px 80px;
+    width: 50%;
+    border-radius: 10px;
+}
 .treat-button {
-    margin-left: 40px;
+    margin-right: 20px;
     font-size: 2.6vmin;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -123,7 +127,7 @@ p{
     background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
     border: none;
     color: black;
-    border-radius: 2em;
+    border-radius: 2rem;
     padding: 0.6em 1.5em;
     overflow: hidden;
     -webkit-user-select: none;
@@ -174,14 +178,31 @@ button {
 /******************** Sign in button *************/
 
 .inputField {
-    margin-top: 20px;
     width: 100%;
 }
+.inputField .MuiInputBase-input{
+    width: 60%;
+}
+.inputField fieldset{
+    width: 60%;
+}
+.inputField .MuiTextField-root{
+    margin-top:20px;
+    transform: translate(15%, 0%);
 
+}
 .form_signIn {
-    width: 700px
+    width: 100%;
+    height: 100%;
 }
 
+.paper_login{
+    background-color: #333333;
+    width: 50%;
+    height: 70%;    
+    padding: 30px 20px 0px 60px;
+    border-radius: 10px;
+}
 .MuiFormControl-root {
     width: 100%;
 }
@@ -189,14 +210,21 @@ button {
 .sign_in_title {
     font-size: 2rem;
     font-weight: 700;
-    text-align: center;
+    color: white;
+    display: flex
 }
-
-.divider {
-    width: 2px;
-    display: block;
-    height: 100%;
-    background-color: white;
+.sign_in_title p{
+    margin-left: 100px;
+    width: max-content
+}
+.sign_in_title span{
+    cursor: pointer;
+    margin-left:auto;
+    margin-right: 20px;
+}
+.button_login{
+    transform: translate(25%, 0%);
+    width: 70%
 }
 
 .google_login {
@@ -210,17 +238,12 @@ button {
     appearance: none;
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
     background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
-    border: none;
-    color: black;
-    border-radius: 2em;
-    padding: 0.6em 1.5em;
     overflow: hidden;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     z-index: 1;
-    box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
     -webkit-transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
     transition: box-shadow 0.2s, -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
     transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
@@ -243,7 +266,7 @@ button {
     color: white;
     font-size: 1rem;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 10px;
     border-radius: 10px !important;
     width: 80%;
     height: 50px;
@@ -261,16 +284,13 @@ button {
     margin-right: 20px;
 }
 
-.makeStyles-paper-2 {
-    background-color: #131343 !important
-}
-
 /* button and forget link */
 
 .button-sign {
-    width: 100%;
+    width: 65%;
     margin-top: 10px;
     justify-content: space-between;
+    transform: translate(25%, 0%);
 }
 
 .button-sign a {
@@ -291,6 +311,7 @@ button {
 .MuiInputBase-input {
     color: white !important;
 }
+
 
 .forget_container {
     padding: 70px 0;
@@ -443,15 +464,10 @@ button {
     margin-top: 10px;
 }
 
-.container {
-    background-color: #181818
-}
-
 .navbar_right {
     z-index: 1;
-    height: 90%;
+    height: max-content;
     margin-top: 30px;
-    margin-left: 20px;
     background-color:inherit;
     width: 20%;
     position:fixed
@@ -460,7 +476,7 @@ button {
 .navbar_right ul {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: max-content;
     width: 100%;
     background-color: inherit
 }
@@ -754,41 +770,21 @@ button {
     margin-left: auto;
     margin-right: 15px;
 }
-
-
-
 .menuMessage {
     padding-top: 10px;
     width: max-content;
     margin-left: auto;
     margin-right: 10px;
+    height: 50%;
 }
-
-.menuMessage .MuiButtonBase-root {
-    padding: 0;
+.button-option{
+    background-color: #333333;
+    padding: 5px 15px;
     color: white;
-    background-color: #2EE59D;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
-    transition: all 0.3s ease 0s;
-    outline: none;
-}
+    border-radius: 10px;
+    font-size: 1.5rem;  
 
-.menuMessage .MuiButtonBase-root:hover {
-    background-color: white;
-    box-shadow: 0px 15px 20px rgba(255, 255, 255, 0.5);
-    color: #fff;
 }
-
-.menuMessage .MuiButton-label {
-    font-size: 1.9em;
-}
-
-.menuMessage .MuiButton-root {
-    min-width: 50px;
-    line-height: 1.5;
-    margin-left: 5px;
-}
-
 #menuContainerMessage .MuiPaper-root {
     height: 250px;
     width: 200px;
@@ -912,11 +908,12 @@ div.loaderBalls>div {
 
 .contain_block {
     position: absolute;
-    width: 500px;
-    height: 400px;
-    background-color: #0b0b31;
-    top: 20%;
-    left: 35%;
+    width: 600px;
+    height: 500px;
+    background-color: #333333;
+    top: 15%;
+    left: 30%;
+    border-radius: 10px
 }
 
 .contain_block .head {

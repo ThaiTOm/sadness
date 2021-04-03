@@ -82,7 +82,7 @@ function App() {
   }, [id, end])
 
   useEffect(() => {
-    listMessage && fnc()
+    listMessage && listMessage.length > 0 && fnc()
   }, [listMessage])
 
   useEffect(() => {

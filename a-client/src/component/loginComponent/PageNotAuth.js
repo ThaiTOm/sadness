@@ -114,8 +114,8 @@ function PageNotAuth() {
                             }}
                         >
                             <Fade in={openSignIn}>
-                                <div className={classes.paper}>
-                                    <LoginForm />
+                                <div className="paper_login">
+                                    <LoginForm onClick={value => handleCloseSignIn()} />
                                 </div>
                             </Fade>
                         </Modal>
@@ -136,8 +136,8 @@ function PageNotAuth() {
                             }}
                         >
                             <Fade in={openSignUp}>
-                                <div className={classes.paper}>
-                                    <RegisterForm />
+                                <div className="paper_res">
+                                    <RegisterForm onClick={e => handleCloseSignUp()} />
                                 </div>
                             </Fade>
                         </Modal>

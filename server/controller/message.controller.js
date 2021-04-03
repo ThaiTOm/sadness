@@ -14,13 +14,13 @@ exports.listContact = (req, res) => {
     //id is idRoom
     const { id, start, end } = req.body
     User.findById(id, async (err, result) => {
-        if (err) {
+        if (err || !result) {
             return res.json({
                 error: "Lỗi hệ thống bạn hãy thử lại sau"
             })
         }
         else {
-            const { blockN } = result;
+            const { blockN } = result || 0
             if (blockN > 3) {
                 res.json({ message: "Bạn đã bị chặn" })
             } else {

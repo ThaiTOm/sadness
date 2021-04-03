@@ -13,6 +13,9 @@
     background-color: #242526;
     width: 95%;
 }
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
+    border-color: none
+}
 .contain_blog .profile{
     padding:5% 5% 0% 5%;
     margin-bottom:10px;

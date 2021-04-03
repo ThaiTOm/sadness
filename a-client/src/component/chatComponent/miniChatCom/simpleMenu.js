@@ -41,16 +41,16 @@ export default function SimpleMenu({ id, onClick }) {
     const handleCloseBlock = () => {
         setOpen(false)
     }
-    const handleLogOut = () => {
-        signOut();
-        window.location.reload(false);
-    }
+
     return (
-        <div className="menuMessage" >
+        <div className="menuMessage">
             <ToastContainer />
-            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            <button className="tooltip button-option" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                 &#9776;
-            </Button>
+                <span className="tooltiptext">
+                    Thong tin
+                </span>
+            </button>
             <Menu
                 id="menuContainerMessage"
                 anchorEl={anchorEl}
@@ -98,11 +98,6 @@ export default function SimpleMenu({ id, onClick }) {
                         className="simple_menu_span"
                     >
                         <ReportIcon />   Báo cáo
-                    </span>
-                </MenuItem>
-                <MenuItem onClick={handleLogOut}>
-                    <span className="simple_menu_span">
-                        <ExitToAppIcon /> Đăng xuất
                     </span>
                 </MenuItem>
                 {/* <MenuItem onClick={}>Logout</MenuItem> */}

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function RegisterForm() {
+function RegisterForm({ onClick }) {
     const [formData, setFormData] = useState({
         email: "",
         name: "",
@@ -78,7 +78,10 @@ function RegisterForm() {
     return (
         <form className="form_signIn" onSubmit={handleSubmit}>
             <ToastContainer />
-            <p className="sign_in_title">Đăng ký</p>
+            <div className="sign_in_title">
+                <p >Sign up</p>
+                <span onClick={e => onClick("hoho")}>x</span>
+            </div>
             <div className="row">
                 <div className="col-sm-6">
                     <div className="inputField">

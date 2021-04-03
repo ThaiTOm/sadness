@@ -226,5 +226,7 @@ const chatGorup = ({ id, len, ipOfUser }) => {
     regionGroup[ipOfUser].push(user)
     return { idRoom: user.room, yet: "yet", have: null }
 }
+const outChat = ({ id, len }) => {
 
-module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup };
+}
+module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup, outChat };
