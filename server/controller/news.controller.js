@@ -75,25 +75,16 @@ exports.viewBlog = async (req, res) => {
             return tenA
         }
         switch (value) {
-            case 0:
-                return await fnc(1, 1, 0)
-            case 1:
-                return await fnc(2, 1, 1)
-            case 2:
-                return await fnc(3, 1, 2)
-            case 3:
-                return await fnc(4, 1, 3)
-            case 4:
-                return await fnc(5, 1, 4)
-            case 5:
-                return await fnc(6, 1, 5)
-            case 6:
-                return await fnc(7, 1, 6)
+            case 0: return await fnc(1, 1, 0)
+            case 1: return await fnc(2, 1, 1)
+            case 2: return await fnc(3, 1, 2)
+            case 3: return await fnc(4, 1, 3)
+            case 4: return await fnc(5, 1, 4)
+            case 5: return await fnc(6, 1, 5)
+            case 6: return await fnc(7, 1, 6)
             default:
                 let e = await Blog.find({}, null).exec()
-                e.sort((a, b) => {
-                    return b.likes - a.likes
-                })
+                e.sort((a, b) => { return b.likes - a.likes })
                 return e.slice(Number(start), Number(end))
         }
     }
@@ -133,11 +124,9 @@ exports.viewBlog = async (req, res) => {
                 }
                 let arr = await nodeCache.get(id) || ""
                 arr.length === 0 ? arr = arr : arr = arr.split(",")
-
                 for await (let value of commentTop) {
                     arr.indexOf(value.id) > -1 ? fnc(true, value) : fnc(false, value)
                 }
-
                 isLiked > -1 ? likeFnc(true, value) : likeFnc(false, value)
             }
             return res.json({
@@ -145,26 +134,17 @@ exports.viewBlog = async (req, res) => {
             })
         } else {
             //if in last 2 hours does not have any new post then push more to get
-            if (ed > 8) {
-                return res.json({
-                    end: "uh"
-                })
-            } else await ret(ed + 1)
+            if (ed > 8) return res.json({ end: "uh" })
+            else await ret(ed + 1)
         }
     }
-    if (0 <= start < 10) {
-        return await ret(0)
-    } else if (10 <= start < 20) {
-        return await ret(1)
-    } else if (20 <= start < 30) {
-        return await ret(2)
-    } else if (30 <= start < 40) {
-        return await ret(3)
-    } else if (40 <= start < 50) {
-        return await ret(4)
-    } else if (50 <= start < 60) {
-        return await ret(5)
-    }
+    if (0 <= start < 10) return await ret(0)
+    else if (10 <= start < 20) return await ret(1)
+    else if (20 <= start < 30) return await ret(2)
+    else if (30 <= start < 40) return await ret(3)
+    else if (40 <= start < 50) return await ret(4)
+    else if (50 <= start < 60) return await ret(5)
+
 }
 exports.viewOne = async (req, res) => {
     const { id, user } = req.query

@@ -18,16 +18,16 @@ function ViewOneBlog(props) {
     const [data, setData] = useState(null)
     let socket = socketApp.getSocket()
 
-    let arr = props.location.pathname.split("/")
-
     useEffect(() => {
+        let arr = props.location.pathname.split("/")
         axios.get("http://localhost:2704/api/news/post?" + arr[2] + "&user=" + id)
             .then(value => {
                 setData(value.data)
             }).catch(err => {
                 console.log(err)
             })
-    }, [arr, id])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id])
 
     const Slideshow = () => {
         const zoomInProperties = {
@@ -72,15 +72,16 @@ function ViewOneBlog(props) {
                             <span>&#8942;</span>
                         </IconButton>
                         <div className="content_div">
-                            <img alt="this is your avatar" src="/demo.jpeg"></img>
-                            <span>{data.time}</span>
+                            <div>
+                                <img alt="this is your avatar" src="/demo.jpeg"></img>
+                                <span>{data.time}</span>
+                            </div>
                             {
                                 data.text.map(function (value, i) {
                                     return <p key={i}>{value}</p>
                                 })
                             }
                         </div>
-
                         <div className="extension_blog">
                             <LikePost props={{ value: data, i: "1", className: "ex night", socket, id }} />
                             <div className="ex night">

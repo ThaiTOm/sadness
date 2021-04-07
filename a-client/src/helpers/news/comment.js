@@ -53,7 +53,6 @@ function Comment(props) {
             </div>
         }
     </div>
-
     useEffect(() => {
         axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
             .then(async res => {
@@ -104,7 +103,7 @@ function Comment(props) {
                                             return <p key={index}>{data}</p>
                                         })
                                     }
-                                    <LikeComment props={{ data: vari, i, value: value.idBlog }} />
+                                    <LikeComment props={{ data: vari, i, value: value.idBlog, idUser: id }} />
                                 </div>
                             </div>
 

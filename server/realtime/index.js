@@ -6,6 +6,7 @@ const date = require("date-and-time")
 
 module.exports = {
     index: function (io, socket) {
+        console.log(socket.id)
         socket.on('joinChat', async ({ id, len, ipOfUser }, callback) => {
             const { yet, have, idRoom } = await addUser({ id, len, ipOfUser });
             if (yet) callback("error")
@@ -80,6 +81,7 @@ module.exports = {
         })
         socket.on("like", async ({ value, id }, callback) => {
             const { error, message, user, type, number } = await likeBlog({ value, id })
+            console.log(user, type)
             if (error) {
                 return callback("error")
             } else if (message) {

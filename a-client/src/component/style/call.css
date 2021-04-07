@@ -1,48 +1,48 @@
 .call_div_container {
-    width: 25%;
-    height: 100%;
-    border-right: 1px solid rgba(248, 248, 255, 0.322);
-    overflow-y: scroll;
+  width: 25%;
+  height: 100%;
+  border-right: 1px solid rgba(248, 248, 255, 0.322);
+  overflow-y: scroll;
 }
 
 .main_mic {
-    border-top: 1px solid rgba(248, 248, 255, 0.322);
-    width: 100%;
-    padding: 5px 0;
-    height: 50%
+  border-top: 1px solid rgba(248, 248, 255, 0.322);
+  width: 100%;
+  padding: 5px 0;
+  height: 50%;
 }
 
 .main_mic p {
-    text-align: center;
-    color: whitesmoke
+  text-align: center;
+  color: whitesmoke;
 }
 
 .user_device img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-right: 20px;
-    margin-left: 10px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 20px;
+  margin-left: 10px;
 }
 
 .user_device {
-    margin-bottom: 10px;
-    display: flex;
-    justify-items: center;
-    align-items: center;
+  margin-bottom: 10px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
 }
 
 .user_device .icon_device svg {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .user_device .MuiSvgIcon-root {
-    font-size: 1.7rem;
+  font-size: 1.7rem;
 }
-         /* for navbar right */
-.active_title{
-    background-color: rgba(255, 255, 240, 0.233);
-    border-left: 4px solid rgb(90, 189, 228)
+/* for navbar right */
+.active_title {
+  background-color: rgba(255, 255, 240, 0.233);
+  border-left: 4px solid hsla(39, 100%, 71%, 1);
 }
 
 /* customize spinning waiting */
@@ -108,24 +108,24 @@
     transform-origin: 100% 0;
   }
 }
-.contact_contain_text .count{
+.contact_contain_text .count {
   margin-left: 10px;
   font-size: 12px;
   padding: 2px 5px 2px 2px;
-  border-radius:40%;
+  border-radius: 40%;
   background-color: #45423c;
-  color: white
+  color: white;
 }
-.dot{
+.dot {
   padding: 5px;
   height: 5px;
   width: 5px;
   border-radius: 10px;
-  background-color: rgba(1, 255, 153, 0.8);
+  background-color: #bb86fc;
 }
 
-.contact_contain_text .setting_chat{
-  background-color:rgba(212, 207, 207, 1);
+.contact_contain_text .setting_chat {
+  background-color: rgba(212, 207, 207, 1);
   position: absolute;
   color: black;
   border-radius: 50%;
@@ -134,47 +134,48 @@
   transform: translate(-10%, 30%);
   display: none;
 }
-.contact_container:hover{
-  background-color: rgba(245, 245, 245, 0.301) 
+.contact_container:hover {
+  background-color: rgba(245, 245, 245, 0.301);
 }
-.setting_chat .MuiButton-root{
+.setting_chat .MuiButton-root {
   padding: 0;
   min-width: 30px;
 }
-.contact_contain_text:hover .setting_chat{
-  display:block;
+.contact_contain_text:hover .setting_chat {
+  display: block;
 }
-.setting_chat_modal{
+.setting_chat_modal {
   min-height: 120px;
   height: 300px;
 }
-.setting_chat_modal .MuiPaper-root{
+.setting_chat_modal .MuiPaper-root {
   min-width: 270px;
+  background-color: #333333;
+  color: white;
 }
-.setting_chat_modal .MuiPaper-root .MuiMenuItem-root{
+.setting_chat_modal .MuiPaper-root .MuiMenuItem-root {
   margin-bottom: 10px;
   padding: 10px;
 }
-.setting_chat_modal .MuiPaper-root .MuiMenuItem-root img{
+.setting_chat_modal .MuiPaper-root .MuiMenuItem-root img {
   padding-right: 10px;
-
 }
-.comment_blog{
+.comment_blog {
   position: relative;
   margin-bottom: 10px;
   cursor: pointer;
   /* border-radius: 10px */
 }
-.comment_blog {  
+.comment_blog {
   border-left: 2px solid magenta;
 }
-.comment_blog:hover{
+.comment_blog:hover {
   background-color: rgba(245, 245, 245, 0.171);
 }
-.comment_blog img{
+.comment_blog img {
   padding-left: 10px;
 }
- /* accordion for mic chat */
+/* accordion for mic chat */
 .accordion {
   cursor: pointer;
   text-align: left;
@@ -186,7 +187,7 @@
 }
 
 .accordion:after {
-  content: '\002B';
+  content: "\002B";
   color: white;
   font-weight: bold;
   float: right;
@@ -195,5 +196,9 @@
 .panel {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-out
+  transition: max-height 0.2s ease-out;
+}
+.menuMessage .back_button {
+  margin-right: auto;
+  padding: 0 0 0 10px;
 }

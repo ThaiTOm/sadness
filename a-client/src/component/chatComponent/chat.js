@@ -4,6 +4,7 @@ import { getCookie, decryptWithAES } from '../../helpers/auth';
 import axios from "axios"
 import socketApp from '../../socket';
 import { messageLiRender, messageLiImageRender, executeScroll, Spinning, FormSend } from '../../helpers/message/message';
+import { toast, ToastContainer } from "react-toastify"
 
 function Chat({ handleRoom }) {
     let socket = socketApp.getSocket();
@@ -46,14 +47,14 @@ function Chat({ handleRoom }) {
     //Fetch data to recive the idRoom
     useEffect(() => {
         const source = axios.CancelToken.source()
-        const fetchData = async () => {
-            try {
-                await axios.post("http://localhost:2704/api/msgC/getIdRoom", { id })
-                    .then(res => {
-                        SetLen(res.data.len)
-                    })
-            } catch (error) {
-            }
+        const fetchData = () => {
+            axios.post("http://localhost:2704/api/msgC/getIdRoom", { id })
+                .then(res => {
+                    if (res.data.len >= 0) SetLen(res.data.len)
+                    else toast.error("Có lỗi đã xảy ra bạn hãy đăng nhập lại hoặc thử lại sau")
+                }).catch(err => {
+                    toast.error("Có lỗi đã xảy ra bạn hãy đăng nhập lại hoặc thử lại sau")
+                })
         }
         fetchData()
         return () => {
@@ -65,7 +66,6 @@ function Chat({ handleRoom }) {
         socket.on("message", msg => {
             if (msg.roomId) {
                 // If we have a couple together than we start to chat
-                console.log(msg)
                 setWait(false)
                 setFinish(true)
                 setidRoom(msg.roomId)
@@ -103,6 +103,7 @@ function Chat({ handleRoom }) {
     }
     return (
         <div className="message_container">
+            <ToastContainer />
             <div className="container_button" style={finish === true ? { display: "none" } : {}}>
                 <div className="part_1">
                     <button
@@ -134,7 +135,6 @@ function Chat({ handleRoom }) {
                         </span>
                     </div>
                 </div>
-
             </div>
             <div className="message_container_div" style={finish === false ? { display: "none" } : { display: "block" }}>
                 <ul>

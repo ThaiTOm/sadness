@@ -16,6 +16,8 @@ const responseTime = require("response-time");
 // const { User } = require("./models/user.models");
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
+const { Message } = require("./models/message.model");
+const { User } = require("./models/user.models");
 const server = http.createServer(app);
 
 require("dotenv").config({
@@ -42,10 +44,18 @@ io.on('connection', (socket) => realTimeD.index(io, socket));
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
-app.get("/", (req, res) => {
-    let now = Date.now()
-    cm.flush()
-    return res.json(now - 3600000)
+app.get("/load/:num", (req, res) => {
+    const { num } = req.params
+    let arr = []
+    for (i = 0; i < parseInt(num); i++) {
+        Message.findByIdAndUpdate({ "_id": "6067dad2cdcc3315c25f12ee0a" }, { $push: { "data": "asd" } }, (err, result) => {
+            User.findById({ "_id": "6067dad2cdcc3315c25f12ee" }, (err, resuo) => {
+
+            })
+        })
+    }
+
+    return res.json(arr)
 })
 app.use((req, res, next) => {
     res.status(404).json({

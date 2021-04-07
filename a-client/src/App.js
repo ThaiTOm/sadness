@@ -22,7 +22,7 @@ function App() {
   let socket = socketApp.getSocket()
   const id = getCookie().token
   const [value, setValue] = useState([]);
-  const [title, setTitle] = useState(null)
+  const [title, setTitle] = useState()
   const [listMessage, setListMessage] = useState(null)
   const notifications = useMemo(() => ({ value, setValue }), [value, setValue]);
   const messageList = useMemo(() => ({ listMessage, setListMessage }), [listMessage, setListMessage])
@@ -56,7 +56,6 @@ function App() {
     id && socket.emit("join", { id })
     socket.on("activities", msg => toast.info(msg.number + msg.value))
   }, [socket, id])
-
   // fetch data
   useEffect(() => {
     axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
@@ -86,7 +85,7 @@ function App() {
   }, [listMessage])
 
   useEffect(() => {
-    document.title = title
+    // document.title = title
   }, [title])
   return (
     <BrowserRouter >

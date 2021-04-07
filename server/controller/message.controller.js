@@ -3,13 +3,14 @@ const { Message } = require("../models/message.model");
 const { cm } = require("../nodeCache");
 
 
-exports.getIdRooms = async (req, res) => {
+exports.getIdRooms = (req, res) => {
     const { id } = req.body;
-    let rooms = await User.findById({ "_id": id }).exec() || []
-    return res.json({
-        len: rooms.messageList.length
+    return User.findById({ "_id": id }, (err, result) => {
+        if (err || !result) return res.json({})
+        else return res.json({ len: result.messageList.length })
     })
 }
+
 exports.listContact = (req, res) => {
     //id is idRoom
     const { id, start, end } = req.body
@@ -21,9 +22,8 @@ exports.listContact = (req, res) => {
         }
         else {
             const { blockN } = result || 0
-            if (blockN > 3) {
-                res.json({ message: "Bạn đã bị chặn" })
-            } else {
+            if (blockN > 3) return res.json({ message: "Bạn đã bị chặn" })
+            else {
                 // ru: String of all room id the user in
                 let ru = await User.findById({ "_id": id }, "messageList").exec()
                 ru = ru.messageList
@@ -52,7 +52,7 @@ exports.listContact = (req, res) => {
                         }
                     }
                 }
-                res.json(arr)
+                return res.json(arr)
             }
         }
     })
@@ -76,40 +76,18 @@ exports.sendContactRoom = async (req, res) => {
 exports.setBlock = async (req, res) => {
     const { idSend } = req.body
     const arr = req.body.id.split(";")
-    if (arr[1] === idSend) {
-        cm.add(idSend + "blackList", arr[2])
+    let fnc = (user) => {
+        cm.add(idSend + "blackList", user)
             .then()
             .catch(() => {
-                cm.append(idSend + "blackList", arr[2])
+                cm.append(idSend + "blackList", user)
             })
-        cm.add(arr[2] + "blackList", idSend)
+        cm.add(user + "blackList", idSend)
             .then()
             .catch(() => {
-                cm.append(arr[2] + "blackList", idSend)
+                cm.append(user + "blackList", idSend)
             })
-        User.findOneAndUpdate({ _id: arr[2] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
-            if (err) {
-                return res.json({
-                    error: "Đã có lỗi xảy ra bạn vui lòng thử lại"
-                })
-            } else {
-                return res.json({
-                    message: "."
-                })
-            }
-        })
-    } else {
-        cm.add(idSend + "blackList", arr[1])
-            .then()
-            .catch(() => {
-                cm.append(idSend + "blackList", arr[1])
-            })
-        cm.add(arr[1] + "blackList", idSend)
-            .then()
-            .catch(() => {
-                cm.append(arr[1] + "blackList", idSend)
-            })
-        User.findOneAndUpdate({ _id: arr[1] }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
+        User.findOneAndUpdate({ _id: user }, { $inc: { 'blockN': 1 } }).exec((err, result) => {
             if (err) {
                 return res.json({
                     error: "Đã có lỗi xảy ra bạn vui lòng thử lại"
@@ -121,5 +99,23 @@ exports.setBlock = async (req, res) => {
             }
         })
     }
-
+    if (arr[1] === idSend) return fnc(arr[2])
+    else return fnc(arr[1])
+}
+exports.outMessage = async (req, res) => {
+    const { id, idRoom, users } = req.body
+    let fnc = (res) => {
+        Message.findByIdAndDelete({ "_id": idRoom }, function (err, va) {
+            if (err) return res.json({ data: "Đã có lỗi xảy ra bạn hãy thử lại sau" })
+            else {
+                for (let value of va.user) {
+                    User.findByIdAndUpdate({ "_id": value }, { $pull: { "messageList": idRoom } }, (err, data) => {
+                        if (err) return res.json({ data: "Đã có lỗi xảy ra bạn hãy thử lại sau" })
+                    })
+                }
+                return res.json({ data: "Yêu cầu của bạn đã được thực hiện" })
+            }
+        })
+    }
+    if (users[id]) return fnc(res)
 }

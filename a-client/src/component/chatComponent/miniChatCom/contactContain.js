@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { decryptWithAES, getCookie } from '../../../helpers/auth';
 import classNames from "classnames";
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Modal, Menu, MenuItem, Button } from '@material-ui/core';
+import axios from "axios"
+import { toast } from "react-toastify"
 
 // This function is use for render list of contact
-
 function ContactContain({ onClick, message, users, idRoom, target, nread, socket }) {
     // const [room, setRoom] = useState(idRoom)
     // msg == new message send by real time, message == old message 
@@ -15,6 +14,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     const [value, setValue] = useState("");
     const [count, setCount] = useState(nread)
     const [anchorEl, setAnchorEl] = useState(null);
+    const [outMessage, setOutMessage] = useState(false)
     // the user in the room is online or not
     const [onl, setOnl] = useState(null)
     // lu last user, clu contain last user and message
@@ -27,24 +27,40 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     const handleClose = () => {
         setAnchorEl(null);
     };
+    // handle close and open out meessge
+    const handleOpenOut = () => {
+        setOutMessage(true);
+        handleClose()
+    };
+
+    const handleCloseOut = () => {
+        setOutMessage(false);
+    };
 
     let sliceMess = (a, user, value) => {
-        if (value.seen === "false") {
-            setRead(true)
-        }
+        if (value.seen === "false") setRead(true)
         if (a.length > 0) {
             let mess = a.length > 10 ? a.slice(0, 10) + "....." : a
             setValue(user + mess)
         }
-        else {
-            setValue(user + "đã gửi hình ảnh")
-        }
+        else setValue(user + "đã gửi hình ảnh")
     }
 
     const validateImage = (value) => {
         let a = value.data[0] ? decryptWithAES(value.data[0]) : value.data.data[0] ? decryptWithAES(value.data.data[0]) : "đã gửi hình ảnh"
         if (value.id === id) sliceMess(a, "Bạn: ", value)
         else sliceMess(a, "", value)
+    }
+    const HandleOutMessage = () => {
+        axios.post("http://localhost:2704/api/msgC/outMessage", { id, idRoom, users })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log("error")
+            })
+        toast.success("Yêu cầu của bạn đã được thực hiện")
+        handleCloseOut()
     }
     // if position change call this
     // else validate this
@@ -93,20 +109,42 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                         className="setting_chat_modal"
                         id="simple-menu"
                         anchorEl={anchorEl}
-                        keepMounted
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
+                        keepMounted
                     >
-                        <MenuItem onClick={handleClose}>
-                            <img alt="out_image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAoklEQVRIie2VQQ6CMBBFn56GhexceQKI9zacgxKNrPAEdVPATKShzLBA+clsOvn/tzPTFnYk4go0gF8YDihjBk4h3kf9KXgQBj7xxFMYdI9GgpPQGlTAK4WQUutb4JyAp8iZGHRB/JuJiYEHWiAP3Ay4LzG4xAgCZ2kwp8lylFXQlujBlpq8+ph6xosm1wf83lvUGGi6WLJE9yfUQGGwyX/CG5rJq/ywf6OxAAAAAElFTkSuQmCC" />
+                        <MenuItem>
+                            <span onClick={handleOpenOut}>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABHklEQVRIidWVMUpDQRRFz1VThCxCsNDKHegOJIJaRMEqrYtwHxZiGi1SiggpRIlbEGNvYy8aEK+FCJ/xj3/m+1Pkdm/evHtm5s0wMO9SOGC7BewCy5Gad2Ak6SGbZrtl+97VmtrergPoJZj/KGkHC0G8mrGetTqAMM6prT/pL9lu216ZGQDoAxPbe7MCnAJj4ML2QeMASa/AFnAHDELIUkX9ETCJJW2PCmEbWATObD9LuoVmjihdto8zHpoLdR3bN7Y/bO8XPZu4ph3gEtgEDiWdF/NVPUhRH9gAepKGYbIJwAlwLempLPlvgKQ3oNQcfvfgM8M7aW4IiK6kRNH3EZW/P5xxwg2d2u6meMa+zB1gnfIevQBXkh6zdzCX+gK5swNxrVtbyQAAAABJRU5ErkJggg==" />
                             Thoát cuộc trò chuyện
+                            </span>
+                            <Modal
+                                aria-labelledby="simple-modal-title"
+                                aria-describedby="simple-modal-description"
+                                open={outMessage}
+                            >
+                                <div className="contain_block">
+                                    <div className="head">
+                                        <button onClick={handleCloseOut}>&#10005;</button>
+                                    </div>
+                                    <div className="middle">
+                                        <p> Bạn sẽ không thể nhận và trả lời tin nhắn của người này và đoạn tin nhắn này sẽ bị xóa đi ở cả 2 phía </p>
+                                    </div>
+                                    <div className="bottom">
+                                        <button onClick={HandleOutMessage}>Xác nhận</button>
+                                        <button
+                                            onClick={handleCloseOut}
+                                            className="cancel">Hủy bỏ</button>
+                                    </div>
+                                </div>
+                            </Modal>
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <img alt="delete_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAkklEQVRIie2UUQrDIBBEX3OafNhD1Fwsn72fP71Biz2E+dnARoUWbWqLGViQUWcWhxV6wQyEqK7vXDxluFDZzEZzqBTrALkMoDyHRG/3DH7C4AZcgIfinsAEuFJjPVBWOAN4KSOcjc4WGWhBE639JwxWk7PaH4F75lyCZpP81SfaPWQnQrpbL5x7ZXB8Fe0N/h8LhlVEflv4ChYAAAAASUVORK5CYII=" />
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABoElEQVRIie2Vv2sTYRjHP89zkmTRRadOHqEUXEJyGTNJBynFzbgVcSgI7k4u3XRytujgZvB/cDlx6F1CFreIBTta/FElUO55HLwLSaBJ63XMd3q/75f7ft73veNeYYF6vV5Qr9dfuPsOcG0u/iki70aj0W63283O6riyCBCG4QN3fwyMgc9z8Zq7PwzD8APw+lyAwWBw08yuF97MtvLhUxF5P/fsbXd/rqpbaZoOi0lV/dZsNr8UXgDiOL5aq9XuAy+LuRJyYHc8Hr/tdDq/FKBara4B+5dQTt6xn3f+O6IgCI7N7NkllE8UBMFxQZuo3+/fMrOdMsWq+qbVan0q/MxLzrJsXUSelAFkWfYRmAC0TNl5tAywJyJtYAigqpuquplnwzzb+2+Aux9GUZQCJwBmNjSz4ps/iaIodffDMjsorRVgBVgBllyZwKMkSe4AGwAi8grA3QE2kiTpuXt4EcCPaZP/a9qFd/e7U/EN4J7I7B3l7t+n/cwRVSqVA+Bo0YqW6KuqHpwJaDQav81sG4iB0wsUnwKxqm632+0/08FfUMOI+5EjNxEAAAAASUVORK5CYII=" />
                             Xóa cuộc trò chuyện
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <img alt="seen_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA1ElEQVRIie3VOwrCQBRA0SvuwJW4AkvRUhHtVCzE1v8fwc4fbsSFuAIXYqNoYiycwCNFJo4TbHLbvJw3DIFA0h/LAal0THgbOAGZOPAW4AIeMLGNNwU+tY03BD6zjdeAp8LntvGqwBe28YrAl2GDWQNcnjwUXwMOUP8CLwMPha90w2M16PD5EnSVBL6JeqKResHVLCkCdzW7jYr7DTVLCgLffYv7DRTwAjoB/Kae7U1xv35gSV7gh19xP3ldxneuq6tgDziaImH/gzNwBS5Az3RBkrY3LltA/9XJVDYAAAAASUVORK5CYII=" />
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABmJLR0QA/wD/AP+gvaeTAAABCklEQVRIie3UPWqEUBSG4dcwjYW4hoDYWWnhVK5jJmtJl61MNuAa/CsUFHQJWlhaWpxUBkfQyRWnCMnXXQ58zz2IF/6jEG1+yPP8Q0QuB/R+ep73Ph1O84mIXIHXA5A34Bt5WQw1jsldzxJ5Sn4HIiJ0XYeIPAcREeI4JgxDiqI4HpmAuq7RNA3TNPchTdNQVdVDIAgCLMta7TmtDYZhIIoiRIRxHHFddxWwbXvrruubGIaB7/sA5HlOlmW7gM1NABzHASBJEsqypG1b+r5XAjY3mUPn8xlgFwAPNplDAGmaKgM/RibIsix0XVcCQPE/2QMoI3uzRNYfILXc9Sy/yQ24HoDcDuj4q/kCxCxyJ7UVsuwAAAAASUVORK5CYII=" />
                             Đánh dấu là đã đọc
                         </MenuItem>
                     </Menu>
@@ -121,6 +159,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                 <img onClick={() => onClick(idRoom, users, id)} alt="avatar" src="./demo.jpeg" />
                 {onl === true ? <span className="dot"></span> : console.log()}
             </div>
+
         </div >
     )
 }

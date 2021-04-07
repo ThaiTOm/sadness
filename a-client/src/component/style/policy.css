@@ -1,80 +1,80 @@
-.policy_div{
-    width: 100%;
-    height: 100%;
+.policy_div {
+  width: 100%;
+  height: 100%;
 
-    color: white;
+  color: white;
 }
-.policy_div .navbar_auth{
-    height: 73px;
+.policy_div .navbar_auth {
+  height: 73px;
 }
-.policy_div .navbar_right{
-    height: 90%;
-    position:fixed;
-    margin-top: auto
+.policy_div .navbar_right {
+  height: 90%;
+  position: fixed;
+  margin-top: auto;
 }
-.policy_div .policy{
-    width: 100%;
-    height: max-content;
-    background-color: #181818;
-    padding-top:69px;
+.policy_div .policy {
+  width: 100%;
+  height: max-content;
+  background-color: #181818;
+  padding-top: 69px;
 }
-.policy_div .policy .content{
-    padding: 20px 200px
+.policy_div .policy .content {
+  padding: 20px 200px;
 }
-.policy_div .policy p{
-    margin: 1em 0px;
+.policy_div .policy p {
+  margin: 1em 0px;
 }
-.policy_div .policy h3{
-    font-size: 1.5rem;
-    color: #4A7D93;
+.policy_div .policy h3 {
+  font-size: 1.5rem;
+  color: #4a7d93;
 }
-.policy_div .policy h1{
-    text-align: center;
-    color: #CE5D40
+.policy_div .policy h1 {
+  text-align: center;
+  color: #ce5d40;
 }
-.navbar_modal{
-    color: rgba(255, 255, 255, 0.692)
+.navbar_modal {
+  color: rgba(255, 255, 255, 0.692);
 }
-.navbar_modal span{
-    font-size: 1.4rem;
-    font-weight: 600;
+.navbar_modal span {
+  font-size: 1.4rem;
+  font-weight: 600;
 }
-.navbar_modal form{
-    background-color: #242526;
-    width: 45%;
-    height: 90%;
-    border-radius: 10px;
-    position: relative
+.navbar_modal form {
+  background-color: #242526;
+  width: 45%;
+  height: 90%;
+  border-radius: 10px;
+  position: relative;
 }
-.navbar_modal_header{
-    margin-top: 10px;
-    display:flex;
-    border-bottom: 1px solid white
+.navbar_modal_header {
+  margin-top: 10px;
+  display: flex;
+  border-bottom: 1px solid white;
 }
-.navbar_modal_header .MuiButtonBase-root{
-    margin-left: auto;
-    margin-right: 10px;
-    font-size: 30px;
-    color: white
+.navbar_modal_header .MuiButtonBase-root {
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 30px;
+  color: white;
 }
-.navbar_modal_header p{
-    font-size: 25px;
-    margin-left: 70px;
+.navbar_modal_header p {
+  font-size: 25px;
+  margin-left: 70px;
 }
-.navbar_modal_body{
-    margin-top: 20px;
-    padding: 0 30px;
+.navbar_modal_body {
+  margin-top: 20px;
+  padding: 0 30px;
 }
-.navbar_modal_body section{
-    margin-top: 20px;
+.navbar_modal_body section {
+  margin-top: 20px;
 }
-.navbar_modal_body #txtSearch{
-    width:100%;
-    margin: 20px 0;
+.navbar_modal_body #txtSearch {
+  width: 100%;
+  margin: 20px 0;
 }
-.navbar_modal form #MuiIconButton-root{
-    position:absolute;
-    right: 10px;
-    bottom: 10px;
-    color: white
+.navbar_modal form #MuiIconButton-root {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: white;
 }

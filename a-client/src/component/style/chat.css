@@ -1,146 +1,143 @@
-#simple_menu_emoji .MuiPaper-root{    
-    max-height: 300px;
-    max-width: 1000px;
+#simple_menu_emoji .MuiPaper-root {
+  max-height: 300px;
+  max-width: 1000px;
 }
-#simple_menu_emoji .MuiPopover-paper{
-    min-width: 300px;
-    max-width: 400px;
+#simple_menu_emoji .MuiPopover-paper {
+  min-width: 300px;
+  max-width: 400px;
 }
-#simple_menu_emoji .MuiList-root{
-    word-break: break-all;
-    padding-right: 0 !important;
-    padding-left: 15px;
-    width: 100% !important;
+#simple_menu_emoji .MuiList-root {
+  word-break: break-all;
+  padding-right: 0 !important;
+  padding-left: 15px;
+  width: 100% !important;
 }
-#simple_menu_emoji .MuiList-root span{
-    padding-right: 5px;
-    cursor:pointer
+#simple_menu_emoji .MuiList-root span {
+  padding-right: 5px;
+  cursor: pointer;
 }
-#group_icon{
-    color: white;
-    height: max-content;
-    position: absolute;
-    right:5px
+#group_icon {
+  color: white;
+  height: max-content;
+  position: absolute;
+  right: 5px;
 }
 /*****************************************8* Message accordion  ***************************/
-.accordion_div{
-    position: fixed;
-    bottom:0;
-    background-color: #18191a;
-    width:max-content;
-    z-index: 2;
-    right: 6%;
-    border-radius: 15px 15px 0 0;
-    box-shadow: 1px 1px 5px white;
-
+.accordion_div {
+  position: fixed;
+  bottom: 0;
+  background-color: #18191a;
+  width: max-content;
+  z-index: 2;
+  right: 6%;
+  border-radius: 15px 15px 0 0;
+  box-shadow: 1px 1px 5px white;
 }
-.accordion_header{
-    width: 350px;
-    border-radius: 15px 15px 0 0;
-    display: flex;
-    background-color:#242323
-
+.accordion_header {
+  width: 350px;
+  border-radius: 15px 15px 0 0;
+  display: flex;
+  background-color: #242323;
 }
-.accordion_div button span{
-    color: white;
+.accordion_div button span {
+  color: white;
 }
-.accordion_div .accordion_message{
-    border-radius: 15px 15px 0 0;
-    width: 80%;
-    margin-left:auto;
-    cursor:pointer;
+.accordion_div .accordion_message {
+  border-radius: 15px 15px 0 0;
+  width: 80%;
+  margin-left: auto;
+  cursor: pointer;
 }
-.accordion_div .accordion_message .MuiIconButton-root:hover{
-    border-radius: 10px 10px 0 0 ;
-    background-color:#242323;
+.accordion_div .accordion_message .MuiIconButton-root:hover {
+  border-radius: 10px 10px 0 0;
+  background-color: #242323;
 }
-.accordion_div .accordion_message .MuiIconButton-root{
-    border-radius:10px 10px 0 0 
+.accordion_div .accordion_message .MuiIconButton-root {
+  border-radius: 10px 10px 0 0;
 }
-.accordion_div .accordion_data{
-    display: none;
-    width: 350px;
-    height: 400px;
-    transition: 0.2s ease-out;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.accordion_div .accordion_data {
+  display: none;
+  width: 350px;
+  height: 400px;
+  transition: 0.2s ease-out;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-.accordion_message button{
-    width: 100%;
+.accordion_message button {
+  width: 100%;
 }
-.accordion_message  .MuiIconButton-label{
-    width: 100%;
-
+.accordion_message .MuiIconButton-label {
+  width: 100%;
 }
-.accordion_message  .MuiIconButton-label  .sympol{
-    margin-left: auto
+.accordion_message .MuiIconButton-label .sympol {
+  margin-left: auto;
 }
-.accordion_data ul{
-    height: 81%;
-    overflow-y:scroll
+.accordion_data ul {
+  height: 81%;
+  overflow-y: scroll;
 }
-.accordion_data .formMessage{
-    width: 95%;
+.accordion_data .formMessage {
+  width: 95%;
 }
 .tooltip {
-    position: relative;
-  }
-#tooltip_post::after{
-    margin-left: -100px;
-    right: 10%;
-    left: initial
+  position: relative;
 }
-#tooltip_post{
-    margin-left: -100px;
-    font-size: 1rem
+#tooltip_post::after {
+  margin-left: -100px;
+  right: 10%;
+  left: initial;
+}
+#tooltip_post {
+  margin-left: -100px;
+  font-size: 1rem;
 }
 .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 99;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 1rem;
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 99;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 1rem;
 }
-.menuMessage .tooltip .tooltiptext{
-    top: 100%;
-    left: 50%;
-    bottom:0;
-    height: max-content;
-    width: 90px;
+.menuMessage .tooltip .tooltiptext {
+  top: 100%;
+  left: 50%;
+  bottom: 0;
+  height: max-content;
+  width: 90px;
 }
-.menuMessage .tooltip .tooltiptext::after{
-    content: " ";
+.menuMessage .tooltip .tooltiptext::after {
+  content: " ";
   position: absolute;
   bottom: 100%;
   left: 50%;
-  top:initial;
+  top: initial;
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent #333333 transparent;
 }
 .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
 }
-  
+
 .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
