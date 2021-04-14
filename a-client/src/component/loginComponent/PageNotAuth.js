@@ -58,37 +58,6 @@ function PageNotAuth() {
                         <p>
                             <a href="/"> Sadnessly </a>
                         </p>
-                        <span aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                            &#9776;
-                    </span>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>
-                                <a href="/">
-                                    <AccountCircleIcon />
-                                    <p>Profile Of me</p>
-                                </a>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <a href="/">
-                                    <AccountCircleIcon />
-                                    <p>What do you think</p>
-                                </a>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <a href="/">
-                                    <AccountCircleIcon />
-                                    <p>Profile</p>
-                                </a>
-                            </MenuItem>
-                        </Menu>
-
-
                     </div>
                     <div className="text-navbar">
                         <p className="text-navbar-first">

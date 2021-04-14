@@ -103,7 +103,7 @@ function Comment(props) {
                                             return <p key={index}>{data}</p>
                                         })
                                     }
-                                    <LikeComment props={{ data: vari, i, value: value.idBlog, idUser: id }} />
+                                    <LikeComment props={{ data: vari, i, value: value.idBlog, idUser: id, socket }} />
                                 </div>
                             </div>
 

@@ -8,7 +8,6 @@ import Comment from "../../../helpers/news/comment"
 import { Link } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import ShareBlog from "../../../helpers/news/shareBlog"
-import { HeaderPage } from '../../../helpers/news/news';
 import { IconButton } from '@material-ui/core';
 import socketApp from '../../../socket';
 
@@ -53,7 +52,6 @@ function ViewOneBlog(props) {
 
     return (
         <div className="post_viewing">
-            <HeaderPage />
             <Link className="go_to_previous" to="/news">
                 <ArrowBackIosOutlinedIcon />
                 <span>

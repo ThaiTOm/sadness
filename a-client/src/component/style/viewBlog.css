@@ -48,14 +48,14 @@
 
 .activities_blog {
   display: inline-flex;
-  width: 102%;
+  width: 100%;
 }
 
 .activities_blog .inner {
   list-style: none;
-  flex: 0 0 31.333333%;
+  flex: 0 0 33.333333%;
   background-color: initial;
-  margin: 5px 11px 10px 0;
+  margin: 5px 0px 10px 0;
 }
 
 .activities_blog .list li {
@@ -100,11 +100,103 @@
   height: 50px;
 }
 
-.inner .like svg,
-.inner .list svg {
+.like svg,
+.list svg,
+.active_like svg {
   padding-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+.active_like svg path {
+  fill: #31e8ff;
+  stroke-width: 40;
+  stroke-dasharray: 1550;
+  stroke-dashoffset: 0;
 }
 
+.like svg path,
+.list svg path {
+  fill: transparent;
+  stroke-width: 40;
+  stroke-dasharray: 1550;
+  stroke-dashoffset: 0;
+}
+.like svg path {
+  stroke: #31e8ff;
+}
+.inner .comment svg,
+.inner .share svg {
+  padding-right: 10px;
+  width: 22px;
+  height: 22px;
+}
+.inner .comment svg path {
+  stroke-dasharray: 1900;
+  stroke: rgba(46, 229, 156, 0.897);
+}
+.inner .share svg path {
+  stroke-dasharray: 1900;
+  stroke: #eb8b38;
+}
+
+.inner .comment svg:hover path {
+  animation: animate-comment 1s linear forwards;
+}
+.like svg:hover path {
+  animation: animate-heart 1s linear forwards;
+}
+.inner .share svg:hover path {
+  animation: animate-share 1s linear forwards;
+}
+
+@keyframes animate-heart {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1550;
+  }
+  80% {
+    stroke-dashoffset: 3100;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 3100;
+    fill: #31e8ff;
+  }
+}
+@keyframes animate-comment {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1900;
+  }
+  80% {
+    stroke-dashoffset: 3800;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 3800;
+    fill: rgba(46, 229, 156, 0.897);
+  }
+}
+@keyframes animate-share {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1900;
+  }
+  80% {
+    stroke-dashoffset: 3800;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 3800;
+    fill: #eb8b38;
+  }
+}
 input[type="checkbox"] {
   display: none;
 }
@@ -330,10 +422,6 @@ input[type="checkbox"] {
   display: flex;
 }
 
-.share .list svg {
-  padding-right: 10px;
-}
-
 .post_viewing {
   display: flex;
   overflow-y: hidden;
@@ -414,16 +502,17 @@ input[type="checkbox"] {
 }
 
 #menu_main_page .MuiPaper-root {
-  background-color: #242526 !important;
-  left: initial !important;
-  right: 10px;
-  width: auto !important;
-  height: 500px;
+  background-color: #1b2530 !important;
+  width: 350px;
+  height: 550px;
+  left: 20px;
 }
-
+#menu_main_page .MuiMenu-list {
+  padding: 10px 20px;
+}
 #menuContainerMessage .MuiPaper-root {
   height: 300px;
-  background-color: #242526 !important;
+  background-color: #34495e !important;
   width: auto !important;
 }
 
@@ -509,25 +598,6 @@ input[type="checkbox"] {
 #share-menu .MuiMenu-list li {
   height: 50px;
   width: 200px;
-}
-
-.like svg:hover,
-.inner .list svg:hover {
-  filter: drop-shadow(3px 5px 5px rgba(46, 229, 157, 0.4));
-  transition: all 0.3s ease 0s;
-}
-
-.like svg,
-.night .like svg {
-  color: rgba(255, 255, 255, 0.822);
-}
-
-.comment svg {
-  color: rgba(46, 229, 156, 0.897);
-}
-
-.share svg {
-  color: rgba(182, 85, 206, 0.966);
 }
 
 .inner a {

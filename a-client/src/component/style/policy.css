@@ -4,9 +4,7 @@
 
   color: white;
 }
-.policy_div .navbar_auth {
-  height: 73px;
-}
+
 .policy_div .navbar_right {
   height: 90%;
   position: fixed;
@@ -16,10 +14,9 @@
   width: 100%;
   height: max-content;
   background-color: #181818;
-  padding-top: 69px;
 }
 .policy_div .policy .content {
-  padding: 20px 200px;
+  padding: 20px 23%;
 }
 .policy_div .policy p {
   margin: 1em 0px;

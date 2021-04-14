@@ -1,12 +1,10 @@
 import React from 'react'
-import { NavbarRight, HeaderPage } from '../../helpers/news/news'
+import { NavbarRight } from '../../helpers/news/news'
 import "../style/policy.css"
 
 function Policy() {
     return (
         <div className="policy_div">
-            <HeaderPage />
-
             <div className="policy">
                 <NavbarRight />
                 <div className="content">

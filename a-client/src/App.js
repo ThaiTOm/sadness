@@ -51,10 +51,34 @@ function App() {
     let arr = [...listMessage]
     socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
   }
-
+  let fncNotification = (arrNoti) => {
+    console.log(arrNoti)
+    socket.once("activities", async (msg) => {
+      // value is link to post 
+      toast.info(msg.number + msg.value)
+      let arr = {
+        type: msg.type,
+        value: msg.value,
+        number: msg.number
+      }
+      let i = 0
+      for await (let data of arrNoti) {
+        if (data.type === arr.type && data.value === arr.value) {
+          let old = [...value]
+          old.splice(i, 1)
+          old.unshift(data)
+          return setValue(old)
+        }
+        i++
+      }
+      setValue(a => [...a, arr])
+    })
+  }
+  useEffect(() => {
+    fncNotification(value)
+  }, [value])
   useEffect(() => {
     id && socket.emit("join", { id })
-    socket.on("activities", msg => toast.info(msg.number + msg.value))
   }, [socket, id])
   // fetch data
   useEffect(() => {

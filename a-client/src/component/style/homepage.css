@@ -8,7 +8,9 @@ body,
 .viewBlog,
 .forget_container,
 .container_button,
-.container {
+.MuiList-root,
+.container,
+.drag_file .icon {
   width: 100%;
   height: 100%;
 }
@@ -70,14 +72,14 @@ p {
 #btnSearch,
 .close_button.share span,
 .like,
-.share span {
+.share span,
+.active_like {
   cursor: pointer;
 }
 
 .navbar,
 .MuiMenu-list li a,
 .button-sign,
-.navbar_auth,
 .container,
 .messageLiOwn,
 .messageLiOther,
@@ -125,7 +127,8 @@ div.loaderBalls,
 .navbar_right ul li a div,
 .navbar_modal,
 .navbar_modal_header,
-.button-navbar {
+.button-navbar,
+.active_like {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -560,11 +563,6 @@ button {
   background: #b1d4e0;
 }
 
-#simple-menu .MuiMenu-list {
-  width: 100%;
-  height: 30%;
-}
-
 /* *********************************************************************** */
 
 /* ********************  Navbar for page that auth ******************* */
@@ -576,24 +574,9 @@ button {
   overflow-y: hidden;
 }
 
-.navbar_auth {
-  top: 0;
-  width: 100%;
-  position: fixed;
-  color: white;
-  background-color: #333333;
-  padding: 0 40px;
-  z-index: 1;
-}
-
-.navbar_auth #recal {
-  margin-top: 10px;
-}
-
 .navbar_right {
   z-index: 1;
-  height: max-content;
-  margin-top: 30px;
+  height: 100%;
   background-color: inherit;
   width: 20%;
   position: fixed;
@@ -605,6 +588,7 @@ button {
   height: max-content;
   width: 85%;
   background-color: inherit;
+  height: 80%;
 }
 
 .navbar_right ul li {
@@ -789,13 +773,14 @@ button {
   width: 90%;
   right: 0;
   height: 7%;
+  margin-left: 5%;
 }
 .message_container_div {
   width: 75%;
   height: 100%;
 }
 .formMessage_div {
-  width: 90%;
+  width: 100%;
   position: relative;
   bottom: 15px;
 }
@@ -845,7 +830,6 @@ button {
 .messageLiOwnl60 {
   width: max-content;
   border-top-width: 0px;
-  border-right-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
 }
@@ -985,10 +969,7 @@ button {
   height: 30px;
   padding-bottom: 5px;
 }
-.container {
-  margin-top: 66px;
-  height: 91%;
-}
+
 .button_load_more button {
   width: 100%;
   height: 100%;
@@ -1280,6 +1261,29 @@ div.loaderBalls > div {
 .active .circle {
   transform: scale(0);
 }
-.navbar_auth {
-  height: 11%;
+.navbar_right .header {
+  position: relative;
+  width: 85px;
+}
+.navbar_right .header span {
+  color: #1b2530;
+  padding: 8px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.logout_icon {
+  margin-left: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.logout_icon svg {
+  padding-right: 10px;
+}
+.logout_icon svg path {
+  fill: white;
 }

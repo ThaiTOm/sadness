@@ -180,10 +180,23 @@ const chatGorup = ({ id, len, ipOfUser }) => {
             return { have: "have" }
         }
     }
-
+    const spliceUser = (start, end, pos) => {
+        let data
+        for (let i = start; i < end; i++) {
+            data = regionGroup[pos][i]
+            for (let value of regionGroup[pos].slice(start - i, end)) {
+                console.log(data, value)
+                if (data === value) {
+                    let temp = regionGroup[pos].splice(i, 1)
+                    regionGroup[pos].push(temp)
+                }
+            }
+        }
+        regionGroup[pos].splice(start, end)
+    }
     const createRoom = async (a, pos) => {
         // if we splice already have 5 user the splice it out
-        a.length < 5 ? {} : a.length === 5 ? regionGroup[pos].splice(0, a.length) : {}
+        a.length < 5 ? {} : a.length >= 5 ? spliceUser(0, a.length, pos) : {}
         let roomId = a[0].room
         // let roomCurrent = await cm.get(roomId) || []
         let users = []
@@ -210,9 +223,11 @@ const chatGorup = ({ id, len, ipOfUser }) => {
         }
         if (users.length <= 0) return { idRoom: roomId, yet: "yet" }
         users.length > 0 && Message.findByIdAndUpdate({ "_id": roomId }, { $set: { "user": users } }).exec()
+
         return { idRoom: roomId, have: null }
     }
     // main structure
+    // "g" mean group                                                                                                   
     const user = { id, room: id + len + "g" }
     for (let i in regionGroup) {
         if (regionGroup[i].length > 0) {

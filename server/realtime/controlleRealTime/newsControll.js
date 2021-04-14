@@ -5,42 +5,29 @@ const { nodeCache, newCache } = require("../../nodeCache");
 // newCache save post like
 // cacheNode save comment like, notifications
 
-var saveCacheNode = async (user, type, link, id) => {
+var saveCacheNode = async ({ user, type, link, id }) => {
+    console.log(user)
+    // user: that upload the blog, id:id blog
     let arr = nodeCache.get(user + "noti") || []
-    let ob
     let i = 0
     for await (let a of arr) {
         if (a.type === type && a.value === link && a.id === id) {
-            ob = {
-                id,
-                type: type,
-                value: link,
-                seen: false,
-                number: a.number
-            }
-            let old = [...arr]
-            old.splice(i, 1)
-            old.unshift(ob)
-            nodeCache.set(user + "noti", old, 2147483647)
-            return {
-                number: ob.number
-            }
-        } else {
-            ob = {
+            let ob = {
                 id,
                 type: type,
                 value: link,
                 seen: false,
                 number: a.number + 1
             }
-            arr.unshift(ob)
-            nodeCache.set(user + "noti", arr, 2147483647)
-            return {
-                number: ob.number
-            }
+            let old = [...arr]
+            old.splice(i, 1)
+            old.unshift(ob)
+            nodeCache.set(user + "noti", old, 2147483647)
+            return { number: ob.number }
         }
+        i += 1
     }
-    ob = {
+    let ob = {
         id,
         type: type,
         value: link,
@@ -49,15 +36,12 @@ var saveCacheNode = async (user, type, link, id) => {
     }
     arr.unshift(ob)
     nodeCache.set(user + "noti", arr, 2147483647)
-    return {
-        number: ob.number
-    }
+    return { number: ob.number }
 }
 const comment = async ({ idRecieve, idSent, value }) => {
     let x = await Blog.findById({ "_id": idRecieve }, "comment").exec()
     let length = x.comment.length || 0
     let text = value.split(/\r\n|\r|\n/)
-    console.log(text)
     const data = {
         id: idSent + ";" + length + ";" + idRecieve,
         value: text,
@@ -71,7 +55,7 @@ const comment = async ({ idRecieve, idSent, value }) => {
         }
     } else {
         await Blog.findByIdAndUpdate({ _id: idRecieve }, { $push: { "comment": data }, $inc: { "commentNumber": 1 } })
-        let { number } = await saveCacheNode(user.user, " người đã bình luận về bài viết của bạn", "posts/id=" + idRecieve, data.id)
+        let { number } = await saveCacheNode({ user: user.user, type: " người đã bình luận về bài viết của bạn", link: "posts/id=" + idRecieve, id: data.id })
         return {
             user,
             type: "post/id=" + idRecieve,
@@ -85,7 +69,7 @@ const likeBlog = async ({ id, value }) => {
     // increment likes in mongodb
     let incData = async () => {
         let a = await Blog.findOneAndUpdate({ _id: value }, { $inc: { "likes": 1 } }).exec()
-        await User.findOneAndUpdate({ _id: id }, { $push: { "likes": value } }).exec()
+        User.findOneAndUpdate({ _id: id }, { $push: { "likes": value } }).exec()
         if (a.user === id) {
             return {
                 error: "",
@@ -93,7 +77,7 @@ const likeBlog = async ({ id, value }) => {
             }
         }
         // save to cache for the notifications
-        let { number } = await saveCacheNode(a.user, " người đã thích bài viết của bạn", "posts/id=" + value, value)
+        let { number } = await saveCacheNode({ user: a.user, type: " người đã thích bài viết của bạn", link: "posts/id=" + value, id: value })
         return {
             error: "",
             message: "ok",
@@ -109,11 +93,12 @@ const likeBlog = async ({ id, value }) => {
     } else {
         let old = [...cacheData]
         let index = old.indexOf(value)
+        // if it already exists
         if (index > -1) {
             old.splice(index, 1)
             newCache.put(id, old)
-            await Blog.findOneAndUpdate({ _id: value }, { $inc: { "likes": -1 } }).exec()
-            await User.updateOne({ _id: id }, { $pull: { "likes": value } }).exec()
+            Blog.findOneAndUpdate({ _id: value }, { $inc: { "likes": -1 } }).exec()
+            User.updateOne({ _id: id }, { $pull: { "likes": value } }).exec()
             return {
                 error: "error",
                 message: ""
@@ -127,51 +112,24 @@ const likeBlog = async ({ id, value }) => {
 }
 const likeCmt = async ({ value, id, idComment }) => {
     // value contain id of post comment, id is id of user
-    let a = idComment.split(";")
-    var user = await Blog.findById({ _id: value }).exec()
+    let idCommentArr = idComment.split(";")
+    let user = await Blog.findById({ _id: value }).exec()
+    let cacheData = await nodeCache.get(id) || ""
     let incData = async (data) => {
-        if (data === undefined) {
-            await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": 1 } }).exec()
-            let err = nodeCache.set(id, idComment, 2147483647)
-            if (a[0] === user.user) {
-                return {
-                    error: err,
-                    message: "ok"
-                }
-            }
-            let { number } = await saveCacheNode(user.user, " người đã thích bình luận của bạn", "posts/id=" + value, idComment)
-            return {
-                error: err,
-                message: "ok",
-                user: user.user,
-                type: "posts/id=" + value,
-                number
-            }
-        } else {
-            await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": 1 } }).exec()
-            let arr = data
-            arr = arr + "," + idComment
-            let err = nodeCache.set(id, arr, 2147483647)
-            if (user.user === id) {
-                return {
-                    error: err,
-                    message: "ok"
-                }
-            }
-            let { number } = await saveCacheNode(user.user, " người đã thích bình luận của bạn", "posts/id=" + value, idComment)
-            return {
-                error: err,
-                message: "ok",
-                user: user.user,
-                type: "posts/id=" + value,
-                number
-            }
+        data === undefined && nodeCache.set(id, idComment, 2147483647) || nodeCache.set(id, data + "," + idComment, 2147483647)
+        await Blog.updateOne({ "_id": value, "comment.id": idComment }, { $inc: { "comment.$.likes": 1 } }).exec()
+        if (idCommentArr[0] === id) return { message: "ok" }
+        let { number } = await saveCacheNode({ user: idCommentArr[0], type: " người đã thích bình luận của bạn", link: "posts/id=" + value, id: idComment })
+        // save user likes
+        return {
+            message: "ok",
+            user: idCommentArr[0],
+            type: "posts/id=" + value,
+            number
         }
     }
-    let cacheData = await nodeCache.get(id) || ""
-    if (cacheData === undefined || cacheData.length === 0) {
-        return incData()
-    } else {
+    if (cacheData === undefined || cacheData.length === 0 || cacheData === null) return incData()
+    else {
         let arr = cacheData.split(",")
         let index = arr.indexOf(idComment)
         if (index > -1) {
@@ -184,9 +142,7 @@ const likeCmt = async ({ value, id, idComment }) => {
                 error: "",
                 message: "exists"
             }
-        } else {
-            return incData(cacheData)
-        }
+        } else return incData(cacheData)
     }
 }
 const setOffline = ({ id }) => {

@@ -23,6 +23,11 @@ function ChatGroup(props) {
     const [volumn, setVolumn] = useState(false)
     const [oldPeer, setOldPeer] = useState(null)
     const [talk, setTalk] = useState(false)
+    const [accor, setAccor] = useState(false)
+
+    const handleOpenAccor = () => {
+        setAccor(!accor)
+    }
     // turn on or turn off own volumn
     const handleSetVolumn = async () => {
         // does any another user in the room
@@ -222,8 +227,13 @@ function ChatGroup(props) {
             <RenderChat id={props.id} userId={userId} socket={socket} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
+                <div className="main_user">
+                    <p>Thành viên</p>
+                    <div className="user_device">
+
+                    </div>
+                </div>
                 <div className="main_mic">
-                    <p>Voice Chat</p>
                     <div className="user_device">
                         <img
                             alt="demom"
@@ -238,26 +248,29 @@ function ChatGroup(props) {
                             </IconButton>
                         </div>
                     </div>
-                    {
-                        audio.length > 0 ? audio.map(function (value, i) {
-                            return <div className="user_device" key={i}>
-                                <img
-                                    alt="demom"
-                                    style={talk === true ? { border: "2px solid rgba(46, 229, 157, 0.4)" } : {}}
-                                    src="../demo.jpeg"></img>
-                                <div className="icon_device">
-                                    {value.stream}
-                                    {value.mic}
-                                    <IconButton onClick={(e) => handleSetMicOther(value, i)}>
-                                        {value.mic === true ? <MicIcon /> : <MicOffIcon />}
-                                    </IconButton>
-                                    <IconButton onClick={(e) => handleSetVolumnOther(value, i)}>
-                                        {value.audio === true ? talk === true ? <VolumeUpIcon /> : <VolumeMuteIcon /> : <VolumeOffIcon />}
-                                    </IconButton>
+                    <p onClick={handleOpenAccor} className={accor === true ? "accordion active" : "accordion"}>Voice Chat</p>
+                    <div style={accor === true ? { maxHeight: "200px" } : { maxHeight: null }} className="panel">
+                        {
+                            audio.length > 0 ? audio.map(function (value, i) {
+                                return <div className="user_device" key={i}>
+                                    <img
+                                        alt="demom"
+                                        style={talk === true ? { border: "2px solid rgba(46, 229, 157, 0.4)" } : {}}
+                                        src="../demo.jpeg"></img>
+                                    <div className="icon_device">
+                                        {value.stream}
+                                        {value.mic}
+                                        <IconButton onClick={(e) => handleSetMicOther(value, i)}>
+                                            {value.mic === true ? <MicIcon /> : <MicOffIcon />}
+                                        </IconButton>
+                                        <IconButton onClick={(e) => handleSetVolumnOther(value, i)}>
+                                            {value.audio === true ? talk === true ? <VolumeUpIcon /> : <VolumeMuteIcon /> : <VolumeOffIcon />}
+                                        </IconButton>
+                                    </div>
                                 </div>
-                            </div>
-                        }) : console.log()
-                    }
+                            }) : console.log()
+                        }
+                    </div>
                 </div>
             </div>
         </div >

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import Chat from './chat.js';
 import ContactContain from './miniChatCom/contactContain.js';
 import SendContact from './sendContact.js';
-import { HeaderPage, NavbarRight } from '../../helpers/news/news.js';
+import { NavbarRight } from '../../helpers/news/news.js';
 import { MessageList } from '../../userContext.js';
 import socketApp from '../../socket.js';
 import { getCookie } from '../../helpers/auth.js';
@@ -13,7 +13,6 @@ function Main_page() {
     const { listMessage } = useContext(MessageList)
     const [find, setFind] = useState(null)
     const [room, setRoom] = useState("");
-    //value contain Rooms
     // const [name, setName] = useState("Recal")
     // user contain 2 user 
     // const [user, setUser] = useState("")
@@ -29,7 +28,7 @@ function Main_page() {
     }
     return (
         <div className="main_page_auth" onClick={e => find && handleStopFind()}>
-            <HeaderPage />
+            {/* <HeaderPage /> */}
             <div className="container">
                 <NavbarRight />
                 {
