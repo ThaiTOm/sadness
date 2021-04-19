@@ -20,6 +20,12 @@ const blogSchema = new mongoose.Schema({
     createdAt: {
         type: Number,
         default: Date.now
+    },
+    text: {
+        type: Array
+    },
+    image: {
+        type: Array
     }
 })
 exports.Blog = mongoose.model("Blog", blogSchema)

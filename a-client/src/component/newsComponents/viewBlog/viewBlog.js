@@ -101,7 +101,6 @@ function ViewBlog() {
 
             {/* for message */}
             <MessageContainer />
-            {/* for message */}
             <InfiniteScroll
                 dataLength={blog.length}
                 next={fetchData}

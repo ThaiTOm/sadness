@@ -26,7 +26,7 @@
 .accordion_div {
   position: fixed;
   bottom: 0;
-  background-color: #18191a;
+  background-color: #252936;
   width: max-content;
   z-index: 2;
   right: 6%;
@@ -37,7 +37,7 @@
   width: 350px;
   border-radius: 15px 15px 0 0;
   display: flex;
-  background-color: #242323;
+  background-color: #252936;
 }
 .accordion_div button span {
   color: white;
@@ -47,10 +47,11 @@
   width: 80%;
   margin-left: auto;
   cursor: pointer;
+  background-color: #252936;
 }
 .accordion_div .accordion_message .MuiIconButton-root:hover {
   border-radius: 10px 10px 0 0;
-  background-color: #242323;
+  background-color: #252936;
 }
 .accordion_div .accordion_message .MuiIconButton-root {
   border-radius: 10px 10px 0 0;
@@ -94,7 +95,7 @@
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 120px;
-  background-color: #555;
+  background-color: #222433;
   color: #fff;
   text-align: center;
   border-radius: 6px;
@@ -108,14 +109,16 @@
   transition: opacity 0.3s;
   font-size: 1rem;
 }
-.menuMessage .tooltip .tooltiptext {
+.menuMessage .tooltip .tooltiptext,
+.shot_header .tooltip .tooltiptext {
   top: 100%;
   left: 50%;
   bottom: 0;
   height: max-content;
   width: 90px;
 }
-.menuMessage .tooltip .tooltiptext::after {
+.menuMessage .tooltip .tooltiptext::after,
+.shot_header .tooltip .tooltiptext::after {
   content: " ";
   position: absolute;
   bottom: 100%;
@@ -124,7 +127,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent #333333 transparent;
+  border-color: transparent transparent #222433 transparent;
 }
 .tooltip .tooltiptext::after {
   content: "";
@@ -134,10 +137,91 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: #222433 transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+.contact_extension {
+  margin-top: 10px;
+  display: flex;
+  border-bottom: 2px solid rgba(221, 213, 213, 0.137);
+  height: 6%;
+  width: 90%;
+  margin-left: auto;
+}
+.contact_extension .contact_extension_div {
+  height: 20px;
+  background-color: transparent;
+  margin-right: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+.shot {
+  margin-top: 3%;
+  height: 180px;
+  width: 85%;
+  color: white;
+  font-size: 1.8rem;
+  border-radius: 10px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+.shot .shot_div {
+  width: 96%;
+  height: max-content;
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+}
+.shot img {
+  width: 125px;
+  height: 180px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+svg {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 10px;
+}
+.shot #arrow {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  top: 55%;
+}
+.shot #arrow path {
+  fill: #44f3fc;
+}
+.shot_header {
+  justify-content: space-between;
+}
+.shot_header svg {
+  width: 17pt;
+  height: 17pt;
+  background-color: palegreen;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.shot_header #add-svg {
+  width: 25pt;
+  height: 25pt;
+  background-color: initial;
+}
+.shot_header #add-svg path {
+  fill: orange;
+}
+.shot_header svg path {
+  fill: white;
+}
+.shot_header .tooltip .tooltiptext {
+  background-color: ivory;
+  color: black;
 }

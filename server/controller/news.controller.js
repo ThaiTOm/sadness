@@ -5,6 +5,7 @@ const { Blog } = require("../models/blog.models")
 const { Idea } = require("../models/idea.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
+const ffmpeg = require("ffmpeg")
 
 // newCache save post like
 // cacheNode save comment like, notifications
@@ -12,12 +13,10 @@ const { nodeCache, newCache } = require("../nodeCache");
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
     let arr = text.split(/\r\n|\r|\n/)
-    let content = {
-        text: JSON.stringify(arr),
-        file: JSON.stringify(file)
-    }
     const blog = new Blog({
         user: id,
+        text: arr,
+        image: file
     })
     blog.save((err, data) => {
         if (err) {
@@ -25,37 +24,24 @@ exports.postBlog = (req, res) => {
                 error: "Đã xảy ra lỗi bạn hãy thử lại sau"
             })
         } else {
-            let ob = {
-                contentText: content.text,
-                contentImg: content.file,
-                comments: ""
-            }
-            client.hmset(data._id.toString(), ob, (err) => {
-                if (err) {
-                    return res.json({
-                        error: "Đã xảy ra lỗi xin bạn hãy thử lại sau"
-                    })
-                } else {
-                    return res.json({
-                        message: "."
-                    })
-                }
+            return res.json({
+                message: "."
             })
         }
     })
 }
 exports.viewBlog = async (req, res) => {
-    var { start, end, id } = req.query
+    let { start, end, id } = req.query
     start = Number(start)
     end = Number(end)
-    var arrLike = newCache.get(id) || []
-    var time = date.format(new Date(), 'hh:A').split(":")
-    if (time[1] === "PM") {
-        time = Number(time[0]) + 12
-    } else {
-        time = Number(time[0])
-    }
-    var data = []
+
+    let arrLike = newCache.get(id) || []
+    let time = date.format(new Date(), 'hh:A').split(":")
+
+    if (time[1] === "PM") time = Number(time[0]) + 12
+    else time = Number(time[0])
+
+    let data = []
 
     const getItem = async (gthan, lthan) => {
         let arr = await Blog.find({ "createdAt": { $gt: gthan, $lt: lthan } }).exec()
@@ -98,8 +84,8 @@ exports.viewBlog = async (req, res) => {
                     return b.likes - a.likes
                 })
                 let isLiked = arrLike.indexOf(idBlog)
-                let promiseRedis = promisify(client.hgetall).bind(client)
-                let a = await promiseRedis(idBlog)
+                // let promiseRedis = promisify(client.hgetall).bind(client)
+                // let a = await promiseRedis(idBlog)
                 var comment = []
                 // push data to comment array
                 let fnc = (bool, value) => {
@@ -116,8 +102,8 @@ exports.viewBlog = async (req, res) => {
                         likes: value.likes,
                         isLiked: bool,
                         idBlog,
-                        text: JSON.parse(a.contentText),
-                        image: JSON.parse(a.contentImg),
+                        text: value.text,
+                        image: value.image,
                         comment: comment.slice(0, 3)
                     }
                     data.push(newArr)
@@ -158,12 +144,12 @@ exports.viewOne = async (req, res) => {
     hl = new Date(hl);
     hl = date.format(hl, 'DD-MM-YYYY');
     let fnc = async (bool) => {
-        let promiseRedis = promisify(client.hgetall).bind(client)
-        let a = await promiseRedis(id)
+        // let promiseRedis = promisify(client.hgetall).bind(client)
+        // let a = await promiseRedis(id)
         let data = {
             isLiked: bool,
-            text: JSON.parse(a.contentText),
-            img: JSON.parse(a.contentImg),
+            text: value.text,
+            img: value.image,
             likes: value.likes,
             time: hl,
             idBlog: value.id
@@ -228,15 +214,13 @@ exports.getBlogWithOut = async (req, res) => {
         let hl = now - createdAt
         hl = new Date(hl);
         hl = date.format(hl, 'DD-MM-YYYY');
-        let promiseRedis = promisify(client.hgetall).bind(client)
-        let a = await promiseRedis(value.id)
         let commentTop = value.comment
         commentTop.sort((a, b) => {
             return b.likes - a.likes
         })
         let x = {
-            text: JSON.parse(a.contentText),
-            image: JSON.parse(a.contentImg),
+            text: value.text,
+            image: value.image,
             likes: value.likes,
             time: hl,
             idBlog: value.id,
@@ -251,4 +235,8 @@ exports.getBlogWithOut = async (req, res) => {
 exports.getIdea = async (req, res) => {
     let data = await Idea.find({}).exec()
     return res.json({ data: data.reverse() })
+}
+exports.postShot = async (req, res) => {
+    const { id, font, file, color, fontSize, text } = req.body
+
 }

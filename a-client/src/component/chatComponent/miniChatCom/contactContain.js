@@ -101,6 +101,14 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     return (
         <div className={classN} >
             <div className="contact_contain_text">
+                <img onClick={() => onClick(idRoom, users, id)} alt="avatar" src="./demo.jpeg" />
+                <p onClick={() => onClick(idRoom, users, id)}>
+                    {value.slice(0, 4) === "Bạn:" ? <span className="content">
+                        <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
+                        <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length - 1) }} /></span>
+                        : <span dangerouslySetInnerHTML={{ __html: value }} />}
+                    {count > 0 ? <span className="count"> {count}</span> : ""}
+                </p>
                 <div className="setting_chat">
                     <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                         ...
@@ -115,7 +123,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                     >
                         <MenuItem>
                             <span onClick={handleOpenOut}>
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABHklEQVRIidWVMUpDQRRFz1VThCxCsNDKHegOJIJaRMEqrYtwHxZiGi1SiggpRIlbEGNvYy8aEK+FCJ/xj3/m+1Pkdm/evHtm5s0wMO9SOGC7BewCy5Gad2Ak6SGbZrtl+97VmtrergPoJZj/KGkHC0G8mrGetTqAMM6prT/pL9lu216ZGQDoAxPbe7MCnAJj4ML2QeMASa/AFnAHDELIUkX9ETCJJW2PCmEbWATObD9LuoVmjihdto8zHpoLdR3bN7Y/bO8XPZu4ph3gEtgEDiWdF/NVPUhRH9gAepKGYbIJwAlwLempLPlvgKQ3oNQcfvfgM8M7aW4IiK6kRNH3EZW/P5xxwg2d2u6meMa+zB1gnfIevQBXkh6zdzCX+gK5swNxrVtbyQAAAABJRU5ErkJggg==" />
+                                <img alt="out_chat" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABHklEQVRIidWVMUpDQRRFz1VThCxCsNDKHegOJIJaRMEqrYtwHxZiGi1SiggpRIlbEGNvYy8aEK+FCJ/xj3/m+1Pkdm/evHtm5s0wMO9SOGC7BewCy5Gad2Ak6SGbZrtl+97VmtrergPoJZj/KGkHC0G8mrGetTqAMM6prT/pL9lu216ZGQDoAxPbe7MCnAJj4ML2QeMASa/AFnAHDELIUkX9ETCJJW2PCmEbWATObD9LuoVmjihdto8zHpoLdR3bN7Y/bO8XPZu4ph3gEtgEDiWdF/NVPUhRH9gAepKGYbIJwAlwLempLPlvgKQ3oNQcfvfgM8M7aW4IiK6kRNH3EZW/P5xxwg2d2u6meMa+zB1gnfIevQBXkh6zdzCX+gK5swNxrVtbyQAAAABJRU5ErkJggg==" />
                             Thoát cuộc trò chuyện
                             </span>
                             <Modal
@@ -140,26 +148,17 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                             </Modal>
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABoElEQVRIie2Vv2sTYRjHP89zkmTRRadOHqEUXEJyGTNJBynFzbgVcSgI7k4u3XRytujgZvB/cDlx6F1CFreIBTta/FElUO55HLwLSaBJ63XMd3q/75f7ft73veNeYYF6vV5Qr9dfuPsOcG0u/iki70aj0W63283O6riyCBCG4QN3fwyMgc9z8Zq7PwzD8APw+lyAwWBw08yuF97MtvLhUxF5P/fsbXd/rqpbaZoOi0lV/dZsNr8UXgDiOL5aq9XuAy+LuRJyYHc8Hr/tdDq/FKBara4B+5dQTt6xn3f+O6IgCI7N7NkllE8UBMFxQZuo3+/fMrOdMsWq+qbVan0q/MxLzrJsXUSelAFkWfYRmAC0TNl5tAywJyJtYAigqpuquplnwzzb+2+Aux9GUZQCJwBmNjSz4ps/iaIodffDMjsorRVgBVgBllyZwKMkSe4AGwAi8grA3QE2kiTpuXt4EcCPaZP/a9qFd/e7U/EN4J7I7B3l7t+n/cwRVSqVA+Bo0YqW6KuqHpwJaDQav81sG4iB0wsUnwKxqm632+0/08FfUMOI+5EjNxEAAAAASUVORK5CYII=" />
+                            <img alt="delete_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABoElEQVRIie2Vv2sTYRjHP89zkmTRRadOHqEUXEJyGTNJBynFzbgVcSgI7k4u3XRytujgZvB/cDlx6F1CFreIBTta/FElUO55HLwLSaBJ63XMd3q/75f7ft73veNeYYF6vV5Qr9dfuPsOcG0u/iki70aj0W63283O6riyCBCG4QN3fwyMgc9z8Zq7PwzD8APw+lyAwWBw08yuF97MtvLhUxF5P/fsbXd/rqpbaZoOi0lV/dZsNr8UXgDiOL5aq9XuAy+LuRJyYHc8Hr/tdDq/FKBara4B+5dQTt6xn3f+O6IgCI7N7NkllE8UBMFxQZuo3+/fMrOdMsWq+qbVan0q/MxLzrJsXUSelAFkWfYRmAC0TNl5tAywJyJtYAigqpuquplnwzzb+2+Aux9GUZQCJwBmNjSz4ps/iaIodffDMjsorRVgBVgBllyZwKMkSe4AGwAi8grA3QE2kiTpuXt4EcCPaZP/a9qFd/e7U/EN4J7I7B3l7t+n/cwRVSqVA+Bo0YqW6KuqHpwJaDQav81sG4iB0wsUnwKxqm632+0/08FfUMOI+5EjNxEAAAAASUVORK5CYII=" />
                             Xóa cuộc trò chuyện
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABmJLR0QA/wD/AP+gvaeTAAABCklEQVRIie3UPWqEUBSG4dcwjYW4hoDYWWnhVK5jJmtJl61MNuAa/CsUFHQJWlhaWpxUBkfQyRWnCMnXXQ58zz2IF/6jEG1+yPP8Q0QuB/R+ep73Ph1O84mIXIHXA5A34Bt5WQw1jsldzxJ5Sn4HIiJ0XYeIPAcREeI4JgxDiqI4HpmAuq7RNA3TNPchTdNQVdVDIAgCLMta7TmtDYZhIIoiRIRxHHFddxWwbXvrruubGIaB7/sA5HlOlmW7gM1NABzHASBJEsqypG1b+r5XAjY3mUPn8xlgFwAPNplDAGmaKgM/RibIsix0XVcCQPE/2QMoI3uzRNYfILXc9Sy/yQ24HoDcDuj4q/kCxCxyJ7UVsuwAAAAASUVORK5CYII=" />
+                            <img alt="seen_icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABmJLR0QA/wD/AP+gvaeTAAABCklEQVRIie3UPWqEUBSG4dcwjYW4hoDYWWnhVK5jJmtJl61MNuAa/CsUFHQJWlhaWpxUBkfQyRWnCMnXXQ58zz2IF/6jEG1+yPP8Q0QuB/R+ep73Ph1O84mIXIHXA5A34Bt5WQw1jsldzxJ5Sn4HIiJ0XYeIPAcREeI4JgxDiqI4HpmAuq7RNA3TNPchTdNQVdVDIAgCLMta7TmtDYZhIIoiRIRxHHFddxWwbXvrruubGIaB7/sA5HlOlmW7gM1NABzHASBJEsqypG1b+r5XAjY3mUPn8xlgFwAPNplDAGmaKgM/RibIsix0XVcCQPE/2QMoI3uzRNYfILXc9Sy/yQ24HoDcDuj4q/kCxCxyJ7UVsuwAAAAASUVORK5CYII=" />
                             Đánh dấu là đã đọc
                         </MenuItem>
                     </Menu>
                 </div>
-                <p onClick={() => onClick(idRoom, users, id)}>
-                    {value.slice(0, 4) === "Bạn:" ? <span className="content">
-                        <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
-                        <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length - 1) }} /></span>
-                        : <span dangerouslySetInnerHTML={{ __html: value }} />}
-                    {count > 0 ? <span className="count"> {count}</span> : ""}
-                </p>
-                <img onClick={() => onClick(idRoom, users, id)} alt="avatar" src="./demo.jpeg" />
                 {onl === true ? <span className="dot"></span> : console.log()}
             </div>
-
         </div >
     )
 }

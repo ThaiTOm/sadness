@@ -17,6 +17,8 @@ import socketApp from './socket';
 import { toast } from "react-toastify"
 import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
+import CreateShots from './component/anotherPage/createShot';
+
 
 function App() {
   let socket = socketApp.getSocket()
@@ -154,6 +156,9 @@ function App() {
             />
             <Route path="/suggest"
               render={props => <SuggestPage {...props} />}
+            />
+            <Route path="/create/shots"
+              render={props => <CreateShots {...props} />}
             />
           </Notifications.Provider>
         </MessageList.Provider >

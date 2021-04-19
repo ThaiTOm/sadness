@@ -28,7 +28,6 @@ function Main_page() {
     }
     return (
         <div className="main_page_auth" onClick={e => find && handleStopFind()}>
-            {/* <HeaderPage /> */}
             <div className="container">
                 <NavbarRight />
                 {
@@ -42,6 +41,23 @@ function Main_page() {
                         /> : <Chat handleRoom={value => setFind(value)} />
                 }
                 <div className="contact">
+                    <div className="contact_extension">
+                        <div className="contact_extension_div" style={{ backgroundColor: "#15c981" }}>
+                            <span>
+                                Tất cả
+                            </span>
+                        </div>
+                        <div className="contact_extension_div" >
+                            <span>
+                                Chưa đọc
+                            </span>
+                        </div>
+                        <div className="contact_extension_div">
+                            <span>
+                                Kết thúc
+                            </span>
+                        </div>
+                    </div>
                     {
                         // if value have then we can use this 
                         listMessage && listMessage.length > 0 ? listMessage.map((val, i) => <div key={i}>

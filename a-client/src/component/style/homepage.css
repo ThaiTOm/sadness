@@ -7,10 +7,11 @@ body,
 .post_viewing,
 .viewBlog,
 .forget_container,
-.container_button,
 .MuiList-root,
 .container,
-.drag_file .icon {
+.drag_file .icon,
+.header_notAuth,
+.story {
   width: 100%;
   height: 100%;
 }
@@ -99,7 +100,8 @@ p {
 .extension_blog .ex,
 post_viewing,
 .value_content_comment_a_blog,
-.go_to_previous {
+.go_to_previous,
+.shot_header {
   display: flex;
 }
 
@@ -109,7 +111,6 @@ post_viewing,
 .modal_post_blog,
 .form_post_blog p,
 .drag_file .icon,
-.message_container,
 div.loaderBalls,
 .contain_block .middle,
 .block_page,
@@ -128,7 +129,12 @@ div.loaderBalls,
 .navbar_modal,
 .navbar_modal_header,
 .button-navbar,
-.active_like {
+.active_like,
+.navbar_right .header,
+.shot_header div,
+.story-center .story-content,
+.story-center .option-2 .option .section .div section,
+.story-center .option-2 .bottom {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,10 +163,12 @@ div.loaderBalls,
 .Toastify__toast {
   background: #18191a !important;
 }
-
-.header_notAuth {
+.homepage {
   background-image: url("../image/homepage.jpg");
-  height: 100%;
+}
+.header_notAuth {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .navbar {
@@ -188,7 +196,7 @@ div.loaderBalls,
 
 .active_contact {
   background-color: #181818 !important;
-  border: 1px solid rgb(56, 148, 209);
+  border: 1px solid #673ab7;
 }
 
 .not_read_contact {
@@ -563,12 +571,6 @@ button {
   background: #b1d4e0;
 }
 
-/* *********************************************************************** */
-
-/* ********************  Navbar for page that auth ******************* */
-
-/* *********************************************************************** */
-
 .main_page_auth {
   height: 100%;
   overflow-y: hidden;
@@ -577,16 +579,21 @@ button {
 .navbar_right {
   z-index: 1;
   height: 100%;
-  background-color: inherit;
-  width: 20%;
+  background-color: #18191b;
+  width: 18%;
   position: fixed;
 }
-
+.navbar_right .header p {
+  color: white;
+  font-size: 2.4rem;
+  margin-left: 5px;
+  margin-top: 5px;
+}
 .navbar_right ul {
   margin: 0;
   padding: 0;
   height: max-content;
-  width: 85%;
+  width: 100%;
   background-color: inherit;
   height: 80%;
 }
@@ -595,7 +602,6 @@ button {
   list-style: none;
   padding: 15px 0px 15px 10px;
   margin-bottom: 10px;
-  border-radius: 0 5px 5px 0;
 }
 
 .navbar_right ul li a {
@@ -608,9 +614,12 @@ button {
 .navbar_right ul li a div {
   position: relative;
 }
-.navbar_right ul li a div img {
+.navbar_right ul li a div svg {
   position: absolute;
   left: 0;
+}
+.navbar_right ul li a div svg path {
+  fill: rgba(255, 255, 255, 0.404);
 }
 .navbar_right ul li a div span {
   width: 80%;
@@ -619,29 +628,54 @@ button {
 .navbar_right ul li a .MuiSvgIcon-root {
   font-size: 2em;
 }
-
+.navbar_right ul .active_title a div svg {
+  background-color: #15c981;
+}
+.navbar_right ul .active_title a div svg path {
+  fill: white;
+}
 .MuiSvgIcon-root {
   color: white;
   vertical-align: bottom;
   font-size: 25px;
 }
 
-.navbar_right ul .inner_title:hover {
-  background-color: rgba(161, 158, 158, 0.212);
-  border-left: 4px solid hsla(39, 100%, 71%, 1);
-}
-
 .message_container {
   margin-top: auto;
   height: 100%;
   position: relative;
-  width: 60%;
-  left: 20%;
-  background-color: #181818;
+  width: 62%;
+  left: 18%;
+  background-color: #21242b;
+  border-right: 1px solid rgba(255, 255, 255, 0.377);
 }
-
 .container_button {
+  background-color: #537ee2;
+  width: 80%;
+  height: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.5rem;
+}
+.container_button_header {
   display: flex;
+  align-items: center;
+}
+.container_button_header svg {
+  margin-right: 10px;
+  background-color: #ff9417;
+}
+.container_button_header svg path {
+  fill: white;
+}
+.container_button_div {
+  display: flex;
+  width: 100%;
+  height: 80%;
 }
 
 #button_find_partner {
@@ -654,6 +688,8 @@ button {
   font-weight: bold;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
+  box-shadow: 0 2.1px 1.3px rgb(0 0 0 / 4%), 0 5.9px 4.2px rgb(0 0 0 / 5%),
+    0 12.6px 9.5px rgb(0 0 0 / 6%), 0 25px 20px rgb(0 0 0 / 10%);
 }
 
 #button_find_partner:hover {
@@ -708,7 +744,7 @@ button {
 
 .message_container ul {
   height: 85%;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0 10px;
 }
 
@@ -820,7 +856,8 @@ button {
 }
 
 .own_message_same_div {
-  background-color: white;
+  background-color: rgb(46, 159, 224);
+  color: white;
   width: 60%;
   padding: 8px 10px;
   margin-left: auto;
@@ -829,9 +866,6 @@ button {
 
 .messageLiOwnl60 {
   width: max-content;
-  border-top-width: 0px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
 }
 
 .messageLiOwnm60 {
@@ -847,7 +881,8 @@ button {
 
 .other_message_same_div {
   padding: 8px 10px;
-  background-color: #00dbf9;
+  background-color: #242526;
+  color: rgb(255, 251, 251);
 }
 
 .messageLiOtherl60 {
@@ -922,9 +957,9 @@ button {
 
 .contact {
   margin-left: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 20%;
-  background-color: #242526;
+  background-color: #21242b;
 }
 
 .contact_container {
@@ -952,8 +987,7 @@ button {
   width: 50px;
   height: 50px;
   border-radius: 100px;
-  margin-right: 0;
-  margin-left: auto;
+  margin-right: 5px;
 }
 
 .send_container {
@@ -1214,6 +1248,7 @@ div.loaderBalls > div {
 .chat_button_group .chat-bubble {
   cursor: pointer;
   position: relative;
+  padding: 0;
 }
 
 .chat_button_group .bubble {
@@ -1263,16 +1298,18 @@ div.loaderBalls > div {
 }
 .navbar_right .header {
   position: relative;
-  width: 85px;
+  justify-content: space-between;
+  width: 60%;
+  padding-left: 5%;
 }
-.navbar_right .header span {
-  color: #1b2530;
-  padding: 8px;
-  background-color: white;
-  border-radius: 50%;
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.navbar_right .header svg,
+.navbar_right ul li a div svg {
+  width: 15pt;
+  height: 15pt;
+  background-color: #242526;
+}
+.navbar_right .header svg path {
+  fill: rgb(226, 89, 39);
 }
 .logout_icon {
   margin-left: 10px;

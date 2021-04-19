@@ -1,5 +1,5 @@
 const express = require("express");
-const { postBlog, viewBlog, viewOne, viewComment, getNotifications, getBlogWithOut } = require("../controller/news.controller");
+const { postBlog, viewBlog, viewOne, viewComment, getNotifications, getBlogWithOut, postShot } = require("../controller/news.controller");
 const router = express.Router();
 
 // create new post
@@ -10,5 +10,6 @@ router.get("/post", viewOne);
 router.get("/comment", viewComment);
 router.get("/notifications", getNotifications)
 router.get("/dataNo", getBlogWithOut)
+router.post("/post/shot", postShot)
 
 module.exports = router

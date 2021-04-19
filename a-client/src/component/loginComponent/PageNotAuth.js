@@ -1,8 +1,5 @@
 import React from 'react'
 import "../style/homepage.css"
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -51,72 +48,69 @@ function PageNotAuth() {
         setOpenSignUp(false);
     };
     return (
-        <div className="main_page">
-            < div className="homepage">
-                <header className="header_notAuth" >
-                    <div className="navbar">
-                        <p>
-                            <a href="/"> Sadnessly </a>
-                        </p>
-                    </div>
-                    <div className="text-navbar">
-                        <p className="text-navbar-first">
-                            Bạn có thể chia sẻ câu chuyện của mình mà không ai biết bạn là ai!!
+        < div className="homepage">
+            <header className="header_notAuth" >
+                <div className="navbar">
+                    <p>
+                        <a href="/"> Sadnessly </a>
                     </p>
-                        <p className="text-navbar-second">
-                            Đừng để bản thân quá nặng lòng hãy mở lòng và bạn sẽ thấy thoải mái hơn. Cho đi là nhận lại!
+                </div>
+                <div className="text-navbar">
+                    <p className="text-navbar-first">
+                        Bạn có thể chia sẻ câu chuyện của mình mà không ai biết bạn là ai!!
                     </p>
-                    </div>
-                    <div className="button-navbar treat-wrapper">
-                        <button className="signIn-navbar treat-button " type="button" onClick={handleOpenSignIn}>Đăng nhập</button>
-                        {/* **************************** Modal to Login ****************************************/}
-                        <Modal
-                            aria-labelledby="transition-modal-title"
-                            aria-describedby="transition-modal-description"
-                            className={classes.modal}
-                            open={openSignIn}
-                            onClose={handleCloseSignIn}
-                            closeAfterTransition
-                            BackdropComponent={Backdrop}
-                            BackdropProps={{
-                                timeout: 500,
-                            }}
-                        >
-                            <Fade in={openSignIn}>
-                                <div className="paper_login">
-                                    <LoginForm onClick={value => handleCloseSignIn()} />
-                                </div>
-                            </Fade>
-                        </Modal>
+                    <p className="text-navbar-second">
+                        Đừng để bản thân quá nặng lòng hãy mở lòng và bạn sẽ thấy thoải mái hơn. Cho đi là nhận lại!
+                    </p>
+                </div>
+                <div className="button-navbar treat-wrapper">
+                    <button className="signIn-navbar treat-button " type="button" onClick={handleOpenSignIn}>Đăng nhập</button>
+                    {/* **************************** Modal to Login ****************************************/}
+                    <Modal
+                        aria-labelledby="transition-modal-title"
+                        aria-describedby="transition-modal-description"
+                        className={classes.modal}
+                        open={openSignIn}
+                        onClose={handleCloseSignIn}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            timeout: 500,
+                        }}
+                    >
+                        <Fade in={openSignIn}>
+                            <div className="paper_login">
+                                <LoginForm onClick={value => handleCloseSignIn()} />
+                            </div>
+                        </Fade>
+                    </Modal>
 
-                        {/* ************** * * * **   Button to SignUp                  *   ************* */}
+                    {/* ************** * * * **   Button to SignUp                  *   ************* */}
 
-                        <button className="signUp-navbar treat-button" type="button" onClick={handleOpenSignUp}>Đăng ký</button>
-                        <Modal
-                            aria-labelledby="transition-modal-title"
-                            aria-describedby="transition-modal-description"
-                            className={classes.modal}
-                            open={openSignUp}
-                            onClose={handleCloseSignUp}
-                            closeAfterTransition
-                            BackdropComponent={Backdrop}
-                            BackdropProps={{
-                                timeout: 500,
-                            }}
-                        >
-                            <Fade in={openSignUp}>
-                                <div className="paper_res">
-                                    <RegisterForm onClick={e => handleCloseSignUp()} />
-                                </div>
-                            </Fade>
-                        </Modal>
+                    <button className="signUp-navbar treat-button" type="button" onClick={handleOpenSignUp}>Đăng ký</button>
+                    <Modal
+                        aria-labelledby="transition-modal-title"
+                        aria-describedby="transition-modal-description"
+                        className={classes.modal}
+                        open={openSignUp}
+                        onClose={handleCloseSignUp}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            timeout: 500,
+                        }}
+                    >
+                        <Fade in={openSignUp}>
+                            <div className="paper_res">
+                                <RegisterForm onClick={e => handleCloseSignUp()} />
+                            </div>
+                        </Fade>
+                    </Modal>
 
-                        {/* ************************************ End of the Modal   *********** */}
+                    {/* ************************************ End of the Modal   *********** */}
 
-                    </div>
-                </header>
-
-            </div>
+                </div>
+            </header>
         </div>
     )
 }

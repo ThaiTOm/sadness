@@ -2,7 +2,7 @@
   width: 25%;
   height: 100%;
   border-right: 1px solid rgba(248, 248, 255, 0.322);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .main_mic {
@@ -38,11 +38,6 @@
 
 .user_device .MuiSvgIcon-root {
   font-size: 1.7rem;
-}
-/* for navbar right */
-.active_title {
-  background-color: rgba(255, 255, 240, 0.233);
-  border-left: 4px solid hsla(39, 100%, 71%, 1);
 }
 
 /* customize spinning waiting */

@@ -6,7 +6,6 @@ const { nodeCache, newCache } = require("../../nodeCache");
 // cacheNode save comment like, notifications
 
 var saveCacheNode = async ({ user, type, link, id }) => {
-    console.log(user)
     // user: that upload the blog, id:id blog
     let arr = nodeCache.get(user + "noti") || []
     let i = 0
