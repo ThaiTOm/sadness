@@ -1,8 +1,11 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup, outChat } = require("./controlleRealTime/messageControll");
+const { addUser, sendMessage, sendMessageOff, seenMessage, chatGorup, outChat, sendFile } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
 const { Message } = require("../models/message.model");
 const { cm } = require("../nodeCache");
-const date = require("date-and-time")
+const date = require("date-and-time");
+const fs = require("fs");
+const { generatePath } = require("../helpers/generatePath");
+
 
 module.exports = {
     index: function (io, socket) {
@@ -46,7 +49,7 @@ module.exports = {
             });
             callback();
         });
-        socket.on("sendMessageOff", async ({ room, message, userId }) => {
+        socket.on("sendMessageOff", async ({ room, message, userId, file }) => {
             const { roomMessage, messageMessage, memberMessage } = await sendMessageOff({ room, message, id: userId })
             io.to(roomMessage).emit("message", {
                 data: messageMessage,
@@ -56,9 +59,9 @@ module.exports = {
                 id: userId,
             })
         });
-        socket.on("sendImageOff", ({ room, image, userId }) => {
-            const { roomMessage, message, member } = sendImageOff({ room, image, userId });
-            io.to(room).emit("message", { user: member, image: message, idRoom: room })
+        socket.on("file", async ({ room, image, userId, originName }) => {
+            const { message, err } = sendFile({ room, image, userId, originName });
+            io.to(room).emit("message", { user: userId, image: message, idRoom: room, err: err })
         })
         socket.on("seenMessage", ({ id, userId }) => {
             seenMessage({ id, userId })

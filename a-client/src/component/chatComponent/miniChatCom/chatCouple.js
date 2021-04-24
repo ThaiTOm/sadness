@@ -120,7 +120,6 @@ function ChatCouple(props) {
                     setUser(value.id)
                     createCall(call)
                 }
-
             })
         } else {
             createNullStream()

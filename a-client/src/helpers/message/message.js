@@ -12,18 +12,13 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+
 const userId = getCookie().token;
 let socket = socketApp.getSocket();
 
 export const handleFileUpload = (e, userId, id) => {
     let file = e.target.files;
-    let reader = new FileReader()
-    for (let i = 0; i < file.length; i++) {
-        reader.readAsDataURL(file[i])
-        reader.onloadend = () => {
-            socket.emit("sendImageOff", { room: id, image: reader.result, userId })
-        }
-    }
+    socket.emit("file", { room: id, image: file, userId, originName: file["0"].name })
 }
 export const messageLiImageRender = (value, i, imgUrl, myRef) => {
     return (
@@ -33,7 +28,7 @@ export const messageLiImageRender = (value, i, imgUrl, myRef) => {
             className={"messageImage " + value}>
             <input type="checkbox" id={i}></input>
             <label htmlFor={i}>
-                <img className={value} alt="" src={imgUrl}></img>
+                <img className={value} alt="" src={`http://localhost:2704/${imgUrl}`}></img>
             </label>
         </li>
     )

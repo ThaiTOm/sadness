@@ -40,7 +40,7 @@ function ViewOneBlog(props) {
                         data.img.map(function (value, i) {
                             return <div key={i}>
                                 <div className="image-container" >
-                                    <img alt={value.slice(100, 110)} src={value} />
+                                    <img alt={value.slice(100, 110)} src={`http://localhost:2704/${value}`} />
                                 </div>
                             </div>
                         })

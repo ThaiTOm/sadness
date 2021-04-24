@@ -8,7 +8,6 @@ import { getCookie } from '../../../helpers/auth';
 import SeeLike from "../../../helpers/news/seeLike"
 import LikeComment from "../../../helpers/news/likeComment"
 import RequireLogin from '../../../helpers/news/requireLogin';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ShareBlog from "../../../helpers/news/shareBlog"
 import { ImageRender } from '../../../helpers/news/news';
 import { IconButton } from '@material-ui/core';
@@ -134,7 +133,7 @@ function ViewBlog() {
                                     </div>
                                     {/* Render Image */}
                                     <div className="image-blog">
-                                        <ImageRender props={{ value }} />
+                                        <ImageRender props={{ value, id }} />
                                     </div>
                                     <div className="activities_blog">
                                         <SeeLike props={{ value, i, className: "inner", socket, id }} />

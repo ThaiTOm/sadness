@@ -12,12 +12,15 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { getCookie } from '../../helpers/auth';
-
-
+import Slider from '@material-ui/core/Slider';
 
 function CreateShots() {
     const id = getCookie().token
     const fileRef = useRef(null);
+    const videoRef = useRef(null)
+    const mp3Ref = useRef(null)
+    const audioRef = useRef()
+    const videoSrcRef = useRef()
     const anchorRef = useRef(null)
     const [file, setFile] = useState(null)
     const [text, setText] = useState("")
@@ -25,7 +28,11 @@ function CreateShots() {
     const [fontSize, setFontSize] = useState(16)
     const [font, setFont] = useState("Arial")
     const [open, setOpen] = useState(false)
+    const [audio, setAudio] = useState(null)
+    const [video, setVideo] = useState(null)
+    const [value, setValue] = React.useState([0, 60]);
     const fontFamily = ["Arial", "Times New Roman", "Times", "Courier New", "Ubuntu Mono", "Verdana", "Georgia", "Palatino", "Garamond", "Bookman", "Tahoma", "Trebuchet MS", "Arial Black", "Comic Sans MS"]
+    const [duration, setDuration] = useState(100.1234)
 
     const handleFileUpload = async (e) => {
         let imageFile = e.target.files[0];
@@ -38,17 +45,40 @@ function CreateShots() {
             const compressedFile = await imageCompression(imageFile, options);
             var urlCreator = window.URL || window.webkitURL;
             setFile(urlCreator.createObjectURL(compressedFile))
+            setVideo(null)
             // await uploadToServer(compressedFile); // write your own logic
         } catch (error) {
             toast.error("Xin hay dang tai dung noi dung")
         }
+    }
+    const changeSrc = (value) => {
+        if (value.current) {
+            value.current.pause();
+            value.current.load();
+            value.current.play();
+        }
+    }
+    const handleVideoUpload = (e) => {
+        let videoFile = e.target.files[0]
+        var URL = window.URL || window.webkitURL;
+        var src = URL.createObjectURL(videoFile);
+        setVideo(src)
+        setFile(null)
+        changeSrc(videoRef)
+    }
+    const handleChangeMusic = (e) => {
+        let music = e.target.files[0]
+        var URL = window.URL || window.webkitURL;
+        var src = URL.createObjectURL(music);
+        setAudio(src)
+        setDuration(100.1234)
+        changeSrc(audioRef)
     }
     const handleChangeNumber = (e) => {
         if (parseInt(e.target.value) > 50) setFontSize(50)
         else if (parseInt(e.target.value) < 0) setFontSize(1)
         else setFontSize(parseInt(e.target.value))
     }
-
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -70,6 +100,19 @@ function CreateShots() {
 
             })
     }
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        if (isNaN(audioRef.current.duration) !== true) {
+            // put the conditional here 
+            if (duration === 100.1234) {
+                setDuration(audioRef.current.duration)
+            }
+            // after run these codes audioRef will target to <video/> not video object
+            audioRef.current.pause();
+            audioRef.current.load();
+            audioRef.current.play();
+        }
+    };
     return (
         <div className="story">
             <ToastContainer />
@@ -87,8 +130,6 @@ function CreateShots() {
                     </div>
                     <div className="time">
                         <input min="0" max="24" placeholder="Gio" type="number"></input>
-                        <span>:</span>
-                        <input min="0" max="60" placeholder="Phut" type="number"></input>
                     </div>
                     <div className="text">
                         <div className="header">
@@ -102,13 +143,20 @@ function CreateShots() {
                     </div>
                 </div>
                 <div className="story-content">
-                    <div className="story_content_div" style={file ? { backgroundImage: "url(" + file + ")" } : console.log()}>
+                    {audio ? <audio autoPlay controls ref={audioRef}>
+                        <source src={audio + "#t=" + value[0] + "," + value[1]} />
+                    </audio> : console.log()}
+                    {!video ? <div className="story_content_div" style={file ? { backgroundImage: "url(" + file + ")" } : console.log()}>
                         <div>
                             {text.split(/\r\n|\r|\n/).map(function (value) {
                                 return <p style={{ color: color, fontSize: fontSize ? fontSize : 15, fontFamily: font }} > {value}</p>
                             })}
                         </div>
-                    </div>
+                    </div> : video ? <div className="story_content_div">
+                        <video ref={videoSrcRef} autoPlay muted={audio ? true : false}>
+                            <source src={video} type="video/mp4" />
+                        </video>
+                    </div> : console.log()}
                 </div>
                 <div className="option-2">
                     <div className="header ">
@@ -131,7 +179,7 @@ function CreateShots() {
                                         Co chu
                                     </span>
                                 </section>
-                                <section className="tooltip">
+                                <section >
                                     <Button
                                         ref={anchorRef}
                                         aria-controls={open ? 'menu-list-grow' : undefined}
@@ -140,7 +188,7 @@ function CreateShots() {
                                     >
                                         {font}
                                     </Button>
-                                    <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                                    <Popper id="z-index" open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                                         {({ TransitionProps, placement }) => (
                                             <Grow
                                                 {...TransitionProps}
@@ -158,11 +206,10 @@ function CreateShots() {
                                             </Grow>
                                         )}
                                     </Popper>
-                                    <span className="tooltiptext">font chu</span>
                                 </section>
                             </div>
                         </section>
-                        <section className="section">
+                        <section className="section" style={audio || video ? { height: "50%" } : { height: "25%" }}>
                             <p>Da phuong tien</p>
                             <div id="media" className="div">
                                 <section className="tooltip">
@@ -185,18 +232,36 @@ function CreateShots() {
                                     <span className="tooltiptext">Anh </span>
                                 </section>
                                 <section className="tooltip">
-                                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><linearGradient id="a"><stop offset="0" stop-color="#ff5e50" /><stop offset=".249" stop-color="#fe5c6c" /><stop offset=".3765" stop-color="#e3658a" /><stop offset=".497" stop-color="#b87eb0" /><stop offset=".6267" stop-color="#916cff" /><stop offset=".7628" stop-color="#70bcfb" stop-opacity=".917647" /><stop offset="1" stop-color="#21c7fe" /></linearGradient><linearGradient id="b" gradientTransform="matrix(2.8346 0 0 -2.8346 -2983.6272 5210.2773)" gradientUnits="userSpaceOnUse" x1="1092.0836" x2="1194.8329" xlinXhref="#a" y1="1813.7263" y2="1680.365" /><linearGradient id="c" gradientTransform="matrix(2.8346 0 0 -2.8346 -2983.6272 5210.2773)" gradientUnits="userSpaceOnUse" x1="1091.8068" x2="1194.556" xlinkHref="#a" y1="1813.5131" y2="1680.1516" /><path d="m256 0c-141.386719 0-256 114.613281-256 256s114.613281 256 256 256 256-114.613281 256-256-114.613281-256-256-256zm0 490.496094c-129.507812 0-234.496094-104.988282-234.496094-234.496094s104.988282-234.496094 234.496094-234.496094 234.496094 104.988282 234.496094 234.496094-104.988282 234.496094-234.496094 234.496094zm0 0" fill="url(#b)" /><path d="m340.269531 376.832031c15.027344-4.511719 25.636719-15.449219 29.984375-30.902343l1.277344-4.546876.167969-121.835937c.128906-91.242187.007812-122.40625-.488281-124.105469-.523438-1.800781-1.347657-3.316406-2.433594-4.511718-1.585938-1.003907-3.5-1.53125-5.664063-1.53125-1.496093 0-6.683593.738281-11.523437 1.640624-21.414063 3.988282-147.636719 29.71875-149.789063 30.53125-3.335937 1.261719-6.640625 4.261719-8.207031 7.445313l-1.328125 2.695313s-.625 190.96875-1.59375 193.121093c-1.472656 3.269531-4.734375 6.371094-7.742187 7.359375-1.425782.46875-7.066407 1.761719-12.535157 2.875-25.324219 5.160156-34.730469 8.875-42.6875 16.867188-4.515625 4.539062-7.863281 10.734375-9.3125 17.238281-1.378906 6.214844-.917969 15.515625 1.054688 21.167969 2.0625 5.917968 5.386719 10.96875 9.734375 14.941406 3.949218 3.117188 8.613281 5.4375 13.855468 6.808594 11.59375 3.039062 33.292969-.339844 44.394532-6.90625 4.636718-2.746094 10.605468-8.511719 13.710937-13.25 1.226563-1.871094 3.078125-5.652344 4.109375-8.390625 3.613282-9.605469 3.726563-180.6875 4.191406-182.84375.78125-3.652344 3.222657-6.332031 6.589844-7.238281 3.03125-.816407 124.570313-25.410157 127.988282-25.898438 3.011718-.429688 5.855468.5625 7.40625 2.515625.921874.507813 1.695312 1.191406 2.242187 2.027344.984375 1.503906 1.046875 4.480469 1.191406 58.644531.171875 62.34375.242188 60.882812-3.066406 64.816406-2.40625 2.863282-5.417969 3.96875-17.769531 6.546875-18.792969 3.925781-25.226563 5.792969-32.421875 9.390625-8.988281 4.492188-13.980469 9.414063-17.835938 17.589844-2.730469 5.785156-3.75 10.121094-3.742187 15.878906.019531 10.292969 3.488281 18.335938 11.316406 26.210938.71875.722656 1.429688 1.398437 2.140625 2.035156 3.945313 3.117188 7.964844 4.996094 13.019531 6.1875 7.625 1.796875 23.144532.613281 33.765625-2.574219zm0 0" fill="url(#c)" /></svg>
+                                    <svg onClick={e => mp3Ref.current.click()} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><linearGradient id="a"><stop offset="0" stop-color="#ff5e50" /><stop offset=".249" stop-color="#fe5c6c" /><stop offset=".3765" stop-color="#e3658a" /><stop offset=".497" stop-color="#b87eb0" /><stop offset=".6267" stop-color="#916cff" /><stop offset=".7628" stopColor="#70bcfb" stopOpacity=".917647" /><stop offset="1" stop-color="#21c7fe" /></linearGradient><linearGradient id="b" gradientTransform="matrix(2.8346 0 0 -2.8346 -2983.6272 5210.2773)" gradientUnits="userSpaceOnUse" x1="1092.0836" x2="1194.8329" xlinXhref="#a" y1="1813.7263" y2="1680.365" /><linearGradient id="c" gradientTransform="matrix(2.8346 0 0 -2.8346 -2983.6272 5210.2773)" gradientUnits="userSpaceOnUse" x1="1091.8068" x2="1194.556" xlinkHref="#a" y1="1813.5131" y2="1680.1516" /><path d="m256 0c-141.386719 0-256 114.613281-256 256s114.613281 256 256 256 256-114.613281 256-256-114.613281-256-256-256zm0 490.496094c-129.507812 0-234.496094-104.988282-234.496094-234.496094s104.988282-234.496094 234.496094-234.496094 234.496094 104.988282 234.496094 234.496094-104.988282 234.496094-234.496094 234.496094zm0 0" fill="url(#b)" /><path d="m340.269531 376.832031c15.027344-4.511719 25.636719-15.449219 29.984375-30.902343l1.277344-4.546876.167969-121.835937c.128906-91.242187.007812-122.40625-.488281-124.105469-.523438-1.800781-1.347657-3.316406-2.433594-4.511718-1.585938-1.003907-3.5-1.53125-5.664063-1.53125-1.496093 0-6.683593.738281-11.523437 1.640624-21.414063 3.988282-147.636719 29.71875-149.789063 30.53125-3.335937 1.261719-6.640625 4.261719-8.207031 7.445313l-1.328125 2.695313s-.625 190.96875-1.59375 193.121093c-1.472656 3.269531-4.734375 6.371094-7.742187 7.359375-1.425782.46875-7.066407 1.761719-12.535157 2.875-25.324219 5.160156-34.730469 8.875-42.6875 16.867188-4.515625 4.539062-7.863281 10.734375-9.3125 17.238281-1.378906 6.214844-.917969 15.515625 1.054688 21.167969 2.0625 5.917968 5.386719 10.96875 9.734375 14.941406 3.949218 3.117188 8.613281 5.4375 13.855468 6.808594 11.59375 3.039062 33.292969-.339844 44.394532-6.90625 4.636718-2.746094 10.605468-8.511719 13.710937-13.25 1.226563-1.871094 3.078125-5.652344 4.109375-8.390625 3.613282-9.605469 3.726563-180.6875 4.191406-182.84375.78125-3.652344 3.222657-6.332031 6.589844-7.238281 3.03125-.816407 124.570313-25.410157 127.988282-25.898438 3.011718-.429688 5.855468.5625 7.40625 2.515625.921874.507813 1.695312 1.191406 2.242187 2.027344.984375 1.503906 1.046875 4.480469 1.191406 58.644531.171875 62.34375.242188 60.882812-3.066406 64.816406-2.40625 2.863282-5.417969 3.96875-17.769531 6.546875-18.792969 3.925781-25.226563 5.792969-32.421875 9.390625-8.988281 4.492188-13.980469 9.414063-17.835938 17.589844-2.730469 5.785156-3.75 10.121094-3.742187 15.878906.019531 10.292969 3.488281 18.335938 11.316406 26.210938.71875.722656 1.429688 1.398437 2.140625 2.035156 3.945313 3.117188 7.964844 4.996094 13.019531 6.1875 7.625 1.796875 23.144532.613281 33.765625-2.574219zm0 0" fill="url(#c)" /></svg>
+                                    <input onChange={e => handleChangeMusic(e)} ref={mp3Ref} style={{ display: "none" }} type="file" accept="audio/*"></input>
                                     <span className="tooltiptext">
                                         Nhac (mp3)
                                     </span>
                                 </section>
                                 <section className="tooltip">
-                                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><g fill="#dfe7f4"><path d="m15 406v60h241 241v-60h-241z" /><path d="m256 46h-241v60h241 241v-60z" /></g><path d="m256 46h241v60h-241z" fill="#c7cfe1" /><path d="m256 406h241v60h-241z" fill="#c7cfe1" /><path d="m256 106h-226v300h226 226v-300z" fill="#ff641a" /><path d="m256 106h226v300h-226z" fill="#f03800" /><g><g fill="#404a80"><path d="m0 391v90h256 256v-90h-256zm81 60h-51v-30h51zm80 0h-50v-30h50zm80 0h-50v-30h50zm190-30h51v30h-51zm-80 0h50v30h-50zm-80 0h50v30h-50z" /><path d="m256 31h-256v90h256 256v-90zm-175 60h-51v-30h51zm80 0h-50v-30h50zm80 0h-50v-30h50zm80 0h-50v-30h50zm80.001 0h-50.001v-30h50.001zm80.999 0h-51.099v-30h51.099z" /></g><g fill="#283366"><path d="m321 91h-50v-30h50zm80.001 0h-50.001v-30h50.001zm-145.001-60v90h256v-90zm226 60h-51.099v-30h51.099z" /><path d="m512 391h-256v90h256zm-191 60h-50v-30h50zm80 0h-50v-30h50zm81 0h-51v-30h51z" /></g></g><path d="m256 197.976-45-29.998v176.044l45-29.998 87.041-58.024z" fill="#f0f7ff" /><path d="m256 197.976v116.048l87.041-58.024z" fill="#dfe7f4" /></g></svg>
+                                    <svg onClick={(e) => videoRef.current.click()} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><g fill="#dfe7f4"><path d="m15 406v60h241 241v-60h-241z" /><path d="m256 46h-241v60h241 241v-60z" /></g><path d="m256 46h241v60h-241z" fill="#c7cfe1" /><path d="m256 406h241v60h-241z" fill="#c7cfe1" /><path d="m256 106h-226v300h226 226v-300z" fill="#ff641a" /><path d="m256 106h226v300h-226z" fill="#f03800" /><g><g fill="#404a80"><path d="m0 391v90h256 256v-90h-256zm81 60h-51v-30h51zm80 0h-50v-30h50zm80 0h-50v-30h50zm190-30h51v30h-51zm-80 0h50v30h-50zm-80 0h50v30h-50z" /><path d="m256 31h-256v90h256 256v-90zm-175 60h-51v-30h51zm80 0h-50v-30h50zm80 0h-50v-30h50zm80 0h-50v-30h50zm80.001 0h-50.001v-30h50.001zm80.999 0h-51.099v-30h51.099z" /></g><g fill="#283366"><path d="m321 91h-50v-30h50zm80.001 0h-50.001v-30h50.001zm-145.001-60v90h256v-90zm226 60h-51.099v-30h51.099z" /><path d="m512 391h-256v90h256zm-191 60h-50v-30h50zm80 0h-50v-30h50zm81 0h-51v-30h51z" /></g></g><path d="m256 197.976-45-29.998v176.044l45-29.998 87.041-58.024z" fill="#f0f7ff" /><path d="m256 197.976v116.048l87.041-58.024z" fill="#dfe7f4" /></g></svg>
+                                    <input onChange={e => handleVideoUpload(e)} ref={videoRef} style={{ display: "none" }} type="file" accept="video/*"></input>
                                     <span className="tooltiptext">
                                         Video
                                     </span>
                                 </section>
                             </div>
+                            <div className="change">
+                                {audio ? <>
+                                    <span>
+                                        Chinh sua mp3
+                                    </span>
+                                    <Slider
+                                        max={duration}
+                                        min={0}
+                                        value={value}
+                                        onChange={handleChange}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="range-slider"
+                                    /></> : console.log()}
+
+                            </div>
+
                         </section>
                     </div>
                     <div onClick={e => handleSubmit(e)} className="bottom">

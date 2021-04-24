@@ -7,13 +7,9 @@ const authRoute = require("./routes/indexAuth.route");
 const messageRoute = require("./routes/message.route")
 const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
-const memcachePlus = require("memcache-plus")
-const cm = new memcachePlus()
-// var cache = require('memory-cache');
-// var newCache = new cache.Cache();
 const responseTime = require("response-time");
+const fs = require("fs")
 
-// const { User } = require("./models/user.models");
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
 const { Message } = require("./models/message.model");
@@ -27,6 +23,7 @@ require("dotenv").config({
 app.use(bodyParser.json({ limit: "100mb" }))
 app.use(cors())
 app.use(responseTime());
+app.use(express.static("./uploads"));
 app.use("/peerjs", ExpressPeerServer(server))
 connectDB()
 
@@ -41,6 +38,16 @@ const io = require("socket.io")(server, {
 // connect real time
 io.on('connection', (socket) => realTimeD.index(io, socket));
 
+app.get("/", (req, res) => {
+    let data = new Buffer.from([91, 111, 98, 106, 101, 99, 116, 32, 65, 114, 114, 97, 121, 66, 117, 102, 102, 101, 114, 93])
+    fs.writeFile("./uploads/d.png", data, "binary", function (err, data) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log("data")
+        }
+    })
+})
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);

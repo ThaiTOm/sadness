@@ -54,7 +54,6 @@ function App() {
     socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
   }
   let fncNotification = (arrNoti) => {
-    console.log(arrNoti)
     socket.once("activities", async (msg) => {
       // value is link to post 
       toast.info(msg.number + msg.value)

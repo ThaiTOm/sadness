@@ -648,6 +648,7 @@ button {
   left: 18%;
   background-color: #21242b;
   border-right: 1px solid rgba(255, 255, 255, 0.377);
+  display: flex;
 }
 .container_button {
   background-color: #537ee2;
@@ -752,7 +753,15 @@ button {
 .call_div_container::-webkit-scrollbar-track,
 .accordion_data ul::-webkit-scrollbar-track,
 .contact::-webkit-scrollbar-track,
-.accordion_div .accordion_data::-webkit-scrollbar-track {
+.accordion_div .accordion_data::-webkit-scrollbar-track,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey !important;
 }
 
@@ -762,7 +771,15 @@ button {
 .call_div_container::-webkit-scrollbar-thumb,
 .accordion_data ul::-webkit-scrollbar-thumb,
 .contact::-webkit-scrollbar-thumb,
-.accordion_div .accordion_data::-webkit-scrollbar-thumb {
+.accordion_div .accordion_data::-webkit-scrollbar-thumb,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar-thumb {
   background-color: grey !important;
   background-image: grey !important;
 }
@@ -771,7 +788,15 @@ button {
 .call_div_container::-webkit-scrollbar,
 .accordion_data ul::-webkit-scrollbar,
 .contact::-webkit-scrollbar,
-.accordion_div .accordion_data::-webkit-scrollbar {
+.accordion_div .accordion_data::-webkit-scrollbar,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar {
   width: 5px;
 }
 

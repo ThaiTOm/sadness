@@ -104,7 +104,7 @@ function Chat({ handleRoom }) {
         }
     }
     return (
-        <div className="message_container">
+        <div style={finish === true ? { display: "flex" } : { display: "block" }} className="message_container">
             <ShortStatus />
             <ToastContainer />
             <div className="container_button" style={finish === true ? { display: "none" } : {}}>

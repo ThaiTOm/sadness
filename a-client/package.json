@@ -16,6 +16,7 @@
     "classnames": "^2.3.0",
     "crypto-js": "^4.0.0",
     "emoji-picker-react": "^3.4.4",
+    "file-to-array-buffer": "^1.0.0",
     "graphql": "^15.5.0",
     "hark": "^1.2.3",
     "js-cookie": "^2.2.1",

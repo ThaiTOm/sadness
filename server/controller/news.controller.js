@@ -6,17 +6,26 @@ const { Idea } = require("../models/idea.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
 const ffmpeg = require("ffmpeg")
+const { generatePath } = require("../helpers/generatePath");
 
 // newCache save post like
 // cacheNode save comment like, notifications
 
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
+    const files = req.files
+    let path = []
+    if (files) {
+        for (let value of files) {
+            let name = id + "/news/" + generatePath(req.body, value.originalname)
+            path.push(name)
+        }
+    }
     let arr = text.split(/\r\n|\r|\n/)
     const blog = new Blog({
         user: id,
         text: arr,
-        image: file
+        image: path
     })
     blog.save((err, data) => {
         if (err) {
@@ -238,5 +247,19 @@ exports.getIdea = async (req, res) => {
 }
 exports.postShot = async (req, res) => {
     const { id, font, file, color, fontSize, text } = req.body
+    console.log(id)
+    if (file) {
+        try {
+            var process = new ffmpeg(file);
+            process.then(function (video) {
+                console.log('The video is ready to be processed');
+            }, function (err) {
+                console.log('Error: ' + err);
+            });
+        } catch (e) {
+            console.log(e.code);
+            console.log(e.msg);
+        }
+    }
 
 }

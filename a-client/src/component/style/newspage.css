@@ -441,6 +441,7 @@
   color: white;
 }
 .story-center .option-2 .option .section {
+  position: relative;
   width: 80%;
   padding-left: 5%;
   background-color: #1e2745;
@@ -465,9 +466,7 @@
 .story-center .option-2 .option #media section {
   flex: 0 0 33.333333333333%;
 }
-.story-center .option-2 .option div span {
-  margin-right: 10px;
-}
+
 .story-center .option-2 .option div svg {
   width: 45px;
   height: 45px;
@@ -502,4 +501,36 @@
 .story-center .option-2 .bottom svg {
   width: 50px;
   height: 50px;
+}
+.story_content_div video {
+  width: 100%;
+  height: 100%;
+}
+.story-content audio {
+  display: none;
+}
+.story-center .option-2 .option .section #font #z-index {
+  z-index: 9;
+  height: 50%;
+}
+.story-center .option-2 .option .section #font #z-index div {
+  min-height: 100%;
+  background-color: #393e49;
+  color: white;
+  font-size: 1.2rem;
+}
+.story-center .option-2 .option .section #font #z-index div ul {
+  height: 100%;
+  overflow-y: auto;
+}
+.story-center .option-2 .option .section .change {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+}
+.MuiSlider-root {
+  color: white !important;
+}
+.MuiSlider-root .PrivateValueLabel-label-5 {
+  color: black;
 }

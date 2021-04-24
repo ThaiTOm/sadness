@@ -2,7 +2,9 @@ const { arrOfRegion, regionGroup } = require("../../region");
 const { cutSpaceInString } = require("../../../a-client/src/algorithm/algorithm");
 const { cm } = require("../../nodeCache");
 const { Message } = require("../../models/message.model");
-const { User } = require("../../models/user.models")
+const { User } = require("../../models/user.models");
+const { generatePath } = require("../../helpers/generatePath");
+const fs = require("fs")
 
 const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
@@ -149,15 +151,6 @@ const sendMessageOff = async ({ room, message, id }) => {
     }, 1000)
     return { roomMessage: room, messageMessage: mess, memberMessage: id }
 }
-const sendImageOff = ({ room, image, userId }) => {
-    let data = {
-        image,
-        id: userId,
-        seen: false
-    }
-    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": data } }).exec()
-    return { roomMessage: room, message: data, member: userId }
-}
 
 const seenMessage = async ({ id, userId }) => {
     let fnc = (getM) => {
@@ -185,7 +178,6 @@ const chatGorup = ({ id, len, ipOfUser }) => {
         for (let i = start; i < end; i++) {
             data = regionGroup[pos][i]
             for (let value of regionGroup[pos].slice(start - i, end)) {
-                console.log(data, value)
                 if (data === value) {
                     let temp = regionGroup[pos].splice(i, 1)
                     regionGroup[pos].push(temp)
@@ -244,4 +236,32 @@ const chatGorup = ({ id, len, ipOfUser }) => {
 const outChat = ({ id, len }) => {
 
 }
-module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendImageOff, chatGorup, outChat };
+const sendFile = ({ room, image, userId, originName }) => {
+    let path = generatePath(userId, originName)
+    const dir = `./uploads/${userId}/message/`
+    let data = {
+        image: userId + "/message/" + path,
+        id: userId,
+        seen: false
+    }
+    const fnc = () => {
+        fs.writeFile(dir + path, image["0"], "binary", (err) => {
+            return { err: "yes" }
+        })
+    }
+    Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": data } }).exec((err, succes) => {
+        if (err) {
+            return { message: data, err: "yes" }
+        } else {
+            fs.exists(dir, exist => {
+                if (exist === false) {
+                    return fs.mkdir(dir, { recursive: true }, err => {
+                        if (!err) fnc()
+                    });
+                } else fnc()
+            })
+        }
+    })
+    return { message: data, err: null }
+}
+module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendFile, chatGorup, outChat };

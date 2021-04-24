@@ -15,6 +15,7 @@ import { toast } from "react-toastify"
 function Index() {
     const [text, setText] = useState("")
     const [file, setFile] = useState([])
+    const [url, setUrl] = useState([])
     // const [dataFile, setDataFile] = useState("")
     const [open, setOpen] = useState(false)
     const [login, setLogin] = useState(false)
@@ -23,15 +24,35 @@ function Index() {
 
     const dragFile = (file) => {
         let data = file[0];
-        let reader = new FileReader()
-        reader.readAsDataURL(data)
-        reader.onloadend = () => {
-            setFile(value => [...value, reader.result])
-        }
+        var URL = window.URL || window.webkitURL;
+        var src = URL.createObjectURL(data);
+        setUrl(value => [...value, src])
+        setFile(value => [...value, data])
+        // var reader = new FileReader();
+        // reader.onload = () => {
+        //     if (reader.result) {
+        //         var enc = new TextEncoder();
+        //         let dataa = enc.encode(reader.result)
+        //         console.log(dataa)
+        //         axios.post("http://localhost:2704/api/news/a", { formData: dataa })
+        //             .then(ok => {
+        //                 console.log(ok)
+        //             }).catch(err => {
+        //                 console.log(err)
+        //             })
+        //     }
+        // };
+        // reader.readAsArrayBuffer(data);
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        text && axios.post("http://localhost:2704/api/news/post", { text, file, id })
+        let formData = new FormData()
+        formData.append("text", text)
+        formData.append("id", id)
+        for (let value of file) {
+            formData.append("files", value)
+        }
+        text && axios.post("http://localhost:2704/api/news/post", formData)
             .then(data => {
                 toast.success("Bài viết của ban đã được đăng")
                 handleClose()
@@ -52,8 +73,11 @@ function Index() {
     };
     const handleDeleteImamge = (index) => {
         const arr = [...file]
+        const brr = [...url]
         arr.splice(index, 1)
+        brr.splice(index, 1)
         setFile(arr)
+        setUrl(brr)
     }
     const handleChangeText = e => {
         setText(e)
@@ -101,7 +125,7 @@ function Index() {
                 }}
             >
                 <Fade in={open}>
-                    <form onSubmit={handleSubmit} className="form_post_blog">
+                    <form action="#" onSubmit={handleSubmit} className="form_post_blog" >
                         <div className="close_form_button">
                             <IconButton onClick={handleClose}>
                                 x
@@ -136,7 +160,7 @@ function Index() {
                             {({ getRootProps, getInputProps }) => (
                                 <section >
                                     <div className="drag_file" {...getRootProps()}>
-                                        <input {...getInputProps()} />
+                                        <input type="file" accept="image/*"  {...getInputProps()} />
                                         <div className="icon">
                                             <CloudUploadIcon />
                                         </div>
@@ -148,7 +172,7 @@ function Index() {
                         <div>
                             <div className="image_post_news">
                                 {
-                                    typeof file !== 'undefined' ? Object.values(file).map(function (value, index) {
+                                    typeof url !== 'undefined' ? url.map(function (value, index) {
                                         return <li key={index}>
                                             <img alt="image_upload" src={value}></img>
                                             <span onClick={() => handleDeleteImamge(index)}>&#10005;</span>

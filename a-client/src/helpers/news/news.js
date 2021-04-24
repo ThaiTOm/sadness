@@ -10,53 +10,41 @@ import { toast } from 'react-toastify';
 import { Notifications } from '../../userContext';
 import { signOut } from '../auth';
 
-
 export const ImageRender = (cb) => {
     const { value } = cb.props
-    console.log(value)
+
+    const render = (value) => {
+        return (
+            <img
+                alt={value.slice(100, 110)}
+                src={`http://localhost:2704/${value}`}
+            />
+        )
+    }
     switch (value.image.length) {
         case 0:
             return <div></div>
         case 1:
             return <div className="one">
                 <Link to={"/posts/id=" + value.idBlog}>
-                    <img
-                        alt={value.image[0].slice(100, 110)}
-                        src={value.image[0]}
-                    />
+                    {render(value.image[0])}
                 </Link>
             </div>
         case 2:
             return <div className="two">
                 <Link to={"/posts/id=" + value.idBlog}>
-                    <img
-                        alt={value.image[0].slice(100, 110)}
-
-                        src={value.image[0]}></img>
-                    <img
-                        alt={value.image[1].slice(100, 110)}
-
-                        src={value.image[1]}></img>
+                    {render(value.image[0])}
+                    {render(value.image[1])}
                 </Link>
             </div>
-
         case 3:
             return <div className="three">
                 <Link to={"/posts/id=" + value.idBlog}>
                     <div className="two">
-                        <img
-                            alt={value.image[0].slice(100, 110)}
-
-                            src={value.image[0]}></img>
-                        <img
-
-                            alt={value.image[1].slice(100, 110)}
-                            src={value.image[1]}></img>
+                        {render(value.image[0])}
+                        {render(value.image[1])}
                     </div>
-                    <img
-                        alt={value.image[2].slice(100, 110)}
-
-                        src={value.image[2]}></img>
+                    {render(value.image[2])}
                 </Link>
             </div>
 
@@ -64,24 +52,12 @@ export const ImageRender = (cb) => {
             return <div className="three">
                 <Link to={"/posts/id=" + value.idBlog}>
                     <div className="two">
-                        <img
-                            alt={value.image[0].slice(100, 110)}
-
-                            src={value.image[0]}></img>
-                        <img
-                            alt={value.image[1].slice(100, 110)}
-
-                            src={value.image[1]}></img>
+                        {render(value.image[0])}
+                        {render(value.image[1])}
                     </div>
                     <div className="two">
-                        <img
-                            alt={value.image[2].slice(100, 110)}
-
-                            src={value.image[2]}></img>
-                        <img
-                            alt={value.image[3].slice(100, 110)}
-
-                            src={value.image[3]}></img>
+                        {render(value.image[2])}
+                        {render(value.image[3])}
                     </div>
                 </Link>
             </div>
@@ -89,25 +65,13 @@ export const ImageRender = (cb) => {
             return <div className="three">
                 <Link to={"/posts/id=" + value.idBlog}>
                     <div className="two">
-                        <img
-                            alt={value.image[0].slice(100, 110)}
-
-                            src={value.image[0]}></img>
-                        <img
-                            alt={value.image[0].slice(10, 100)}
-
-                            src={value.image[1]}></img>
+                        {render(value.image[0])}
+                        {render(value.image[1])}
                     </div>
                     <div className="two" >
-                        <img
-                            alt={value.image[1].slice(100, 110)}
-
-                            src={value.image[2]}></img>
+                        {render(value.image[0])}
                         <div style={{ position: "relative", width: "90%" }}>
-                            <img
-                                alt={value.image[2].slice(100, 110)}
-                                className="more_image"
-                                src={value.image[3]}></img>
+                            {render(value.image[2])}
                             <span className="last_image">
                                 + {value.image.length - 4}
                             </span>
@@ -116,6 +80,7 @@ export const ImageRender = (cb) => {
                 </Link>
             </div>
     }
+
 }
 
 export const NavbarRight = () => {
@@ -174,7 +139,7 @@ export const NavbarRight = () => {
                 <p>
                     Brand
                 </p>
-                <svg onClick={e => handleClickNoti(e)} id="Layer_4" enable-background="new 0 0 24 24" height="15pt" viewBox="0 0 24 24" width="15pt" xmlns="http://www.w3.org/2000/svg"><g><path d="m21.379 16.913c-1.512-1.278-2.379-3.146-2.379-5.125v-2.788c0-3.519-2.614-6.432-6-6.92v-1.08c0-.553-.448-1-1-1s-1 .447-1 1v1.08c-3.387.488-6 3.401-6 6.92v2.788c0 1.979-.867 3.847-2.388 5.133-.389.333-.612.817-.612 1.329 0 .965.785 1.75 1.75 1.75h16.5c.965 0 1.75-.785 1.75-1.75 0-.512-.223-.996-.621-1.337z" /><path d="m12 24c1.811 0 3.326-1.291 3.674-3h-7.348c.348 1.709 1.863 3 3.674 3z" /></g></svg>
+                <svg onClick={e => handleClickNoti(e)} id="Layer_4" height="15pt" viewBox="0 0 24 24" width="15pt" xmlns="http://www.w3.org/2000/svg"><g><path d="m21.379 16.913c-1.512-1.278-2.379-3.146-2.379-5.125v-2.788c0-3.519-2.614-6.432-6-6.92v-1.08c0-.553-.448-1-1-1s-1 .447-1 1v1.08c-3.387.488-6 3.401-6 6.92v2.788c0 1.979-.867 3.847-2.388 5.133-.389.333-.612.817-.612 1.329 0 .965.785 1.75 1.75 1.75h16.5c.965 0 1.75-.785 1.75-1.75 0-.512-.223-.996-.621-1.337z" /><path d="m12 24c1.811 0 3.326-1.291 3.674-3h-7.348c.348 1.709 1.863 3 3.674 3z" /></g></svg>
                 {
                     value.length > 0 ? <span>{value.length}</span> : console.log()
                 }
@@ -223,7 +188,7 @@ export const NavbarRight = () => {
                     <Link className="feedback_icon icon_nav" to="" >
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                viewBox="0 0 512 512" xmlXspace="preserve">                                <g>                                    <g>                                        <g>
+                                viewBox="0 0 512 512" xmlxspace="preserve">                                <g>                                    <g>                                        <g>
                                     <path d="M374.031,241.75c-6.671-54.43-49.629-97.28-104.076-103.813c-4.688-0.535-9.402-0.803-14.121-0.804
 				c-48.118,0.074-91.444,29.154-109.742,73.657c-18.298,44.503-7.957,95.649,26.193,129.548c18.16,17.391,28.56,41.357,28.857,66.5
 				v13.733h109.714v-13.804c0.083-24.667,10.118-48.256,27.831-65.424c26.754-25.813,39.84-62.686,35.343-99.589V241.75z"/>
@@ -260,7 +225,7 @@ export const NavbarRight = () => {
                     <Link className="contact_icon icon_nav" to="/help">
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                viewBox="0 0 512 512" xmlXspace="preserve">
+                                viewBox="0 0 512 512" xmlxspace="preserve">
                                 <g>
                                     <g>
                                         <path d="M256,0C115.391,0,0.002,115.389,0.002,255.998c0,45.747,12.378,90.526,35.859,130.004L0.778,492.25
@@ -283,7 +248,7 @@ export const NavbarRight = () => {
                         <div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                viewBox="0 0 296.999 296.999" xmlXspace="preserve">
+                                viewBox="0 0 296.999 296.999" xmlxspace="preserve">
                                 <g>
                                     <g>
                                         <g>
@@ -309,7 +274,7 @@ export const NavbarRight = () => {
                 </li>
             </ul>
             <span className="logout_icon" onClick={e => handleLogOut()}>
-                <svg enable-background="new 0 0 24 24" height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg"><g><path d="m15 13c-.553 0-1 .448-1 1v4c0 .551-.448 1-1 1h-3v-15c0-.854-.544-1.617-1.362-1.901l-.296-.099h4.658c.552 0 1 .449 1 1v3c0 .552.447 1 1 1s1-.448 1-1v-3c0-1.654-1.346-3-3-3h-10.75c-.038 0-.07.017-.107.022-.048-.004-.094-.022-.143-.022-1.103 0-2 .897-2 2v18c0 .854.544 1.617 1.362 1.901l6.018 2.006c.204.063.407.093.62.093 1.103 0 2-.897 2-2v-1h3c1.654 0 3-1.346 3-3v-4c0-.552-.447-1-1-1z" /><path d="m23.707 9.293-4-4c-.286-.286-.716-.372-1.09-.217-.373.155-.617.52-.617.924v3h-4c-.552 0-1 .448-1 1s.448 1 1 1h4v3c0 .404.244.769.617.924.374.155.804.069 1.09-.217l4-4c.391-.391.391-1.023 0-1.414z" /></g></svg>
+                <svg height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg"><g><path d="m15 13c-.553 0-1 .448-1 1v4c0 .551-.448 1-1 1h-3v-15c0-.854-.544-1.617-1.362-1.901l-.296-.099h4.658c.552 0 1 .449 1 1v3c0 .552.447 1 1 1s1-.448 1-1v-3c0-1.654-1.346-3-3-3h-10.75c-.038 0-.07.017-.107.022-.048-.004-.094-.022-.143-.022-1.103 0-2 .897-2 2v18c0 .854.544 1.617 1.362 1.901l6.018 2.006c.204.063.407.093.62.093 1.103 0 2-.897 2-2v-1h3c1.654 0 3-1.346 3-3v-4c0-.552-.447-1-1-1z" /><path d="m23.707 9.293-4-4c-.286-.286-.716-.372-1.09-.217-.373.155-.617.52-.617.924v3h-4c-.552 0-1 .448-1 1s.448 1 1 1h4v3c0 .404.244.769.617.924.374.155.804.069 1.09-.217l4-4c.391-.391.391-1.023 0-1.414z" /></g></svg>
                 Đăng xuất
             </span>
             <Modal
