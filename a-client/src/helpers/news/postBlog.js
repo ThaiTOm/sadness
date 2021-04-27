@@ -28,21 +28,6 @@ function Index() {
         var src = URL.createObjectURL(data);
         setUrl(value => [...value, src])
         setFile(value => [...value, data])
-        // var reader = new FileReader();
-        // reader.onload = () => {
-        //     if (reader.result) {
-        //         var enc = new TextEncoder();
-        //         let dataa = enc.encode(reader.result)
-        //         console.log(dataa)
-        //         axios.post("http://localhost:2704/api/news/a", { formData: dataa })
-        //             .then(ok => {
-        //                 console.log(ok)
-        //             }).catch(err => {
-        //                 console.log(err)
-        //             })
-        //     }
-        // };
-        // reader.readAsArrayBuffer(data);
     }
     const handleSubmit = (e) => {
         e.preventDefault();

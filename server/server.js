@@ -8,6 +8,7 @@ const messageRoute = require("./routes/message.route")
 const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const responseTime = require("response-time");
+const spawn = require("child_process").spawn;
 const fs = require("fs")
 
 const app = express();
@@ -34,19 +35,20 @@ const io = require("socket.io")(server, {
         credentials: true
     }
 });
-
 // connect real time
 io.on('connection', (socket) => realTimeD.index(io, socket));
-
 app.get("/", (req, res) => {
-    let data = new Buffer.from([91, 111, 98, 106, 101, 99, 116, 32, 65, 114, 114, 97, 121, 66, 117, 102, 102, 101, 114, 93])
-    fs.writeFile("./uploads/d.png", data, "binary", function (err, data) {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log("data")
-        }
-    })
+    var cmd = '/usr/bin/ffmpeg';
+    var args = ['-i', 'ans.avi', '-vf', 'drawtext="fontfile=./font.ttf:\ text= "Stack Overflow": fontcolor=white: fontsize=50:  \ x=(w-text_w)/2: y=(h-text_h)/2', '-codec:a', 'copy', 'some.avi']
+    var proc = spawn(cmd, args);
+    proc.stderr.setEncoding("utf8")
+    proc.stderr.on('data', function (data) {
+        console.log(data);
+    });
+
+    proc.on('close', function () {
+        console.log('finished');
+    });
 })
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);

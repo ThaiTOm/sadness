@@ -1,15 +1,13 @@
-const redis = require("redis")
-const client = redis.createClient()
-const promisify = require("util").promisify
 const { Blog } = require("../models/blog.models")
 const { Idea } = require("../models/idea.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
-const ffmpeg = require("ffmpeg")
+const spawn = require("child_process").spawn;
+const fs = require("fs")
 const { generatePath } = require("../helpers/generatePath");
-
-// newCache save post like
-// cacheNode save comment like, notifications
+const redis = require("redis");
+const client = redis.createClient();
+const util = require("util")
 
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
@@ -39,6 +37,7 @@ exports.postBlog = (req, res) => {
         }
     })
 }
+
 exports.viewBlog = async (req, res) => {
     let { start, end, id } = req.query
     start = Number(start)
@@ -141,6 +140,7 @@ exports.viewBlog = async (req, res) => {
     else if (50 <= start < 60) return await ret(5)
 
 }
+
 exports.viewOne = async (req, res) => {
     const { id, user } = req.query
     let value = await Blog.findById({ "_id": id }).exec()
@@ -167,6 +167,7 @@ exports.viewOne = async (req, res) => {
     }
     arr.indexOf(id) > -1 ? await fnc(true) : await fnc(false)
 }
+
 exports.viewComment = async (req, res) => {
     const { start, id, blog, end } = req.query
     let commentArr = await Blog.findById({ "_id": blog }, "comment").exec()
@@ -196,6 +197,7 @@ exports.viewComment = async (req, res) => {
         data: arr
     })
 }
+
 exports.getNotifications = async (req, res) => {
     const { id, start, end } = req.query
     let value = await nodeCache.get(id + "noti")
@@ -241,25 +243,139 @@ exports.getBlogWithOut = async (req, res) => {
         data: data
     })
 }
+
 exports.getIdea = async (req, res) => {
     let data = await Idea.find({}).exec()
     return res.json({ data: data.reverse() })
 }
 exports.postShot = async (req, res) => {
-    const { id, font, file, color, fontSize, text } = req.body
-    console.log(id)
-    if (file) {
-        try {
-            var process = new ffmpeg(file);
-            process.then(function (video) {
-                console.log('The video is ready to be processed');
-            }, function (err) {
-                console.log('Error: ' + err);
-            });
-        } catch (e) {
-            console.log(e.code);
-            console.log(e.msg);
-        }
-    }
+    let { id, font, color, fontSize, text, slice } = req.body
+    let { photo, audio, video } = req.files
 
+    audio = audio && audio[0] || null
+    photo = photo && photo[0] || null
+    video = video && video[0] || null
+
+    slice = slice.split(",")
+    // get time for create name of file
+    let d = new Date()
+    let n = d.getTime()
+
+    // Path to ffmpeg
+    var cmd = '/usr/bin/ffmpeg';
+    const dir = `uploads/${id}/shots`
+
+    const fsExists = util.promisify(fs.exists)
+    const fsMkdir = util.promisify(fs.mkdir)
+    try {
+        let Bool = await fsExists(`./${dir}`)
+        if (Bool === false) {
+            await fsMkdir(`./${dir}`)
+        }
+    } catch (error) {
+        res.json({
+            status: 500,
+            error: error
+        })
+    }
+    let deletePath = (path) => {
+        fs.unlink(path, (err) => {
+            if (err) {
+                return { error: "error" }
+            }
+            else {
+                return { error: null }
+            }
+        })
+    }
+    if (photo) {
+        let photoName = generatePath(req.body, photo.originalname, photo.mimetype)
+        let audioName = generatePath(req.body, audio.originalname, audio.mimetype)
+        // file in first case
+        // uploads/id/shots/asdasd.mp3 //
+        let fileName = `${dir}/${audioName.split(".")[0] + n}.mp3`
+        //Splice the audio
+        let args1 = ['-ss', slice[0], `-i`, `designShot/${id}/${audioName}`, `-t`, slice[1] - slice[0], `-c`, `copy`, fileName]
+        // Audio + image from user
+        var args2 = ['-loop', '1', '-y', `-i`, `designShot/${id}/${photoName}`, `-i`, fileName, `-shortest`, `-acodec`, `copy`, `-vcodec`, `mjpeg`, `${dir}/${photoName.split(".")[0] + n}.avi`]
+
+        let proc = spawn(cmd, args1);
+        proc.on('close', async function (data) {
+            if (data !== 0) {
+                return res.json({ error: "error" })
+            } else {
+                // no error
+                let process = spawn(cmd, args2);
+                process.on("close", (data) => {
+                    // have error
+                    if (data !== 0) {
+                        return res.json({
+                            status: 500,
+                            error: "error"
+                        })
+                    } else if (text) {
+                        // case if user adds text 
+                        let arg = [`-i`, `${dir}/${photoName.split(".")[0] + n}.avi`, `-vf`, `drawtext=fontfile=/Font/ubuntu.ttf:\ text=${text}:fontcolor=${color}:fontsize=${fontSize * 3}:\ x=(w-text_w)/2: y=(h-text_h)/2`, `-codec:a`, `copy`, `${fileName + n}.mp4`]
+                        let proce = spawn(cmd, arg)
+                        proce.on('close', function () {
+                            deletePath(`${dir}/${photoName.split(".")[0] + n}.avi`)
+                            deletePath(`designShot/${id}/${photoName}`)
+                            deletePath(`designShot/${id}/${audioName}`)
+                            deletePath(fileName)
+                            client.hmset(id + n, "id-user", id, "path", `${fileName + n}.mp4`, (err, ok) => {
+                                if (err) {
+                                    return res.json({
+                                        status: 500,
+                                        error: "error"
+                                    })
+                                } else {
+                                    return res.json({
+                                        status: 200,
+                                    })
+                                }
+                            })
+                        });
+                    } else {
+                        // case if user does not add anything
+                        deletePath(`designShot/${id}/${photoName}`)
+                        deletePath(`designShot/${id}/${audioName}`)
+                        deletePath(fileName)
+                    }
+                })
+            }
+        });
+    }
+    else if (video) {
+        let videoName = video.path || generatePath(req.body, video.originalname, video.mimetype)
+        let fileName = `designShot/${id}/${n + video.originalname}`
+        let arg = [`-i`, videoName, `-ss`, slice[0], `-t`, slice[1], `-acodec`, `copy`, `-vcodec`, `copy`,]
+        let proc = spawn(cmd, arg);
+        proc.on('close', function () {
+            if (text) {
+                let arg = [`-i`, fileName, `-vf`, `drawtext=fontfile=/Font/ubuntu.ttf:\ text=${text}:fontcolor=${color}:fontsize=${fontSize * 3}:\ x=(w-text_w)/2: y=(h-text_h)/2`, `-codec:a`, `copy`, `${dir}/${video.originalname.split(".")[0] + n}.mp4`]
+                let proce = spawn(cmd, arg)
+                proce.on('close', function () {
+                    deletePath(fileName)
+                    deletePath(videoName)
+                    client.hmset(id + n, "id-user", id, "path", `${dir}/${video.originalname.split(".")[0] + n}.mp4`, (err, ok) => {
+                        if (err) {
+                            return res.json({
+                                status: 500,
+                                error: "error"
+                            })
+                        } else {
+                            return res.json({
+                                status: 200,
+                            })
+                        }
+                    })
+                });
+            } else {
+
+            }
+        });
+    }
+    else {
+
+    }
 }

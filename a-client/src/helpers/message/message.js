@@ -18,7 +18,7 @@ let socket = socketApp.getSocket();
 
 export const handleFileUpload = (e, userId, id) => {
     let file = e.target.files;
-    socket.emit("file", { room: id, image: file, userId, originName: file["0"].name })
+    socket.emit("file", { room: id, image: file, userId, originName: file["0"].name, type: file["0"].type })
 }
 export const messageLiImageRender = (value, i, imgUrl, myRef) => {
     return (

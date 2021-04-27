@@ -14,13 +14,19 @@ import MenuList from '@material-ui/core/MenuList';
 import { getCookie } from '../../helpers/auth';
 import Slider from '@material-ui/core/Slider';
 
+var urlCreator = window.URL || window.webkitURL;
+
 function CreateShots() {
     const id = getCookie().token
+
     const fileRef = useRef(null);
     const videoRef = useRef(null)
-    const mp3Ref = useRef(null)
-    const audioRef = useRef()
+    const audioRef = useRef(null)
+
+    // for target the input
+    const mp3Ref = useRef()
     const videoSrcRef = useRef()
+
     const anchorRef = useRef(null)
     const [file, setFile] = useState(null)
     const [text, setText] = useState("")
@@ -31,24 +37,20 @@ function CreateShots() {
     const [audio, setAudio] = useState(null)
     const [video, setVideo] = useState(null)
     const [value, setValue] = React.useState([0, 60]);
-    const fontFamily = ["Arial", "Times New Roman", "Times", "Courier New", "Ubuntu Mono", "Verdana", "Georgia", "Palatino", "Garamond", "Bookman", "Tahoma", "Trebuchet MS", "Arial Black", "Comic Sans MS"]
+    const fontFamily = ["Arial", "Times New Roman", "Times", "Courier New", "Ubuntu Mono", "Verdana"]
     const [duration, setDuration] = useState(100.1234)
+
+    const [fileSrc, setFileSrc] = useState(null)
+    const [audioSrc, setAudioSrc] = useState(null)
+    const [videoSrc, setVideoSrc] = useState(null)
 
     const handleFileUpload = async (e) => {
         let imageFile = e.target.files[0];
-        const options = {
-            maxSizeMB: 1,
-            maxWidth: 400,
-            useWebWorker: true
-        }
-        try {
-            const compressedFile = await imageCompression(imageFile, options);
-            var urlCreator = window.URL || window.webkitURL;
-            setFile(urlCreator.createObjectURL(compressedFile))
+        if (imageFile) {
+            setFile(imageFile)
+            setFileSrc(urlCreator.createObjectURL(imageFile))
             setVideo(null)
-            // await uploadToServer(compressedFile); // write your own logic
-        } catch (error) {
-            toast.error("Xin hay dang tai dung noi dung")
+            setVideoSrc(null)
         }
     }
     const changeSrc = (value) => {
@@ -60,18 +62,22 @@ function CreateShots() {
     }
     const handleVideoUpload = (e) => {
         let videoFile = e.target.files[0]
-        var URL = window.URL || window.webkitURL;
-        var src = URL.createObjectURL(videoFile);
-        setVideo(src)
+        // if is has file then no video else no file
+        setFileSrc(null)
         setFile(null)
-        changeSrc(videoRef)
+
+        setVideo(videoFile)
+        setVideoSrc(urlCreator.createObjectURL(videoFile))
+        changeSrc(videoSrcRef)
     }
     const handleChangeMusic = (e) => {
         let music = e.target.files[0]
-        var URL = window.URL || window.webkitURL;
-        var src = URL.createObjectURL(music);
-        setAudio(src)
+
+        setAudio(music)
+        setAudioSrc(urlCreator.createObjectURL(music))
+
         setDuration(100.1234)
+
         changeSrc(audioRef)
     }
     const handleChangeNumber = (e) => {
@@ -92,26 +98,45 @@ function CreateShots() {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post("http://localhost:2704/api/news/post/shot", { id, font, file, color, fontSize, text })
+        let total = audio !== null && audio["size"]
+        total += video !== null && video["size"]
+        total += file !== null && file["size"] + 0
+        total = total / (value[0] + value[1])
+        // 100 mb
+        if (total > 50000000) return toast.error("File qua lon by hay thu lai sau")
+        let formData = new FormData()
+        formData.append("text", text)
+        formData.append("color", color)
+        formData.append("fontSize", fontSize)
+        formData.append("slice", value)
+        formData.append("id", id)
+        formData.append("font", font)
+        formData.append("photo", file)
+        formData.append("audio", audio)
+        formData.append("video", video)
+        axios.post("http://localhost:2704/api/news/post/shot", formData)
             .then(data => {
                 toast.success("Bài viết của ban đã được đăng")
             })
             .catch(err => {
-
+                toast.error("Co loi da xay ra ban hay thu lai sau")
             })
     }
+
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-        if (isNaN(audioRef.current.duration) !== true) {
-            // put the conditional here 
-            if (duration === 100.1234) {
-                setDuration(audioRef.current.duration)
+        let fnc = (value) => {
+            if (isNaN(value.current.duration) !== true) {
+                // put the conditional here 
+                if (duration === 100.1234) {
+                    setDuration(value.current.duration)
+                }
+                // after run these codes audioRef will target to <video/> not video object
+                changeSrc(value)
             }
-            // after run these codes audioRef will target to <video/> not video object
-            audioRef.current.pause();
-            audioRef.current.load();
-            audioRef.current.play();
         }
+        setValue(newValue);
+        if (audio) fnc(audioRef)
+        else if (video) fnc(videoSrcRef)
     };
     return (
         <div className="story">
@@ -144,9 +169,9 @@ function CreateShots() {
                 </div>
                 <div className="story-content">
                     {audio ? <audio autoPlay controls ref={audioRef}>
-                        <source src={audio + "#t=" + value[0] + "," + value[1]} />
+                        <source src={audioSrc + "#t=" + value[0] + "," + value[1]} />
                     </audio> : console.log()}
-                    {!video ? <div className="story_content_div" style={file ? { backgroundImage: "url(" + file + ")" } : console.log()}>
+                    {!video ? <div className="story_content_div" style={file ? { backgroundImage: "url(" + fileSrc + ")" } : console.log()}>
                         <div>
                             {text.split(/\r\n|\r|\n/).map(function (value) {
                                 return <p style={{ color: color, fontSize: fontSize ? fontSize : 15, fontFamily: font }} > {value}</p>
@@ -154,7 +179,7 @@ function CreateShots() {
                         </div>
                     </div> : video ? <div className="story_content_div">
                         <video ref={videoSrcRef} autoPlay muted={audio ? true : false}>
-                            <source src={video} type="video/mp4" />
+                            <source src={videoSrc + `#t=${value[0]},${value[1]}`} type="video/mp4" />
                         </video>
                     </div> : console.log()}
                 </div>
@@ -247,7 +272,7 @@ function CreateShots() {
                                 </section>
                             </div>
                             <div className="change">
-                                {audio ? <>
+                                {audio || video ? <>
                                     <span>
                                         Chinh sua mp3
                                     </span>
@@ -259,9 +284,7 @@ function CreateShots() {
                                         valueLabelDisplay="auto"
                                         aria-labelledby="range-slider"
                                     /></> : console.log()}
-
                             </div>
-
                         </section>
                     </div>
                     <div onClick={e => handleSubmit(e)} className="bottom">
@@ -280,5 +303,4 @@ function CreateShots() {
         </div >
     )
 }
-
 export default CreateShots

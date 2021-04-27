@@ -1,4 +1,5 @@
-const { arrOfRegion, regionGroup } = require("../../region");
+const { arrOfRegion, regionGroup } = require("../../helpers/region");
+
 const { cutSpaceInString } = require("../../../a-client/src/algorithm/algorithm");
 const { cm } = require("../../nodeCache");
 const { Message } = require("../../models/message.model");
@@ -236,8 +237,8 @@ const chatGorup = ({ id, len, ipOfUser }) => {
 const outChat = ({ id, len }) => {
 
 }
-const sendFile = ({ room, image, userId, originName }) => {
-    let path = generatePath(userId, originName)
+const sendFile = ({ room, image, userId, originName, type }) => {
+    let path = generatePath(userId, originName, type)
     const dir = `./uploads/${userId}/message/`
     let data = {
         image: userId + "/message/" + path,
@@ -246,7 +247,7 @@ const sendFile = ({ room, image, userId, originName }) => {
     }
     const fnc = () => {
         fs.writeFile(dir + path, image["0"], "binary", (err) => {
-            return { err: "yes" }
+            if (err) return { err: "yes" }
         })
     }
     Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": data } }).exec((err, succes) => {
