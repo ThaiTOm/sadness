@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
 import CreateShots from './component/anotherPage/createShot';
-
+import "./helpers/indexeddb"
 
 function App() {
   let socket = socketApp.getSocket()
@@ -112,6 +112,8 @@ function App() {
   useEffect(() => {
     // document.title = title
   }, [title])
+
+
   return (
     <BrowserRouter >
       <Switch>

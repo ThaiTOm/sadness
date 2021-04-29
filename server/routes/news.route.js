@@ -1,5 +1,5 @@
 const express = require("express");
-const { postBlog, viewBlog, viewOne, viewComment, getNotifications, getBlogWithOut, postShot } = require("../controller/news.controller");
+const { postBlog, viewBlog, viewOne, viewComment, getNotifications, getBlogWithOut, postShot, getShot } = require("../controller/news.controller");
 const router = express.Router();
 const multer = require("multer");
 const { generatePath } = require("../helpers/generatePath");
@@ -45,5 +45,6 @@ router.get("/comment", viewComment);
 router.get("/notifications", getNotifications)
 router.get("/dataNo", getBlogWithOut)
 router.post("/post/shot", uploadShots.fields([{ name: "photo", maxCountL: 1 }, { name: "audio", maxCount: 1 }, { name: "video", maxCount: 1 }]), postShot)
+router.post("/get/shot", getShot)
 
 module.exports = router

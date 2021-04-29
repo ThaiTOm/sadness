@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
 import { Beforeunload } from 'react-beforeunload';
 
 import socketApp from './socket';

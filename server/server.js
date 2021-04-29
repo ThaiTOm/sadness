@@ -8,8 +8,9 @@ const messageRoute = require("./routes/message.route")
 const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const responseTime = require("response-time");
-const spawn = require("child_process").spawn;
-const fs = require("fs")
+const schedule = require('node-schedule');
+const redis = require("redis")
+const client = redis.createClient()
 
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -37,34 +38,31 @@ const io = require("socket.io")(server, {
 });
 // connect real time
 io.on('connection', (socket) => realTimeD.index(io, socket));
-app.get("/", (req, res) => {
-    var cmd = '/usr/bin/ffmpeg';
-    var args = ['-i', 'ans.avi', '-vf', 'drawtext="fontfile=./font.ttf:\ text= "Stack Overflow": fontcolor=white: fontsize=50:  \ x=(w-text_w)/2: y=(h-text_h)/2', '-codec:a', 'copy', 'some.avi']
-    var proc = spawn(cmd, args);
-    proc.stderr.setEncoding("utf8")
-    proc.stderr.on('data', function (data) {
-        console.log(data);
-    });
-
-    proc.on('close', function () {
-        console.log('finished');
-    });
-})
+// 
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
-app.get("/load/:num", (req, res) => {
-    const { num } = req.params
-    let arr = []
-    for (i = 0; i < parseInt(num); i++) {
-        Message.findByIdAndUpdate({ "_id": "6067dad2cdcc3315c25f12ee0a" }, { $push: { "data": "asd" } }, (err, result) => {
-            User.findById({ "_id": "6067dad2cdcc3315c25f12ee" }, (err, resuo) => {
+// app.get("/", (req, res) => {
+//     var task = cron.schedule('1 * * * *', () => {
+//         console.log('stopped task');
+//     }, {
+//         scheduled: false
+//     });
+//     task.start();
+// })
 
-            })
-        })
-    }
+// const job = schedule.scheduleJob("0 */1 * * * ", function () {
+//     console.log('Time for tea!');
+// });
 
-    return res.json(arr)
+app.get("/", (req, res) => {
+    client.scan("0", (err, data) => {
+        if (err) {
+            return res.json(err)
+        } else {
+            return res.json(data)
+        }
+    })
 })
 app.use((req, res, next) => {
     res.status(404).json({

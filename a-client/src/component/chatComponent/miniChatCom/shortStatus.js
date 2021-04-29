@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
+import axios from "axios"
+
 function ShortStatus() {
+    const [data, setData] = useState([])
+    const [start, setState] = useState(0)
+    const [end, setEnd] = useState(5)
+    useEffect(() => {
+        axios.post("http://localhost:2704/api/news/get/shot")
+    })
     return (
         <div className="shot">
             <div className="shot_header">

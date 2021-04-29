@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Link } from "react-router-dom"
 import axios from "axios"
-import imageCompression from 'browser-image-compression';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast, ToastContainer } from "react-toastify"
 import Button from '@material-ui/core/Button';
