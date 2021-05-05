@@ -1,5 +1,5 @@
 exports.generatePath = (req, originalname, file) => {
-    let fileArrOri = originalname.split(".")
+    let fileArrOri = originalname.replace(/\s/g, '').split(".")
     let mix = fileArrOri[0]
 
     let type = file.split("/")

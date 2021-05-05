@@ -51,19 +51,16 @@ app.use("/api/news/", newsRoute);
 //     task.start();
 // })
 
-// const job = schedule.scheduleJob("0 */1 * * * ", function () {
-//     console.log('Time for tea!');
-// });
 
-app.get("/", (req, res) => {
-    client.scan("0", (err, data) => {
-        if (err) {
-            return res.json(err)
-        } else {
-            return res.json(data)
-        }
-    })
-})
+// app.get("/", (req, res) => {
+//     client.scan("0", (err, data) => {
+//         if (err) {
+//             return res.json(err)
+//         } else {
+//             return res.json(data)
+//         }
+//     })
+// })
 app.use((req, res, next) => {
     res.status(404).json({
         succes: false,

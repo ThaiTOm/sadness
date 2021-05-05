@@ -38,6 +38,7 @@ function CreateShots() {
     const [value, setValue] = React.useState([0, 60]);
     const fontFamily = ["Arial", "Times New Roman", "Times", "Courier New", "Ubuntu Mono", "Verdana"]
     const [duration, setDuration] = useState(100.1234)
+    const [time, setTime] = useState(1)
 
     const [fileSrc, setFileSrc] = useState(null)
     const [audioSrc, setAudioSrc] = useState(null)
@@ -46,10 +47,20 @@ function CreateShots() {
     const handleFileUpload = async (e) => {
         let imageFile = e.target.files[0];
         if (imageFile) {
-            setFile(imageFile)
-            setFileSrc(urlCreator.createObjectURL(imageFile))
-            setVideo(null)
-            setVideoSrc(null)
+            let img = new Image();
+            let fnc = () => {
+                setFile(imageFile)
+                setFileSrc(urlCreator.createObjectURL(imageFile))
+                setVideo(null)
+                setVideoSrc(null)
+            }
+            var objectUrl = urlCreator.createObjectURL(imageFile);
+            img.onload = function () {
+                if (this.width > 3500 || this.height > 2500) toast.error("Vui long chon anh co kich co be hon 3500x2500")
+                else fnc()
+                urlCreator.revokeObjectURL(objectUrl);
+            };
+            img.src = objectUrl;
         }
     }
     const changeSrc = (value) => {
@@ -59,6 +70,7 @@ function CreateShots() {
             value.current.play();
         }
     }
+
     const handleVideoUpload = (e) => {
         let videoFile = e.target.files[0]
         // if is has file then no video else no file
@@ -69,21 +81,25 @@ function CreateShots() {
         setVideoSrc(urlCreator.createObjectURL(videoFile))
         changeSrc(videoSrcRef)
     }
+
     const handleChangeMusic = (e) => {
         let music = e.target.files[0]
-
-        setAudio(music)
-        setAudioSrc(urlCreator.createObjectURL(music))
-
-        setDuration(100.1234)
-
-        changeSrc(audioRef)
+        let type = music.type.split("/")[1]
+        if (type === "mp3" || type === "mpeg") {
+            setAudio(music)
+            setAudioSrc(urlCreator.createObjectURL(music))
+            setDuration(100.1234)
+            changeSrc(audioRef)
+        } else {
+            toast.error("Chi dang tai file mp3")
+        }
     }
     const handleChangeNumber = (e) => {
         if (parseInt(e.target.value) > 50) setFontSize(50)
         else if (parseInt(e.target.value) < 0) setFontSize(1)
         else setFontSize(parseInt(e.target.value))
     }
+
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -91,10 +107,12 @@ function CreateShots() {
     const handleClose = (event) => {
         setOpen(false);
     };
+
     const handleChangeFont = (i) => {
         setFont(fontFamily[i])
         handleClose()
     }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         let total = audio !== null && audio["size"]
@@ -103,6 +121,7 @@ function CreateShots() {
         total = total / (value[0] + value[1])
         // 100 mb
         if (total > 50000000) return toast.error("File qua lon by hay thu lai sau")
+        if (!file && !video) return toast.error("Can co anh hoac video")
         let formData = new FormData()
         formData.append("text", text)
         formData.append("color", color)
@@ -113,8 +132,11 @@ function CreateShots() {
         formData.append("photo", file)
         formData.append("audio", audio)
         formData.append("video", video)
+        formData.append("time", time)
+
         axios.post("http://localhost:2704/api/news/post/shot", formData)
             .then(data => {
+                if (data.err) return toast.error("Co loi da xay ra ban hay thu lai sau")
                 toast.success("Bài viết của ban đã được đăng")
             })
             .catch(err => {
@@ -137,6 +159,7 @@ function CreateShots() {
         if (audio) fnc(audioRef)
         else if (video) fnc(videoSrcRef)
     };
+
     return (
         <div className="story">
             <ToastContainer />
@@ -153,7 +176,7 @@ function CreateShots() {
                         <p style={{ fontSize: "1.3rem" }}>Thoi gian xuat hien: </p>
                     </div>
                     <div className="time">
-                        <input min="0" max="24" placeholder="Gio" type="number"></input>
+                        <input value={time} onChange={e => setTime(e.target.value)} min="1" max="12" placeholder="Gio" type="number"></input>
                     </div>
                     <div className="text">
                         <div className="header">

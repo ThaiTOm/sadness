@@ -134,7 +134,9 @@ div.loaderBalls,
 .shot_header div,
 .story-center .story-content,
 .story-center .option-2 .option .section .div section,
-.story-center .option-2 .bottom {
+.story-center .option-2 .bottom,
+#modal-shot,
+.modal-shot-body {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -656,7 +658,7 @@ button {
   height: 50%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10%;
+  margin-top: 5%;
   padding: 10px;
   border-radius: 10px;
   color: white;
