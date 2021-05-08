@@ -4,6 +4,8 @@ import classNames from "classnames";
 import { Modal, Menu, MenuItem, Button } from '@material-ui/core';
 import axios from "axios"
 import { toast } from "react-toastify"
+import { getTime } from '../../../helpers/message/message';
+
 
 // This function is use for render list of contact
 function ContactContain({ onClick, message, users, idRoom, target, nread, socket }) {
@@ -23,6 +25,8 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
+
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -101,14 +105,24 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     return (
         <div className={classN} >
             <div className="contact_contain_text">
-                <img onClick={() => onClick(idRoom, users, id)} alt="avatar" src="./demo.jpeg" />
-                <p onClick={() => onClick(idRoom, users, id)}>
-                    {value.slice(0, 4) === "Bạn:" ? <span className="content">
-                        <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
-                        <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length - 1) }} /></span>
-                        : <span dangerouslySetInnerHTML={{ __html: value }} />}
-                    {count > 0 ? <span className="count"> {count}</span> : ""}
-                </p>
+                <section onClick={() => onClick(idRoom, users, id)}>
+                    <p>
+                        {
+                            value.slice(0, 4) === "Bạn:" ? <span className="content">
+                                <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
+                                <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length - 1) }} /></span>
+                                : <span dangerouslySetInnerHTML={{ __html: value }} />
+                        }
+                        {
+                            message && message.type === "shot" ? <p className="shot-span">
+                                Tin nhắn đang chờ
+                    </p> : console.log()
+                        }
+                    </p>
+                    <p className="timing">
+                        {getTime(message.date)}
+                    </p>
+                </section>
                 <div className="setting_chat">
                     <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                         ...
@@ -157,7 +171,10 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                         </MenuItem>
                     </Menu>
                 </div>
-                {onl === true ? <span className="dot"></span> : console.log()}
+                <div className="left-side">
+                    {count > 0 ? <div className="count"> {count}</div> : ""}
+                    {onl === true ? <div className="dot"></div> : console.log()}
+                </div>
             </div>
         </div >
     )

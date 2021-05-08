@@ -63,6 +63,7 @@ export const isAuth = () => {
         }
     }
 }
+
 export const updateUser = (res, next) => {
     if (window !== "undefined") {
         let auth = JSON.parse(localStorage.getItem("user"))
@@ -76,6 +77,7 @@ export const encryptTo = text => {
     const passphrase = '123nguyenduythaise1';
     return CryptoJS.AES.encrypt(text, passphrase).toString();
 }
+
 export const decryptWithAES = ciphertext => {
     const passphrase = '123nguyenduythaise1';
     const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);

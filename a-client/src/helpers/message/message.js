@@ -70,13 +70,13 @@ export const FormSend = (props) => {
         setMessage("")
         if (message) {
             let value = encryptTo(message)
-            socket.emit('sendMessageOff', { room: id, message: value, userId });
+            socket.emit('sendMessage', { room: id, message: value, id: userId });
         }
     }
     const emojiSubmit = (e, emo) => {
         e.preventDefault()
         let value = encryptTo("&#" + emo + ";")
-        socket.emit('sendMessageOff', { room: id, message: value, userId });
+        socket.emit('sendMessage', { room: id, message: value, id: userId });
         handleClose()
     }
     const useRefTrigger = () => {
@@ -152,6 +152,9 @@ export const MessageContainer = () => {
         setRoom(id[0])
     }
 
+    const handleCreateRoom = (e) => {
+        e.preventDefault()
+    }
     return (
         <div className="accordion_div" style={open === true ? { height: "450px" } : { height: "initial" }}>
             <div className="accordion_header">
@@ -161,15 +164,16 @@ export const MessageContainer = () => {
                 <div onClick={e => setOpen(!open)} className="accordion_message">
                     <IconButton>
                         Message
-                        {open === false ?
-                            <span className="sympol">
-                                <ExpandLessIcon />
-                            </span> :
-                            <span className="sympol">
-                                <ExpandMoreIcon />
-                            </span>
-                        }
-
+                        <div className="sympol">
+                            <svg onClick={e => handleCreateRoom} id="audio" width="35pt" height="25pt" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><path d="m467 143h-36.868c5.277 19.494 8.11 39.982 8.11 61.122 0 129.095-105.026 234.121-234.121 234.121-11.202 0-22.38-.83-33.436-2.427 6.916 15.975 22.829 27.184 41.315 27.184h212.583l63.61 46.142c2.61 1.893 5.701 2.858 8.809 2.858 2.327 0 4.663-.541 6.813-1.638 5.023-2.561 8.185-7.723 8.185-13.362v-309c0-24.813-20.187-45-45-45z" /><path d="m408.243 204.122c0-112.553-91.569-204.122-204.121-204.122s-204.122 91.569-204.122 204.122c0 39.168 11.028 76.924 31.969 109.698l-31.038 83.98c-2.03 5.493-.678 11.666 3.463 15.807 2.864 2.864 6.699 4.394 10.609 4.394 1.744 0 3.503-.305 5.198-.931l88.229-32.61c29.327 15.58 62.254 23.783 95.691 23.783 112.553 0 204.122-91.568 204.122-204.121zm-308.243 41.697c0 8.284-6.716 15-15 15s-15-6.716-15-15v-83.637c0-8.284 6.716-15 15-15s15 6.716 15 15zm210.001-83.637c0-8.284 6.716-15 15-15s15 6.716 15 15v83.637c0 8.284-6.716 15-15 15s-15-6.716-15-15zm-60 23.999c0-8.284 6.716-15 15-15s15 6.716 15 15v35.639c0 8.284-6.716 15-15 15s-15-6.716-15-15zm-90.001 35.639c0 8.284-6.716 15-15 15s-15-6.716-15-15v-35.639c0-8.284 6.716-15 15-15s15 6.716 15 15zm30.001 56.181v-148.001c0-8.284 6.716-15 15-15s15 6.716 15 15v148c0 8.284-6.716 15-15 15s-15-6.715-15-14.999z" /></g></svg>                            {open === false ?
+                                <span >
+                                    <ExpandLessIcon />
+                                </span> :
+                                <span >
+                                    <ExpandMoreIcon />
+                                </span>
+                            }
+                        </div>
                     </IconButton>
                 </div>
             </div>
@@ -190,4 +194,45 @@ export const MessageContainer = () => {
             </div>
         </div >
     )
+}
+
+export const getTime = (time) => {
+    let d = new Date()
+    d = Math.ceil(d.getTime())
+    let timing = d - time
+    let ans = ""
+    // get years
+    if (timing >= 31556952000) {
+        let years = Math.ceil(timing / 31556952000)
+        timing = Math.ceil(timing % 31556952000)
+        ans += `${years} năm`
+    }
+    // get months
+    if (timing >= 2629800000) {
+        let months = Math.ceil(timing / 2629800000)
+        timing = Math.ceil(timing % 2629800000)
+        ans += `${months} tháng`
+
+    }
+    // get days
+    if (timing >= 86400000) {
+        let days = Math.ceil(timing / 86400000)
+        timing = Math.ceil(timing % 86400000)
+        ans += `${days} ngày`
+
+    }
+    // get hours
+    if (timing >= 3600000) {
+        let hours = Math.ceil(timing / 3600000)
+        timing = Math.ceil(timing % 3600000)
+        ans += `${hours} giờ`
+
+    }
+    // get minutes
+    if (timing >= 60000) {
+        let minutes = Math.ceil(timing / 60000)
+        timing = Math.ceil(timing % 60000)
+        ans += `${minutes} phút `
+    }
+    return ans
 }

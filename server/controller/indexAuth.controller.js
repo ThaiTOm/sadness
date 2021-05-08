@@ -11,6 +11,7 @@ const { Idea } = require("../models/idea.models");
 
 const { cm } = require("../nodeCache");
 var mongoose = require('mongoose');
+const { checkPath } = require("../helpers/fileSetting");
 
 
 sgEmail.setApiKey("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")
@@ -85,6 +86,7 @@ exports.activationController = (req, res) => {
                     email,
                     password
                 })
+                checkPath(`uploads/${id}`)
                 user.save((err, user) => {
                     if (err) {
                         return res.status(401).json({
@@ -265,6 +267,7 @@ exports.googleController = (req, res) => {
                                     error: errorHandler(err)
                                 })
                             }
+                            checkPath(`uploads/${id}`)
                             const token = id
                             cm.set(data.id, "online")
                                 .then(function () {
@@ -311,19 +314,9 @@ exports.facebookController = (req, res) => {
                         } else {
                             let password = field + process.env.JWT_SECRET;
                             let user
-                            if (field === "_id") {
-                                user = new User({
-                                    _id: value,
-                                    name,
-                                    password
-                                })
-                            } else {
-                                user = new User({
-                                    email: value,
-                                    name,
-                                    password
-                                })
-                            }
+                            // if that user have id or have email
+                            if (field === "_id") user = new User({ _id: value, name, password })
+                            else user = new User({ email: value, name, password })
                             user.save((err, data) => {
                                 if (err) {
                                     return res.status(400).json({
@@ -331,6 +324,7 @@ exports.facebookController = (req, res) => {
                                     })
                                 }
                                 const token = data._id
+                                checkPath(`uploads/${data._id}`)
                                 cm.set(token.toString(), "online")
                                     .then(function () {
 

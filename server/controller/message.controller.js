@@ -62,14 +62,16 @@ exports.listContact = (req, res) => {
 exports.sendContactRoom = async (req, res) => {
     const { id, start, end } = await req.query
     Message.findById({ "_id": id }).exec(async (err, value) => {
-        let data = value.data
-        data = data.length > 10 ? data.slice(data.length - end, data.length - start) : data
-        let users = []
-        for await (value of value.user) {
-            let state = await cm.get(value)
-            users.push(state)
+        if (value) {
+            let data = value.data
+            data = data.length > 10 ? data.slice(data.length - end, data.length - start) : data
+            let users = []
+            for await (value of value.user) {
+                let state = await cm.get(value)
+                users.push(state)
+            }
+            return res.json({ data, users })
         }
-        return res.json({ data, users })
     })
 }
 

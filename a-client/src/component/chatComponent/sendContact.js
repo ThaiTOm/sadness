@@ -29,9 +29,10 @@ function SendContact(props) {
     return (
         <>
             {peer ?
-                props.id[props.id.length - 1] === "a" ?
-                    <ChatCouple onClick={(value) => props.onClick(value)} peerJS={peer} id={props.id} socket={props.socket} /> :
+                props.id[props.id.length - 1] === "g" ?
                     <ChatGroup onClick={(value) => props.onClick(value)} peerJS={peer} id={props.id} socket={props.socket} /> :
+                    <ChatCouple onClick={(value) => props.onClick(value)} peerJS={peer} id={props.id} socket={props.socket} />
+                :
                 console.log()
             }
         </>

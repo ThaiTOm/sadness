@@ -18,7 +18,6 @@ import { toast } from "react-toastify"
 import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
 import CreateShots from './component/anotherPage/createShot';
-import "./helpers/indexeddb"
 
 function App() {
   let socket = socketApp.getSocket()
@@ -36,6 +35,7 @@ function App() {
     if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
     return setListMessage(arr)
   }
+
   let forLoop = (arr, msgs) => {
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].idRoom === msgs.idRoom && i !== 0) {
@@ -49,21 +49,21 @@ function App() {
       }
     }
   }
+
   let fnc = () => {
     let arr = [...listMessage]
     socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
   }
+
   let fncNotification = (arrNoti) => {
+    // if user has notifications now 
     socket.once("activities", async (msg) => {
       // value is link to post 
       toast.info(msg.number + msg.value)
-      let arr = {
-        type: msg.type,
-        value: msg.value,
-        number: msg.number
-      }
+      let arr = { type: msg.type, value: msg.value, number: msg.number }
       let i = 0
       for await (let data of arrNoti) {
+        // type (post,like,comment), value(link to that post)
         if (data.type === arr.type && data.value === arr.value) {
           let old = [...value]
           old.splice(i, 1)
@@ -75,14 +75,17 @@ function App() {
       setValue(a => [...a, arr])
     })
   }
+
+  // do not match two these useEffect 
+  // This useEffect is use for recieve data from server
   useEffect(() => {
     fncNotification(value)
   }, [value])
-  useEffect(() => {
-    id && socket.emit("join", { id })
-  }, [socket, id])
+
+
   // fetch data
   useEffect(() => {
+    // get notifications list
     axios.get("http://localhost:2704/api/news/notifications?id=" + id + "&start=0&end=10")
       .then(res => {
         let fnc = () => {
@@ -98,22 +101,30 @@ function App() {
         res.data.value !== undefined && fnc()
       }).catch(err => { })
 
+    // get message list
     axios.post("http://localhost:2704/api/msgC/contactL?start=" + start + "&end=" + end, { id })
       .then(res => {
         if (res.data.message) history.push("/report")
         else setListMessage(res.data)
       }).catch(err => { })
+
   }, [id, end])
 
   useEffect(() => {
-    listMessage && listMessage.length > 0 && fnc()
+    socket.on("reqShot", msg => {
+      let arr = listMessage ? [...listMessage] : []
+      arr.push(msg.mess)
+      setListMessage(arr)
+    }) && listMessage && listMessage.length > 0 && fnc()
   }, [listMessage])
 
   useEffect(() => {
     // document.title = title
   }, [title])
 
-
+  useEffect(() => {
+    id && socket.emit("join", { id })
+  }, [socket, id])
   return (
     <BrowserRouter >
       <Switch>

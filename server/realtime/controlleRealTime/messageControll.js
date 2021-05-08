@@ -4,8 +4,10 @@ const { cutSpaceInString } = require("../../../a-client/src/algorithm/algorithm"
 const { cm } = require("../../nodeCache");
 const { Message } = require("../../models/message.model");
 const { User } = require("../../models/user.models");
-const { generatePath } = require("../../helpers/generatePath");
-const fs = require("fs")
+const { generatePath } = require("../../helpers/fileSetting");
+const fs = require("fs");
+const { decryptWithAES } = require("../../helpers/message");
+
 
 const addUser = async ({ id, ipOfUser, len }) => {
     // First check in messageSave already have this user or not
@@ -20,8 +22,8 @@ const addUser = async ({ id, ipOfUser, len }) => {
     const user = { id: id, room: id + len }
 
     const createRoom = async (arrOfRegion, a, pos) => {
-        let fnc = (value, arr) => {
-            User.findByIdAndUpdate({ "_id": value }, { $push: { "messageList": { "$each": [arr], "$position": 0 } } }, (err, succes) => {
+        let fnc = (value, roomId) => {
+            User.findByIdAndUpdate({ "_id": value }, { $push: { "messageList": { "$each": [roomId], "$position": 0 } } }, (err, succes) => {
                 if (err) console.log(err)
             })
         }
@@ -106,37 +108,17 @@ const addUser = async ({ id, ipOfUser, len }) => {
     return { idRoom: user.room + "a", yet: "yet" };
 }
 
-const sendMessage = ({ room, message, id }) => {
+const sendMessage = ({ room, message, id, type }) => {
     //mess contain message and id 
+    let date = new Date()
+    date = date.getTime()
     let mess = {
         data: [message],
         seen: false,
         idRoom: room,
-        type: "message",
+        type: type,
         id: id,
-    }
-    setTimeout(async () => {
-        let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
-        for await (value of messageUsers.user) {
-            let data = await User.findById({ "_id": value }, { "messageList": 1 }).exec()
-            let arr = [...data.messageList]
-            // find index of the that room in array
-            let index = arr.indexOf(room)
-            arr.splice(index, 1)
-            arr.unshift(room)
-            User.findByIdAndUpdate({ "_id": value }, { $set: { "messageList": arr } }).exec()
-        }
-    }, 1000)
-    return { roomMessage: room, messageMessage: mess, memberMessage: id }
-}
-
-const sendMessageOff = async ({ room, message, id }) => {
-    let mess = {
-        data: [message],
-        seen: false,
-        idRoom: room,
-        type: "message",
-        id: id,
+        date: Math.ceil(date)
     }
     setTimeout(async () => {
         let messageUsers = await Message.findByIdAndUpdate({ "_id": room }, { $push: { "data": mess } }).exec()
@@ -265,4 +247,66 @@ const sendFile = ({ room, image, userId, originName, type }) => {
     })
     return { message: data, err: null }
 }
-module.exports = { addUser, sendMessage, sendMessageOff, seenMessage, sendFile, chatGorup, outChat };
+
+const reqShot = async ({ id, idUser, value, idPost }) => {
+    // id:  user send request 
+    // value: content id send
+    // idUser: user's shot
+    let d = new Date()
+    let n = d.getTime()
+
+    let name1 = decryptWithAES(id)
+    let name2 = decryptWithAES(idUser)
+    let idRoom = name1 + idPost
+    if (name1 === name2) {
+        return {
+            succes: false
+        }
+    }
+    let date = new Date()
+    date = date.getTime()
+    let mess = {
+        data: [value],
+        seen: false,
+        idRoom,
+        type: "shot",
+        id: name1,
+        date: Math.ceil(date)
+    }
+
+    let exists = await Message.findById({ "_id": idRoom }).exec()
+    let res = { idRoom: idRoom, data: mess, user: name1 }
+    if (!exists) {
+        const obj = new Message({
+            _id: idRoom,
+            user: [name1, name2],
+            data: [mess],
+        })
+        obj.save((err, succes) => {
+            if (err) {
+                return { succes: false }
+            }
+            else {
+                User.findByIdAndUpdate({ "_id": name2 }, { $push: { "messageList": { "$each": [idRoom], "$position": 0 } } }, (err, succes) => {
+                    if (err) console.log(err)
+                })
+            }
+        })
+
+        return {
+            succes: true,
+            idRoom,
+            idUserPost: name2,
+            mess: res
+        }
+    } else {
+        sendMessage({ room: idRoom, message: value, id: name1, type: "shot" })
+        return {
+            succes: true,
+            idRoom,
+            idUserPost: name2,
+            mess: res
+        }
+    }
+}
+module.exports = { addUser, sendMessage, seenMessage, sendFile, chatGorup, outChat, reqShot };

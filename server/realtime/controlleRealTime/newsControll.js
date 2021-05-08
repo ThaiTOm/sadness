@@ -152,4 +152,5 @@ const setOffline = ({ id }) => {
 const setOnline = ({ id }) => {
     User.findByIdAndUpdate({ "_id": id }, { "isOnline": true }).exec()
 }
+
 module.exports = { comment, likeBlog, likeCmt, setOffline, setOnline };

@@ -8,15 +8,22 @@ const messageRoute = require("./routes/message.route")
 const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const responseTime = require("response-time");
-const schedule = require('node-schedule');
-const redis = require("redis")
-const client = redis.createClient()
+const path = require("path")
 
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
-const { Message } = require("./models/message.model");
-const { User } = require("./models/user.models");
 const server = http.createServer(app);
+
+let options = {
+    etag: true,
+    maxAge: 3600000,
+    redirect: true,
+    setHeader: (req, path, stat) => {
+        res.set({
+            "x-timestamp": Date.now()
+        })
+    }
+}
 
 require("dotenv").config({
     "path": "./config/config.env"
@@ -25,7 +32,7 @@ require("dotenv").config({
 app.use(bodyParser.json({ limit: "100mb" }))
 app.use(cors())
 app.use(responseTime());
-app.use(express.static("./uploads"));
+app.use(express.static(path.join("uploads"), options));
 app.use("/peerjs", ExpressPeerServer(server))
 connectDB()
 

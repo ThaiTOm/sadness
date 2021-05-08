@@ -1,11 +1,8 @@
-const { addUser, sendMessage, sendMessageOff, seenMessage, chatGorup, outChat, sendFile } = require("./controlleRealTime/messageControll");
+const { addUser, sendMessage, seenMessage, chatGorup, outChat, sendFile, reqShot } = require("./controlleRealTime/messageControll");
 const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll")
 const { Message } = require("../models/message.model");
 const { cm } = require("../nodeCache");
 const date = require("date-and-time");
-const fs = require("fs");
-const { generatePath } = require("../helpers/generatePath");
-
 
 module.exports = {
     index: function (io, socket) {
@@ -34,30 +31,15 @@ module.exports = {
         socket.on("joinChatBack", ({ idRoom }) => {
             socket.join(idRoom)
         })
-        socket.on('sendMessage', ({ room, message, id }, callback) => {
-            const { roomMessage,
-                messageMessage,
-                memberMessage
-            } = sendMessage({ room, message, id });
-
+        socket.on('sendMessage', async ({ room, message, id }, callback) => {
+            const { roomMessage, messageMessage, memberMessage } = await sendMessage({ room, message, id, type: "message" });
             io.to(roomMessage).emit('message', {
-                data: messageMessage.data,
+                data: messageMessage,
                 seen: false,
                 idRoom: room,
                 type: "message",
                 id: id,
             });
-            callback();
-        });
-        socket.on("sendMessageOff", async ({ room, message, userId, file }) => {
-            const { roomMessage, messageMessage, memberMessage } = await sendMessageOff({ room, message, id: userId })
-            io.to(roomMessage).emit("message", {
-                data: messageMessage,
-                seen: false,
-                idRoom: room,
-                type: "message",
-                id: userId,
-            })
         });
         socket.on("file", async ({ room, image, userId, originName }) => {
             const { message, err } = sendFile({ room, image, userId, originName });
@@ -120,6 +102,15 @@ module.exports = {
         })
         socket.on("outJoinChat", ({ id }) => {
             return outChat({ id })
+        })
+        socket.on("shotReq", async ({ id, value, idUser, idPost }) => {
+            // id: id user send request 
+            // value: content id send
+            // idUser: user's shot
+            const { succes, idRoom, idUserPost, mess } = await reqShot({ id, value, idUser, idPost }) || null
+            if (succes === false) return
+            await socket.join(idRoom)
+            socket.broadcast.to(idUserPost).emit('reqShot', { mess });
         })
     }
 }

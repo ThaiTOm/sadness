@@ -534,3 +534,32 @@
 .MuiSlider-root .PrivateValueLabel-label-5 {
   color: black;
 }
+.accordion_message .MuiIconButton-label .sympol #audio {
+  fill: #22c1c3;
+  z-index: 1;
+}
+.accordion_message .MuiIconButton-label .sympol #audio path {
+  stroke-width: 10;
+  stroke-dasharray: 1350;
+  stroke-dashoffset: 0;
+  stroke: #22c1c3;
+}
+.accordion_message .MuiIconButton-label .sympol #audio:hover path {
+  animation: animate-pod 1s linear forwards;
+}
+@keyframes animate-pod {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1350;
+  }
+  80% {
+    stroke-dashoffset: 2700;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 2700;
+    fill: #22c1c3;
+  }
+}

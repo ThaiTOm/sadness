@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { encryptTo } from '../../../helpers/auth'
+import { IconButton } from "@material-ui/core"
 
-function ShortStatus() {
+function ShortStatus({ id, socket }) {
     const [data, setData] = useState([])
-    const [start, setState] = useState(0)
+    const [start, setStart] = useState(0)
     const [end, setEnd] = useState(5)
     const [image, setImage] = useState(null)
     const [imgBg, setImgBg] = useState(null)
@@ -12,10 +14,12 @@ function ShortStatus() {
     const [duration, setDuration] = useState(null)
     const [mute, setMute] = useState(false)
     const [targetInput, setTargetInput] = useState(false)
+    const [text, setText] = useState("")
 
     const videoRef = useRef(null)
     // sue for how when sorce finish 
     const [load, setLoad] = useState(null)
+
     let handleClick = (i) => {
         setLoad(null)
         if (image) {
@@ -35,6 +39,52 @@ function ShortStatus() {
         }
     }
 
+    let changeShot = () => {
+        setText(null)
+        setDuration(null)
+        setPlay(true)
+        setMute(false)
+        setTargetInput(false)
+    }
+
+    let handleNext = () => {
+        let index = data.indexOf(image)
+        if (index >= data.length - 1) {
+            setStart(start + 5)
+        } else {
+            setImage(data[index + 1])
+            setImgBg(data[index + 1]["b-g"])
+            changeShot()
+        }
+    }
+
+    let handlePre = () => {
+        let index = data.indexOf(image)
+        if (index > 0) {
+            setImage(data[index - 1])
+            setImgBg(data[index - 1]["b-g"])
+            changeShot()
+        }
+    }
+
+    let handleSubmit = (e) => {
+        e.preventDefault()
+        if (text) {
+            let value = encryptTo(id)
+            let text1 = encryptTo(text)
+
+            socket.emit("shotReq", { id: value, idPost: image.id, value: text1, idUser: image["id-user"] });
+        }
+    }
+
+    let handleChangeText = (e) => {
+        setText(e.target.value)
+        if (videoRef.current) {
+            play === true && videoRef.current.pause()
+            setPlay(false)
+        }
+    }
+
     useEffect(() => {
         axios.post("http://localhost:2704/api/news/get/shot", { start, end })
             .then(data => {
@@ -49,11 +99,12 @@ function ShortStatus() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            videoRef.current ? setDuration(videoRef.current.currentTime) : setDuration(0)
+            videoRef.current ? videoRef.current.currentTime === videoRef.current.duration ? handleNext() : setDuration(videoRef.current.currentTime) : setDuration(0)
         }, 50)
         return () => clearInterval(interval);
 
     }, [videoRef.current, duration, play])
+
     return (
         <>
             <div className="shot">
@@ -88,7 +139,7 @@ function ShortStatus() {
                         return <video onClick={e => handleClick(i)} key={i} alt={value.path} src={value.path}></video>
                     })}
                 </div>
-                <svg version="1.1" id="arrow" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.008 512.008" xmlxspace="preserve">
+                <svg id="arrow" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.008 512.008" xmlxspace="preserve">
                     <path d="M306.219,45.796c-21.838-21.838-57.245-21.838-79.083,0s-21.838,57.245,0,79.083l77.781,77.803
 	H53.333C23.878,202.682,0,226.56,0,256.015c0,29.455,23.878,53.333,53.333,53.333h251.584l-77.781,77.781
 	c-21.838,21.838-21.838,57.245,0,79.083c21.838,21.838,57.245,21.838,79.083,0l202.667-202.667c4.164-4.165,4.164-10.917,0-15.083
@@ -105,7 +156,7 @@ function ShortStatus() {
                         </span>
                     </div>
                     <div className="modal-shot-body" style={load ? { display: "flex" } : { display: "none" }}>
-                        <svg className="modal-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        <svg onClick={e => handlePre()} className="modal-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                             viewBox="0 0 512 512" xmlSpace="preserve">
                             <g>
                                 <g>
@@ -176,18 +227,20 @@ function ShortStatus() {
                             <video muted={mute} autoPlay ref={videoRef} src={image.path} onLoadedData={e => setLoad(true)} />
                             {
                                 targetInput === true ? <div className="bottom">
-                                    <input></input>
-                                    <div onClick={e => setTargetInput(!targetInput)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsslink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                            viewBox="-30 -65 550 562" xmlSpace="preserve">
-                                            <g><g>
-                                                <path d="M481.508,210.336L68.414,38.926c-17.403-7.222-37.064-4.045-51.309,8.287C2.86,59.547-3.098,78.551,1.558,96.808
+                                    <form onSubmit={e => handleSubmit(e)}>
+                                        <input onChange={e => handleChangeText(e)}></input>
+                                        <IconButton type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlnsslink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                viewBox="-30 -65 550 562" xmlSpace="preserve">
+                                                <g><g>
+                                                    <path d="M481.508,210.336L68.414,38.926c-17.403-7.222-37.064-4.045-51.309,8.287C2.86,59.547-3.098,78.551,1.558,96.808
             L38.327,241h180.026c8.284,0,15.001,6.716,15.001,15.001c0,8.284-6.716,15.001-15.001,15.001H38.327L1.558,415.193
             c-4.656,18.258,1.301,37.262,15.547,49.595c14.274,12.357,33.937,15.495,51.31,8.287l413.094-171.409
             C500.317,293.862,512,276.364,512,256.001C512,235.638,500.317,218.139,481.508,210.336z"/>
-                                            </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
-                                        </svg>
-                                    </div>
+                                                </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                                            </svg>
+                                        </IconButton>
+                                    </form>
                                 </div> : <div id="input-click" className="bottom">
                                     <input></input>
                                     <div onClick={e => setTargetInput(!targetInput)}>
@@ -203,9 +256,8 @@ function ShortStatus() {
                                     </div>
                                 </div>
                             }
-
                         </div>
-                        <svg className="modal-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        <svg onClick={e => handleNext(e)} className="modal-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                             viewBox="0 0 512 512" xmlSpace="preserve">
                             <g>
                                 <g>
@@ -216,7 +268,6 @@ function ShortStatus() {
                                 </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
                         </svg>
                     </div>
-
                 </div>
             }
         </>

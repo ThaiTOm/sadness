@@ -3,14 +3,12 @@ const { Idea } = require("../models/idea.models")
 const date = require('date-and-time');
 const { nodeCache, newCache } = require("../nodeCache");
 const spawn = require("child_process").spawn;
-const fs = require("fs")
-const { generatePath } = require("../helpers/generatePath");
+const { generatePath, checkPath, saveRedis, deletePath } = require("../helpers/fileSetting");
 const redis = require("redis");
 const client = redis.createClient();
 const util = require('util');
 const { Shot } = require("../models/shot.models");
-const schedule = require('node-schedule');
-
+const CryptoJS = require("crypto-js")
 
 exports.postBlog = (req, res) => {
     const { text, file, id } = req.body
@@ -268,88 +266,8 @@ exports.postShot = async (req, res) => {
     var cmd = '/usr/bin/ffmpeg';
     const dir = `uploads/${id}/shots`
 
-    const fsExists = util.promisify(fs.exists)
-    const fsMkdir = util.promisify(fs.mkdir)
-
-    try {
-        let Bool = await fsExists(`./${dir}`)
-        if (Bool === false) {
-            await fsMkdir(`./${dir}`)
-        }
-    } catch (error) {
-        res.json({
-            status: 500,
-            error: error
-        })
-    }
-
-    let deletePath = (arr) => {
-        for (let value of arr) {
-            fs.unlink(value, (err) => {
-                if (err) {
-                    return { error: "error" }
-                }
-                else {
-                    return { error: null }
-                }
-            })
-        }
-    }
-
-    let saveRedis = (_id, idUser, path) => {
-        // get image from video to set background
-        let bgPath = path.split(".")
-        bgPath.splice(bgPath.length - 1, 1)
-        let arg = [`-ss`, "00:00:00", `-i`, path, `-vframes`, `1`, `${bgPath[0]}bg.jpeg`]
-        let proce = spawn(cmd, arg)
-        proce.stderr.setEncoding("utf8")
-        proce.stderr.on('data', function (data) {
-            console.log(data);
-        });
-        return proce.on('close', function (err) {
-            let paths = path.split("/")
-            paths.splice(0, 1)
-            paths = paths.join("/")
-            bgPath = bgPath[0].split("/")
-
-            bgPath.splice(0, 1)
-            bgPath = bgPath.join("/")
-            console.log(bgPath)
-
-
-            let date = new Date()
-            let current = date.getTime()
-
-            let d = new Date(current + (time * 60 * 1000 * 60))
-            schedule.scheduleJob(d, function () {
-                client.del(_id, (err, ok) => {
-                    if (!err) {
-                        deletePath([paths])
-                        Shot.findByIdAndRemove({ "_id": _id }).exec()
-                    }
-                })
-            });
-
-            client.hmset(_id, "id-user", idUser, "path", "http://localhost:2704/" + paths, "b-g", "http://localhost:2704/" + `${bgPath}bg.jpeg`, (err, ok) => {
-                if (err) {
-                    return res.json({
-                        status: 500,
-                        error: "error"
-                    })
-                } else {
-                    let data = new Shot({
-                        _id
-                    })
-                    data.save((err, succes) => {
-                        if (err) console.log(err)
-                    })
-                    return res.json({
-                        status: 200,
-                    })
-                }
-            })
-        })
-    }
+    // check if dir is exists else create 
+    await checkPath(dir)
 
     let photoFfmpeg = () => {
         let photoName = generatePath(req.body, photo.originalname, photo.mimetype)
@@ -375,14 +293,30 @@ exports.postShot = async (req, res) => {
                     process.stderr.on('data', function (data) {
                         console.log(data);
                     });
-                    process.on('close', function (error) {
+                    return process.on('close', function (error) {
                         if (error !== 0) return res.json({ err: "up" })
-                        deletePath([path, `designShot/${id}/${photoName}`, `${fileName + n}.png`])
-                        return saveRedis(id + n, id, `${fileName + n}.mp4`)
+                        deletePath([path, `designShot/${id}/${photoName}`, `${fileName + n}.jpeg`])
+                        let { error, ok } = saveRedis({
+                            cmd,
+                            _id: id + n,
+                            idUser: id,
+                            path: `${fileName + n}.mp4`,
+                            time
+                        })
+                        if (error) return res.json({ err: "p" })
+                        else return res.json({ data: "ok" })
                     })
                 } else {
                     deletePath([path, `designShot/${id}/${photoName}`])
-                    return saveRedis(id + n, id, `${fileName + n}.mp4`)
+                    let { error, ok } = saveRedis({
+                        cmd,
+                        _id: id + n,
+                        idUser: id,
+                        path: `${fileName + n}.mp4`,
+                        time
+                    })
+                    if (error) return res.json({ err: "p" })
+                    else return res.json({ data: "ok" })
                 }
             });
         }
@@ -453,10 +387,16 @@ exports.postShot = async (req, res) => {
             return pro.on('close', function () {
                 if (!text) {
                     deletePath([fileName, audioName, videoName])
-                    return res.json({
-                        status: 200,
-                        message: "0k"
+
+                    let { error, ok } = saveRedis({
+                        _id: id + n,
+                        idUser: id,
+                        path: `${dir}/${n + video.originalname.split(".")[0]}.mp4`,
+                        cmd,
+                        time
                     })
+                    if (error) return res.json({ err: "p" })
+                    else return res.json({ data: "ok" })
                 } else {
                     deletePath([audioName])
                     textAdd(`${dir}/${n + video.originalname.split(".")[0]}.mp4`)
@@ -471,9 +411,17 @@ exports.postShot = async (req, res) => {
             proce.stderr.on('data', function (data) {
                 console.log(data);
             });
-            return proce.on('close', function () {
+            proce.on('close', function () {
                 deletePath([fileName, videoName, path])
-                saveRedis(id + n, id, `${dir}/${video.originalname.split(".")[0] + n}1.mp4`)
+                let { error, ok } = saveRedis({
+                    _id: id + n,
+                    idUser: id,
+                    path: `${dir}/${video.originalname.split(".")[0] + n}1.mp4`,
+                    cmd,
+                    time
+                })
+                if (error) return res.json({ err: "p" })
+                else return res.json({ data: "ok" })
             });
         }
 
@@ -507,6 +455,11 @@ exports.getShot = async (req, res) => {
 
     for await (let value of arr) {
         let val = await getAsync(value._id)
+        // set id for blog
+        val["id"] = value._id
+        // crypto user's id 
+        const passphrase = '123nguyenduythaise1';
+        val["id-user"] = CryptoJS.AES.encrypt(val["id-user"], passphrase).toString();
         result.push(val)
     }
     return res.json(result)

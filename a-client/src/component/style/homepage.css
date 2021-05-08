@@ -136,7 +136,9 @@ div.loaderBalls,
 .story-center .option-2 .option .section .div section,
 .story-center .option-2 .bottom,
 #modal-shot,
-.modal-shot-body {
+.modal-shot-body,
+.accordion_message .MuiIconButton-label .sympol,
+.contact_contain_text .count {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -763,7 +765,8 @@ button {
   #font
   #z-index
   div
-  ul::-webkit-scrollbar-track {
+  ul::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey !important;
 }
 
@@ -781,9 +784,10 @@ button {
   #font
   #z-index
   div
-  ul::-webkit-scrollbar-thumb {
+  ul::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb {
   background-color: grey !important;
-  background-image: grey !important;
+  border-radius: 5px;
 }
 
 .message_container ul::-webkit-scrollbar,
@@ -798,7 +802,8 @@ button {
   #font
   #z-index
   div
-  ul::-webkit-scrollbar {
+  ul::-webkit-scrollbar,
+html::-webkit-scrollbar {
   width: 5px;
 }
 
@@ -999,22 +1004,20 @@ button {
   margin: 0px 15px;
   padding-top: 5px;
   width: 90%;
-  justify-content: space-between;
   position: relative;
+  height: 100%;
 }
-
-.contact_contain_text p {
+.contact_contain_text .timing {
+  font-size: 0.7rem;
+  width: max-content;
+}
+.contact_contain_text section {
   margin: 0;
   color: rgba(255, 255, 255, 0.9);
   padding-top: 10px;
   width: 100%;
-}
-
-.contact_contain_text img {
-  width: 50px;
-  height: 50px;
-  border-radius: 100px;
-  margin-right: 5px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .send_container {

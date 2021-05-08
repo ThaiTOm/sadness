@@ -2,7 +2,7 @@ const express = require("express");
 const { postBlog, viewBlog, viewOne, viewComment, getNotifications, getBlogWithOut, postShot, getShot } = require("../controller/news.controller");
 const router = express.Router();
 const multer = require("multer");
-const { generatePath } = require("../helpers/generatePath");
+const { generatePath } = require("../helpers/fileSetting");
 const fs = require("fs")
 
 const fileStorageOptionNews = multer.diskStorage({

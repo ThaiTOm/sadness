@@ -81,6 +81,7 @@ function Chat({ handleRoom }) {
                 executeScroll(myRef)
             }
         })
+
     }, [socket, idRoom])
 
     //defined button find partner classname
@@ -105,7 +106,7 @@ function Chat({ handleRoom }) {
     }
     return (
         <div style={finish === true ? { display: "flex" } : { display: "block" }} className="message_container">
-            <ShortStatus />
+            <ShortStatus id={id} socket={socket} />
             <ToastContainer />
             <div className="container_button" style={finish === true ? { display: "none" } : {}}>
                 <div className="container_button_header">
