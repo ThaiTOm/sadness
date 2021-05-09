@@ -6,7 +6,7 @@ import ActivatePage from './component/loginComponent/activate';
 import Forget from './component/loginComponent/forget';
 import ChangePassword from './component/loginComponent/changePassword';
 import HomePage from './component/HomePage';
-import Chat from './component/chatComponent/chat';
+import Chat from './component/chatComponent/findChat';
 import NewsMain from './component/newsComponents/newsMain';
 import Main_block from './component/main.block';
 import ViewOneBlog from './component/newsComponents/viewBlog/viewOneBlog';
@@ -18,6 +18,7 @@ import { toast } from "react-toastify"
 import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
 import CreateShots from './component/anotherPage/createShot';
+import AudioChatCom from './component/audioChatComponent/index';
 
 function App() {
   let socket = socketApp.getSocket()
@@ -153,6 +154,10 @@ function App() {
             <Route
               path="/chat"
               component={Chat} />
+              <Route
+              path="/audio"
+              component={AudioChatCom}
+              />
             <Route
               path="/news"
               component={NewsMain} />

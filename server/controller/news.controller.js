@@ -10,13 +10,14 @@ const util = require('util');
 const { Shot } = require("../models/shot.models");
 const CryptoJS = require("crypto-js")
 
-exports.postBlog = (req, res) => {
+exports.postBlog = async (req, res) => {
     const { text, file, id } = req.body
     const files = req.files
     let path = []
     if (files) {
-        for (let value of files) {
-            let name = id + "/news/" + generatePath(req.body, value.originalname)
+        for await (let value of files) {
+            let dir = await generatePath(req.body, value.originalname, value.mimetype)
+            let name = "http://localhost:2704/" + id + "/news/" + dir
             path.push(name)
         }
     }

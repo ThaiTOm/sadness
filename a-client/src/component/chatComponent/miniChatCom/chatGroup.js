@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { getCookie } from '../../../helpers/auth';
 import socketApp from '../../../socket';
 import IconButton from '@material-ui/core/IconButton';
-import "../../style/call.css"
+import "../../../assets/style/call.css"
+
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';

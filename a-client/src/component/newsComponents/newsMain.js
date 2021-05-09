@@ -1,5 +1,5 @@
 import React from 'react'
-import "../style/newspage.css"
+import "../../assets/style/newspage.css"
 import PostBlogMain from "../../helpers/news/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import { ToastContainer } from "react-toastify";

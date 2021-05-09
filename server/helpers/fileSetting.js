@@ -8,11 +8,11 @@ const spawn = require("child_process").spawn;
 const { Shot } = require("../models/shot.models");
 
 
-let generatePath = (req, originalname, file) => {
-    let fileArrOri = originalname.replace(/\s/g, '').split(".")
+let generatePath = async (req, originalname, file) => {
+    let fileArrOri = await originalname.replace(/\s/g, '').split(".")
     let mix = fileArrOri[0]
-
-    let type = file.split("/")
+    console.log(file)
+    let type = file ? file.split("/") : []
     switch (type[0]) {
         case "image":
             return mix + ".jpeg"
@@ -21,7 +21,7 @@ let generatePath = (req, originalname, file) => {
         case "video":
             return mix + ".mp4"
         default:
-            return fileArrOri
+            return originalname
     }
 }
 let checkPath = async (dir) => {

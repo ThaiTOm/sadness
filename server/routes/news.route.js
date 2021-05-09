@@ -14,9 +14,9 @@ const fileStorageOptionNews = multer.diskStorage({
             return cb(null, dir)
         })
     },
-    filename: (req, file, cb) => {
-        let name = generatePath(req.body, file.originalname, file.mimetype)
-        cb(null, name)
+    filename: async (req, file, cb) => {
+        let name = await generatePath(req.body, file.originalname, file.mimetype)
+        return cb(null, name)
     }
 })
 const desginshotOption = multer.diskStorage({
@@ -28,8 +28,8 @@ const desginshotOption = multer.diskStorage({
             return cb(null, dir)
         })
     },
-    filename: (req, file, cb) => {
-        let name = generatePath(req.body, file.originalname, file.mimetype)
+    filename: async (req, file, cb) => {
+        let name = await generatePath(req.body, file.originalname, file.mimetype)
         cb(null, name)
     }
 })

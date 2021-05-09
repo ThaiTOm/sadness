@@ -1,0 +1,39 @@
+.audioChat {
+  background-color: #21242b;
+  width: 100%;
+  height: 100%;
+}
+.audioChat .container {
+  width: 80%;
+  margin-left: auto;
+  height: 100%;
+  display: block;
+}
+.audioChat .modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.801);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.audioChat .modal-container {
+  background-color: #21242b;
+  padding: 20px;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+}
+.audioChat .modal-container .header {
+  cursor: pointer;
+  color: white;
+  margin-left: auto;
+  font-size: 2rem;
+  width: max-content;
+}

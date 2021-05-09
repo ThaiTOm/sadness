@@ -40,7 +40,7 @@ function ViewOneBlog(props) {
                         data.img.map(function (value, i) {
                             return <div key={i}>
                                 <div className="image-container" >
-                                    <img alt={value.slice(100, 110)} src={`http://localhost:2704/${value}`} />
+                                    {value.split(".")[1] !== "mp4" ? <img alt={value.slice(100, 110)} src={value} /> : <video alt={value.slice(10, 110)} src={value} />}
                                 </div>
                             </div>
                         })

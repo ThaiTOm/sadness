@@ -1,5 +1,5 @@
 import React from 'react'
-import "../style/homepage.css"
+import "../../assets/style/homepage.css"
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         backgroundColor: "rgb(36, 37, 38)",
         border: '1px solid #000',
-        // boxShadow: theme.shadows[5],
         padding: theme.spacing(1, 10, 10),
     }
 }));

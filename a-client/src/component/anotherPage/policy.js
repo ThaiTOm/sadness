@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavbarRight } from '../../helpers/news/news'
-import "../style/policy.css"
+import "../../assets/style/policy.css"
 
 function Policy() {
     return (

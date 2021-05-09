@@ -3,13 +3,13 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import Skeleton from "../../../helpers/news/Skeleton"
 import InfiniteScroll from "react-infinite-scroll-component";
-import "../../style/viewBlog.css"
+import "../../../assets/style/viewBlog.css"
 import { getCookie } from '../../../helpers/auth';
 import SeeLike from "../../../helpers/news/seeLike"
 import LikeComment from "../../../helpers/news/likeComment"
 import RequireLogin from '../../../helpers/news/requireLogin';
 import ShareBlog from "../../../helpers/news/shareBlog"
-import { ImageRender } from '../../../helpers/news/news';
+import { ImageRender, VideoRender } from '../../../helpers/news/news';
 import { IconButton } from '@material-ui/core';
 import { MessageContainer } from '../../../helpers/message/message';
 import socketApp from '../../../socket';
@@ -132,8 +132,10 @@ function ViewBlog() {
                                         </div>
                                     </div>
                                     {/* Render Image */}
+                                    {console.log(value.image)}
                                     <div className="image-blog">
-                                        <ImageRender props={{ value, id }} />
+                                        {value && value.image && value.image[0].split(".")[1] === "jpeg" ? <ImageRender props={{ value, id }} /> : <VideoRender value={value.image} idBlog={value.idBlog} />}
+
                                     </div>
                                     <div className="activities_blog">
                                         <SeeLike props={{ value, i, className: "inner", socket, id }} />

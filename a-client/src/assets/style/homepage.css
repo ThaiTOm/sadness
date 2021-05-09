@@ -1,0 +1,1350 @@
+/********************************** Same attribute *******************/
+
+body,
+#root,
+.App,
+.homepage,
+.post_viewing,
+.viewBlog,
+.forget_container,
+.MuiList-root,
+.container,
+.drag_file .icon,
+.header_notAuth,
+.story {
+  width: 100%;
+  height: 100%;
+}
+p {
+  margin: 0;
+}
+
+.Toastify__toast,
+.form_post_blog,
+.form_ost_blog section,
+.google_login,
+.message_container ul::-webkit-scrollbar-track,
+.message_container ul::-webkit-scrollbar-thumb,
+.own_message_same_div,
+.other_message_same_div,
+.contact::-webkit-scrollbar-track,
+.contact::-webkit-scrollbar-thumb,
+.contact_container,
+.button_load_more button,
+.contain_block .bottom button,
+.block_page .paper .end button,
+.form_post_blog button,
+.contain_blog,
+.activities_blog .inner,
+.blog_skeleton_wrapper,
+.skeleton,
+.activities_blog label.activities_blog label .activities_blog label,
+.extension_blog .ex,
+.value_content_comment_a_blog div,
+.active_page,
+.extension_input,
+#button_find_partner {
+  border-radius: 10px !important;
+}
+
+.navbar span,
+.treat-button,
+.google_login,
+.navbar_right ul li,
+#button_find_partner,
+.input button,
+.formMessage button[type="submit"],
+.menuMessage button,
+.contact_container,
+.button_load_more
+  button.contain_block
+  .head
+  button.contain_block
+  .bottom
+  button.block_page
+  .paper
+  .end
+  button.news_page
+  .navbar_auth
+  p,
+.form_post_blog button,
+.image_post_news span,
+.like.comment_blog .comment,
+#btnSearch,
+.close_button.share span,
+.like,
+.share span,
+.active_like {
+  cursor: pointer;
+}
+
+.navbar,
+.MuiMenu-list li a,
+.button-sign,
+.container,
+.messageLiOwn,
+.messageLiOther,
+.messageImage,
+.contact_contain_text,
+.contain_block .bottom,
+.image_post_news,
+.profile,
+.activities_blog .inner,
+.activities_blog label li,
+.image-blog .two,
+.image-blog .three .two,
+.comment_blog_view .comment_blog .activities,
+.comment_blog .content,
+.like,
+.comment li,
+.extension_blog .ex,
+post_viewing,
+.value_content_comment_a_blog,
+.go_to_previous,
+.shot_header {
+  display: flex;
+}
+
+.content_comment_a_blog .activities .list,
+.extension_blog .ex,
+.post_viewing_div,
+.modal_post_blog,
+.form_post_blog p,
+.drag_file .icon,
+div.loaderBalls,
+.contain_block .middle,
+.block_page,
+.extension_auth,
+.like,
+.inner .list,
+#share-menu .MuiMenu-list li,
+.share .list,
+.formMessage,
+.part_1,
+.part_2,
+.activities_blog .inner,
+#button_find_partner,
+.search_div,
+.navbar_right ul li a div,
+.navbar_modal,
+.navbar_modal_header,
+.button-navbar,
+.active_like,
+.navbar_right .header,
+.shot_header div,
+.story-center .story-content,
+.story-center .option-2 .option .section .div section,
+.story-center .option-2 .bottom,
+#modal-shot,
+.modal-shot-body,
+.accordion_message .MuiIconButton-label .sympol,
+.contact_contain_text .count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*******************************8* End ************************/
+
+.part_1,
+.part_2 {
+  width: 50%;
+}
+.part_2 {
+  position: relative;
+}
+
+.post_viewing {
+  background-color: #242526;
+}
+
+.active_page {
+  background-color: blanchedalmond;
+  width: 50%;
+  height: 50%;
+}
+
+.Toastify__toast {
+  background: #18191a !important;
+}
+.homepage {
+  background-image: url("../image/homepage.jpg");
+}
+.header_notAuth {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.navbar {
+  margin-bottom: 100px;
+  width: 100%;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.navbar a {
+  margin-left: 50px;
+  text-decoration: none;
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.navbar span {
+  margin-top: 20px;
+  color: white;
+  font-size: 1.7rem;
+  margin-right: 50px;
+  font-weight: 600;
+}
+
+.active_contact {
+  background-color: #181818 !important;
+  border: 1px solid #673ab7;
+}
+
+.not_read_contact {
+  color: black;
+  font-size: 1.2rem;
+}
+
+/******************************** For text navbar  *******************/
+
+.text-navbar {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  color: white;
+}
+
+.text-navbar-first {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.text-navbar-second {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+/************** For button navbar *************/
+
+.button-navbar {
+  margin-top: 50px;
+}
+.paper_res {
+  background-color: #333333;
+  padding: 30px 20px 20px 80px;
+  width: 50%;
+  border-radius: 10px;
+}
+.treat-button {
+  margin-right: 20px;
+  font-size: 2.6vmin;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#ffffff),
+    to(#ffffff)
+  );
+  background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
+  border: none;
+  color: black;
+  border-radius: 2rem;
+  padding: 0.6em 1.5em;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 1;
+  box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
+  -webkit-transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+}
+
+.treat-button:hover {
+  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3);
+}
+
+.treat-button:active {
+  -webkit-transform: scale(0.8) translateY(10%);
+  transform: scale(0.8) translateY(10%);
+  -webkit-transition-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+  transition-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+}
+
+button {
+  border-style: none;
+}
+
+/************* Menu Navbar ***********/
+
+.MuiMenu-list li a:hover {
+  color: #00aefd;
+}
+.MuiMenu-list li a {
+  padding: 2px 10px;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+/******************** Sign in button *************/
+
+.inputField {
+  width: 100%;
+}
+.inputField .MuiInputBase-input {
+  width: 60%;
+}
+.inputField fieldset {
+  width: 60%;
+}
+.inputField .MuiTextField-root {
+  margin-top: 20px;
+  transform: translate(15%, 0%);
+}
+.form_signIn {
+  width: 100%;
+  height: 100%;
+}
+
+.paper_login {
+  background-color: #333333;
+  width: 50%;
+  height: 70%;
+  padding: 30px 20px 0px 60px;
+  border-radius: 10px;
+}
+.MuiFormControl-root {
+  width: 100%;
+}
+
+.sign_in_title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  display: flex;
+}
+.sign_in_title p {
+  margin-left: 100px;
+  width: max-content;
+}
+.sign_in_title span {
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 20px;
+}
+.button_login {
+  transform: translate(25%, 0%);
+  width: 70%;
+}
+
+.google_login {
+  text-align: center;
+  margin-top: 30px;
+  width: 80%;
+  height: 50px;
+  margin-left: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#ffffff),
+    to(#ffffff)
+  );
+  background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 1;
+  -webkit-transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+}
+
+.google_login:hover {
+  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important;
+}
+
+.facebook_login {
+  box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
+  -webkit-transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
+  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s,
+    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
+  outline: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 10px;
+  border-radius: 10px !important;
+  width: 80%;
+  height: 50px;
+  margin-left: 20px;
+  background-color: rgb(96, 135, 221);
+}
+
+.facebook_login:hover {
+  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important;
+}
+
+.facebook_login i {
+  font-size: 1rem;
+  margin-left: -40px;
+  margin-right: 20px;
+}
+
+/* button and forget link */
+
+.button-sign {
+  width: 65%;
+  margin-top: 10px;
+  justify-content: space-between;
+  transform: translate(25%, 0%);
+}
+
+.button-sign a {
+  margin-top: 30px;
+  height: 100%;
+  color: white;
+  padding: 0;
+}
+
+.button-sign a:hover {
+  color: rgba(238, 174, 202, 100);
+}
+
+.container_register {
+  width: 100%;
+}
+
+.MuiInputBase-input {
+  color: white !important;
+}
+
+.forget_container {
+  padding: 70px 0;
+}
+
+.forget_container > form {
+  position: relative;
+  background-color: #131343;
+  width: 40%;
+  height: 100%;
+  margin: auto;
+  padding: 5%;
+  padding-top: 5%;
+}
+
+.forget_container p {
+  text-align: center;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10%;
+}
+
+#forget_button {
+  margin-top: 10%;
+  position: absolute;
+  right: 50px;
+}
+
+.MuiFormLabel-root {
+  color: white !important;
+}
+
+.MuiPaper-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  background-color: white;
+  margin: auto;
+  height: 400px;
+}
+
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 70%;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.1rem;
+  color: #131343;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 500;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #11998e;
+  font-weight: 700;
+}
+
+/* reset input */
+
+.form__field:required,
+.form__field:invalid {
+  box-shadow: none;
+}
+
+.changePassword_input_div {
+  margin-bottom: 50px;
+}
+
+.href_link {
+  font-size: 1rem;
+  color: black;
+  position: absolute;
+  left: 0;
+  margin-top: 50px;
+}
+
+#button_change_password {
+  margin-top: 0px;
+  position: absolute;
+  right: 0;
+  background: #b1d4e0;
+}
+
+.main_page_auth {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.navbar_right {
+  z-index: 1;
+  height: 100%;
+  background-color: #18191b;
+  width: 18%;
+  position: fixed;
+}
+.navbar_right .header p {
+  color: white;
+  font-size: 2.4rem;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+.navbar_right ul {
+  margin: 0;
+  padding: 0;
+  height: max-content;
+  width: 100%;
+  background-color: inherit;
+  height: 80%;
+}
+
+.navbar_right ul li {
+  list-style: none;
+  padding: 15px 0px 15px 10px;
+  margin-bottom: 10px;
+}
+
+.navbar_right ul li a {
+  color: white;
+  transition: 0.1s;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;
+}
+.navbar_right ul li a div {
+  position: relative;
+}
+.navbar_right ul li a div svg {
+  position: absolute;
+  left: 0;
+}
+.navbar_right ul li a div svg path {
+  fill: rgba(255, 255, 255, 0.404);
+}
+.navbar_right ul li a div span {
+  width: 80%;
+  margin-left: auto;
+}
+.navbar_right ul li a .MuiSvgIcon-root {
+  font-size: 2em;
+}
+.navbar_right ul .active_title a div svg {
+  background-color: #15c981;
+}
+.navbar_right ul .active_title a div svg path {
+  fill: white;
+}
+.MuiSvgIcon-root {
+  color: white;
+  vertical-align: bottom;
+  font-size: 25px;
+}
+
+.message_container {
+  margin-top: auto;
+  height: 100%;
+  position: relative;
+  width: 62%;
+  left: 18%;
+  background-color: #21242b;
+  border-right: 1px solid rgba(255, 255, 255, 0.377);
+  display: flex;
+}
+.container_button {
+  background-color: #537ee2;
+  width: 80%;
+  height: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.5rem;
+}
+.container_button_header {
+  display: flex;
+  align-items: center;
+}
+.container_button_header svg {
+  margin-right: 10px;
+  background-color: #ff9417;
+}
+.container_button_header svg path {
+  fill: white;
+}
+.container_button_div {
+  display: flex;
+  width: 100%;
+  height: 80%;
+}
+
+#button_find_partner {
+  height: 50px;
+  width: 200px;
+  background: #fff;
+  color: #1ecd97;
+  letter-spacing: 1px;
+  font-size: 15px;
+  font-weight: bold;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 2.1px 1.3px rgb(0 0 0 / 4%), 0 5.9px 4.2px rgb(0 0 0 / 5%),
+    0 12.6px 9.5px rgb(0 0 0 / 6%), 0 25px 20px rgb(0 0 0 / 10%);
+}
+
+#button_find_partner:hover {
+  color: white;
+  background: #1ecd97;
+}
+
+#button_find_partner:active {
+  letter-spacing: 2px;
+}
+
+.onclic {
+  width: 40px;
+  border-color: #bbbbbb;
+  border-width: 3px;
+  font-size: 0;
+  border-left-color: #1ecd97;
+}
+
+.onclic:after {
+  content: "";
+}
+
+.onclic:hover {
+  color: #1ecd97;
+  background: white;
+}
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/******************************** Custom message output ***************************/
+
+.message_container ul {
+  height: 85%;
+  overflow-y: auto;
+  padding: 0 10px;
+}
+
+.message_container ul::-webkit-scrollbar-track,
+.call_div_container::-webkit-scrollbar-track,
+.accordion_data ul::-webkit-scrollbar-track,
+.contact::-webkit-scrollbar-track,
+.accordion_div .accordion_data::-webkit-scrollbar-track,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track,
+.emoji-mart-scroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey !important;
+}
+
+/* Handle */
+
+.message_container ul::-webkit-scrollbar-thumb,
+.call_div_container::-webkit-scrollbar-thumb,
+.accordion_data ul::-webkit-scrollbar-thumb,
+.contact::-webkit-scrollbar-thumb,
+.accordion_div .accordion_data::-webkit-scrollbar-thumb,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb,
+.emoji-mart-scroll::-webkit-scrollbar-thumb {
+  background-color: grey !important;
+  border-radius: 5px;
+}
+
+.message_container ul::-webkit-scrollbar,
+.call_div_container::-webkit-scrollbar,
+.accordion_data ul::-webkit-scrollbar,
+.contact::-webkit-scrollbar,
+.accordion_div .accordion_data::-webkit-scrollbar,
+.story-center
+  .option-2
+  .option
+  .section
+  #font
+  #z-index
+  div
+  ul::-webkit-scrollbar,
+html::-webkit-scrollbar,
+.emoji-mart-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+/****************************** Message input  *************************/
+
+#icon_button_file {
+  display: none;
+}
+.extension_input .MuiIconButton-root {
+  padding: 0;
+  font-size: 1rem;
+}
+
+.extension_input .MuiIconButton-label .MuiSvgIcon-root {
+  font-size: 2em;
+  width: 1;
+  color: white;
+}
+
+/****************************** Message input  *************************/
+
+.formMessage .MuiSvgIcon-root {
+  margin: 0;
+  color: rgb(220, 227, 228);
+  width: 1.3em;
+  font-size: 3em;
+  padding-left: 5px;
+}
+
+.formMessage p {
+  margin: 0;
+}
+
+.formMessage {
+  width: 90%;
+  right: 0;
+  height: 7%;
+  margin-left: 5%;
+}
+.message_container_div {
+  width: 75%;
+  height: 100%;
+}
+.formMessage_div {
+  width: 100%;
+  position: relative;
+  bottom: 15px;
+}
+.formMessage .input {
+  width: 100%;
+  height: 35px;
+  border-radius: 5px;
+  border-style: none;
+  background-color: #333333;
+  color: white;
+  position: absolute;
+  font-size: 17px;
+  padding-left: 10px;
+}
+.formMessage .input:focus,
+.formMessage .input:hover {
+  border-color: white;
+}
+.formMessage .extension_input {
+  position: absolute;
+  display: inline-flex;
+  right: 0;
+  top: 2px;
+}
+
+.formMessage button[type="submit"] {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom recive message */
+
+.messageLiOwn {
+  margin-bottom: 5px;
+  height: max-content;
+}
+
+.own_message_same_div {
+  background-color: rgb(46, 159, 224);
+  color: white;
+  width: 60%;
+  padding: 8px 10px;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.messageLiOwnl60 {
+  width: max-content;
+}
+
+.messageLiOwnm60 {
+  width: 60%;
+}
+
+.messageLiOther {
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+/* same style when span is 60 or more than 60 letter */
+
+.other_message_same_div {
+  padding: 8px 10px;
+  background-color: #242526;
+  color: rgb(255, 251, 251);
+}
+
+.messageLiOtherl60 {
+  width: max-content;
+}
+
+.messageLiOtherm60 {
+  width: 60%;
+}
+
+.messageImage {
+  width: 100%;
+  margin: 10px 0;
+}
+.messageImage .mIOwn .mIOwn {
+  float: right;
+}
+
+.messageImage input[type="checkbox"] {
+  display: none;
+}
+
+.messageImage input[type="checkbox"]:checked ~ label > img {
+  width: 110%;
+  height: 600px;
+  cursor: zoom-out;
+}
+
+.messageImage img {
+  width: 400px;
+  height: 400px;
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+}
+
+/* message image own */
+
+.mIOwn label {
+  margin-left: auto;
+  margin-right: 15px;
+}
+.menuMessage {
+  padding-top: 10px;
+  margin-left: auto;
+  margin-right: 10px;
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+.menuMessage button {
+  height: max-content;
+}
+.button-option {
+  background-color: #333333;
+  padding: 5px 15px;
+  color: white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+#menuContainerMessage .MuiPaper-root {
+  height: 250px;
+  width: 200px;
+  top: 70px;
+}
+
+#menuContainerMessage .MuiPaper-root li {
+  padding: 0px;
+  height: auto;
+}
+
+/* thiet ke phan danh ba */
+
+.contact {
+  margin-left: auto;
+  overflow-y: auto;
+  width: 20%;
+  background-color: #21242b;
+}
+
+.contact_container {
+  height: 70px;
+  background-color: inherit;
+  margin: 5px;
+}
+
+.contact_contain_text {
+  margin: 0px 15px;
+  padding-top: 5px;
+  width: 90%;
+  position: relative;
+  height: 100%;
+}
+.contact_contain_text .timing {
+  font-size: 0.7rem;
+  width: max-content;
+}
+.contact_contain_text section {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  padding-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.send_container {
+  width: 65%;
+  height: 100%;
+}
+
+/* custom button to load more */
+.comment_a_blog .button_load_more {
+  width: 100%;
+}
+.button_load_more {
+  height: 30px;
+  padding-bottom: 5px;
+}
+
+.button_load_more button {
+  width: 100%;
+  height: 100%;
+  font-size: 1.2rem;
+}
+
+.button_load_more button:hover {
+  box-shadow: 0px 5px 20px rgba(46, 229, 157, 0.4);
+}
+
+:root {
+  --yellow: #feb60a;
+  --red: #ff0062;
+  --blue: #00dbf9;
+  --violet: #da00f7;
+}
+
+div.loaderBalls > div {
+  width: 2vw;
+  height: 2vw;
+  border-radius: 100%;
+  margin: 0 1vw;
+  background-image: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: bounce 1.5s 0.5s linear infinite;
+}
+
+.yellow {
+  background-color: var(--yellow);
+}
+
+.red {
+  background-color: var(--red);
+  animation-delay: 0.1s;
+}
+
+.blue {
+  background-color: var(--blue);
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%,
+  50%,
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  25% {
+    transform: scale(0.6);
+    filter: blur(3px);
+  }
+  75% {
+    filter: blur(3px);
+    transform: scale(1);
+  }
+}
+
+.contain_block {
+  position: absolute;
+  width: 600px;
+  height: 500px;
+  background-color: #333333;
+  top: 15%;
+  left: 30%;
+  border-radius: 10px;
+}
+
+.contain_block .head {
+  width: 100%;
+  height: 20%;
+}
+
+.contain_block .head button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  font-size: 1.3rem;
+}
+
+.contain_block .head button:hover {
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+}
+
+.contain_block .middle {
+  height: 40%;
+  width: 80%;
+  text-align: center;
+  padding: 0 10%;
+}
+
+.contain_block .middle p {
+  font-size: 1.2rem;
+  word-spacing: 2px;
+  color: hsl(0, 0%, 100%);
+}
+
+.contain_block .bottom {
+  justify-content: space-between;
+  height: 10%;
+  width: 60%;
+  padding: 0 20%;
+}
+
+.contain_block .bottom button {
+  padding: 10px 30px;
+  color: white;
+  background-color: #15c981;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  transition: all 0.3s ease 0s;
+  outline: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.contain_block .bottom .cancel {
+  background-color: #c42424;
+  box-shadow: 0px 15px 20px rgba(199, 70, 70, 0.4);
+}
+
+.simple_menu_span {
+  padding: 20px 50px;
+}
+
+.block_page {
+  margin: 10% 0;
+  height: 50%;
+}
+
+.block_page .paper {
+  width: 40%;
+  background-color: #f7f7f8;
+  height: 100%;
+  box-shadow: 5px 5px 15px 5px #807878;
+}
+
+.block_page .paper .header {
+  width: 100%;
+  height: 15%;
+  background-color: #f7f7f8;
+  border-bottom: 1px solid gray;
+}
+
+.block_page .paper .body {
+  height: 70%;
+  margin: 0 10%;
+  font-size: 1.2rem;
+}
+
+.block_page .paper .end {
+  border-top: 1px solid gray;
+  height: 15%;
+  background-color: #f7f7f8;
+}
+
+.block_page .paper .end button {
+  float: right;
+  margin-right: 10px;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: rgba(46, 229, 157, 0.4);
+}
+
+.comment_skeleton_wrapper {
+  width: 200px;
+  height: 100px;
+}
+
+/* ***************************Add title to element ******************/
+
+.title {
+  display: none;
+}
+
+.notify_icon:hover + #notify_title,
+.account_icon:hover + #account_title {
+  display: block;
+  position: absolute;
+  width: max-content;
+  background-color: hsl(0, 0%, 100%);
+  padding: 10px;
+  border-radius: 10px;
+  top: 50px;
+  z-index: 999;
+  color: black;
+}
+
+.post_data_button:hover + #post_blog_title {
+  display: block;
+  position: absolute;
+  width: max-content;
+  background-color: hsl(0, 0%, 100%);
+  padding: 10px;
+  border-radius: 10px;
+  bottom: -970px;
+  right: 70px;
+  z-index: 999;
+  color: black;
+}
+
+.image_upload_message_icon:hover + #image_upload_message_title {
+  display: block;
+  position: absolute;
+  width: max-content;
+  background-color: hsl(0, 0%, 100%);
+  padding: 10px;
+  border-radius: 10px;
+  right: 160px;
+  bottom: 50px;
+  z-index: 999;
+}
+
+.chat_button_group {
+  display: flex;
+  position: relative;
+}
+
+.chat_button_group .background {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2.1px 1.3px rgba(0, 0, 0, 0.044),
+    0 5.9px 4.2px rgba(0, 0, 0, 0.054), 0 12.6px 9.5px rgba(0, 0, 0, 0.061),
+    0 25px 20px rgba(0, 0, 0, 0.1);
+  height: 50px;
+  right: -35px;
+  position: absolute;
+  top: 25px;
+  width: 180px;
+  cursor: pointer;
+}
+
+.chat_button_group .chat-bubble {
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+
+.chat_button_group .bubble {
+  transform-origin: 50%;
+  transition: transform 500ms cubic-bezier(0.17, 0.61, 0.54, 0.9);
+}
+
+.chat_button_group .line {
+  fill: none;
+  stroke: black;
+  stroke-width: 2.75;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat_button_group .line1 {
+  stroke-dasharray: 60 90;
+  stroke-dashoffset: -20;
+}
+
+.chat_button_group .line2 {
+  stroke-dasharray: 67 87;
+  stroke-dashoffset: -18;
+}
+
+.chat_button_group .circle {
+  fill: black;
+  stroke: none;
+  transform-origin: 50%;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.active .bubble {
+  transform: translateX(24px) translateY(4px) rotate(45deg);
+}
+
+.active .line1 {
+  stroke-dashoffset: 21;
+}
+
+.active .line2 {
+  stroke-dashoffset: 30;
+}
+
+.active .circle {
+  transform: scale(0);
+}
+.navbar_right .header {
+  position: relative;
+  justify-content: space-between;
+  width: 60%;
+  padding-left: 5%;
+}
+.navbar_right .header svg,
+.navbar_right ul li a div svg {
+  width: 15pt;
+  height: 15pt;
+  background-color: #242526;
+}
+.navbar_right .header svg path {
+  fill: rgb(226, 89, 39);
+}
+.logout_icon {
+  margin-left: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.logout_icon svg {
+  padding-right: 10px;
+}
+.logout_icon svg path {
+  fill: white;
+}

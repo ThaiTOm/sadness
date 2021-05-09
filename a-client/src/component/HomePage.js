@@ -1,7 +1,7 @@
 import React from 'react'
 import "react-toastify/dist/ReactToastify.css"
 import { isAuth } from "../helpers/auth";
-import Mainpage from "./chatComponent/main_page"
+import Mainpage from "./chatComponent/mainChat"
 import HomepageNotAuth from "./loginComponent/PageNotAuth"
 
 

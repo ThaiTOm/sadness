@@ -17,7 +17,7 @@ export const ImageRender = (cb) => {
         return (
             <img
                 alt={value.slice(100, 110)}
-                src={`http://localhost:2704/${value}`}
+                src={value}
             />
         )
     }
@@ -80,9 +80,76 @@ export const ImageRender = (cb) => {
                 </Link>
             </div>
     }
-
 }
+export const VideoRender = ({ value, idBlog }) => {
+    const render = (value) => {
+        return (
+            <video
+                alt={value.slice(100, 110)}
+                src={value}
+            />
+        )
+    }
+    switch (value.length) {
+        case 0:
+            return <div></div>
+        case 1:
+            return <div className="one">
+                <Link to={"/posts/id=" + idBlog}>
+                    {render(value[0])}
+                </Link>
+            </div>
+        case 2:
+            return <div className="two">
+                <Link to={"/posts/id=" + idBlog}>
+                    {render(value.image[0])}
+                    {render(value.image[1])}
+                </Link>
+            </div>
+        case 3:
+            return <div className="three">
+                <Link to={"/posts/id=" + idBlog}>
+                    <div className="two">
+                        {render(value.image[0])}
+                        {render(value.image[1])}
+                    </div>
+                    {render(value.image[2])}
+                </Link>
+            </div>
 
+        case 4:
+            return <div className="three">
+                <Link to={"/posts/id=" + idBlog}>
+                    <div className="two">
+                        {render(value.image[0])}
+                        {render(value.image[1])}
+                    </div>
+                    <div className="two">
+                        {render(value.image[2])}
+                        {render(value.image[3])}
+                    </div>
+                </Link>
+            </div>
+        default:
+            return <div className="three">
+                <Link to={"/posts/id=" + idBlog}>
+                    <div className="two">
+                        {render(value.image[0])}
+                        {render(value.image[1])}
+                    </div>
+                    <div className="two" >
+                        {render(value.image[0])}
+                        <div style={{ position: "relative", width: "90%" }}>
+                            {render(value.image[2])}
+                            <span className="last_image">
+                                + {value.image.length - 4}
+                            </span>
+                        </div>
+                    </div>
+                </Link>
+            </div>
+    }
+}
 export const NavbarRight = () => {
     const [openNoti, setOpenNoti] = useState(null)
     const [open, setOpen] = useState(false);
@@ -180,6 +247,16 @@ export const NavbarRight = () => {
                             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m498.195312 222.695312c-.011718-.011718-.023437-.023437-.035156-.035156l-208.855468-208.847656c-8.902344-8.90625-20.738282-13.8125-33.328126-13.8125-12.589843 0-24.425781 4.902344-33.332031 13.808594l-208.746093 208.742187c-.070313.070313-.140626.144531-.210938.214844-18.28125 18.386719-18.25 48.21875.089844 66.558594 8.378906 8.382812 19.445312 13.238281 31.277344 13.746093.480468.046876.964843.070313 1.453124.070313h8.324219v153.699219c0 30.414062 24.746094 55.160156 55.167969 55.160156h81.710938c8.28125 0 15-6.714844 15-15v-120.5c0-13.878906 11.289062-25.167969 25.167968-25.167969h48.195313c13.878906 0 25.167969 11.289063 25.167969 25.167969v120.5c0 8.285156 6.714843 15 15 15h81.710937c30.421875 0 55.167969-24.746094 55.167969-55.160156v-153.699219h7.71875c12.585937 0 24.421875-4.902344 33.332031-13.808594 18.359375-18.371093 18.367187-48.253906.023437-66.636719zm0 0" /></svg>
                             <span >
                                 Trang chủ
+                    </span>
+                        </div>
+                    </Link>
+                </li>
+                <li className={arr[3] === "audio" ? "active_title inner_title" : "inner_title"}>
+                    <Link className="home_icon icon_nav" to="/audio">
+                        <div>
+                            <svg id="audio" width="35pt" height="25pt" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><path d="m467 143h-36.868c5.277 19.494 8.11 39.982 8.11 61.122 0 129.095-105.026 234.121-234.121 234.121-11.202 0-22.38-.83-33.436-2.427 6.916 15.975 22.829 27.184 41.315 27.184h212.583l63.61 46.142c2.61 1.893 5.701 2.858 8.809 2.858 2.327 0 4.663-.541 6.813-1.638 5.023-2.561 8.185-7.723 8.185-13.362v-309c0-24.813-20.187-45-45-45z" /><path d="m408.243 204.122c0-112.553-91.569-204.122-204.121-204.122s-204.122 91.569-204.122 204.122c0 39.168 11.028 76.924 31.969 109.698l-31.038 83.98c-2.03 5.493-.678 11.666 3.463 15.807 2.864 2.864 6.699 4.394 10.609 4.394 1.744 0 3.503-.305 5.198-.931l88.229-32.61c29.327 15.58 62.254 23.783 95.691 23.783 112.553 0 204.122-91.568 204.122-204.121zm-308.243 41.697c0 8.284-6.716 15-15 15s-15-6.716-15-15v-83.637c0-8.284 6.716-15 15-15s15 6.716 15 15zm210.001-83.637c0-8.284 6.716-15 15-15s15 6.716 15 15v83.637c0 8.284-6.716 15-15 15s-15-6.716-15-15zm-60 23.999c0-8.284 6.716-15 15-15s15 6.716 15 15v35.639c0 8.284-6.716 15-15 15s-15-6.716-15-15zm-90.001 35.639c0 8.284-6.716 15-15 15s-15-6.716-15-15v-35.639c0-8.284 6.716-15 15-15s15 6.716 15 15zm30.001 56.181v-148.001c0-8.284 6.716-15 15-15s15 6.716 15 15v148c0 8.284-6.716 15-15 15s-15-6.715-15-14.999z" /></g></svg>
+                            <span >
+                                Trò chuyện âm thanh
                     </span>
                         </div>
                     </Link>
