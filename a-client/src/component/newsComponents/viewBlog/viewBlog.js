@@ -55,7 +55,7 @@ function ViewBlog() {
     useEffect(() => {
         let fn = () => {
             if (id) {
-                axios.get("http://localhost:2704/api/news/data?start=" + start + "&end=" + end + "&id=" + id)
+                axios.get(`http://localhost:2704/api/news/data?start=${end - 3}&end=${end}&id=${id}`)
                     .then(res => {
                         if (res.data.data !== undefined) setBlogRes(res)
                         else setHasmore(false)
@@ -64,7 +64,7 @@ function ViewBlog() {
                         handleError()
                     })
             } else {
-                axios.get("http://localhost:2704/api/news/dataNo?start=" + start + "&end=" + end)
+                axios.get(`http://localhost:2704/api/news/dataNo?start=${end - 3}&end=${end}`)
                     .then(res => {
                         setBlogRes(res)
                     })
@@ -132,7 +132,6 @@ function ViewBlog() {
                                         </div>
                                     </div>
                                     {/* Render Image */}
-                                    {console.log(value.image)}
                                     <div className="image-blog">
                                         {value && value.image && value.image[0].split(".")[1] === "jpeg" ? <ImageRender props={{ value, id }} /> : <VideoRender value={value.image} idBlog={value.idBlog} />}
 

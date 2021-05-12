@@ -138,7 +138,10 @@ div.loaderBalls,
 #modal-shot,
 .modal-shot-body,
 .accordion_message .MuiIconButton-label .sympol,
-.contact_contain_text .count {
+.contact_contain_text .count,
+.audioChat .modal-container .bottom .select-user,
+.audioChat .modal-container .bottom .select-user div,
+.podcast-many {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -578,7 +581,7 @@ button {
 .navbar_right {
   z-index: 1;
   height: 100%;
-  background-color: #18191b;
+  background-color: #181818;
   width: 18%;
   position: fixed;
 }
@@ -645,7 +648,7 @@ button {
   position: relative;
   width: 62%;
   left: 18%;
-  background-color: #21242b;
+  background-color: #181818;
   border-right: 1px solid rgba(255, 255, 255, 0.377);
   display: flex;
 }
@@ -762,7 +765,8 @@ button {
   div
   ul::-webkit-scrollbar-track,
 html::-webkit-scrollbar-track,
-.emoji-mart-scroll::-webkit-scrollbar-track {
+.emoji-mart-scroll::-webkit-scrollbar-track,
+.podcast-render::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey !important;
 }
 
@@ -782,7 +786,8 @@ html::-webkit-scrollbar-track,
   div
   ul::-webkit-scrollbar-thumb,
 html::-webkit-scrollbar-thumb,
-.emoji-mart-scroll::-webkit-scrollbar-thumb {
+.emoji-mart-scroll::-webkit-scrollbar-thumb,
+.podcast-render::-webkit-scrollbar-thumb {
   background-color: grey !important;
   border-radius: 5px;
 }
@@ -801,7 +806,8 @@ html::-webkit-scrollbar-thumb,
   div
   ul::-webkit-scrollbar,
 html::-webkit-scrollbar,
-.emoji-mart-scroll::-webkit-scrollbar {
+.emoji-mart-scroll::-webkit-scrollbar,
+.podcast-rende::-webkit-scrollbarr {
   width: 5px;
 }
 

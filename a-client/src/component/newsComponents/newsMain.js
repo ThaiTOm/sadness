@@ -1,6 +1,7 @@
 import React from 'react'
 import "../../assets/style/newspage.css"
-import PostBlogMain from "../../helpers/news/postBlog"
+// import PostBlogMain from "../../helpers/news/postBlog"
+import PostBlogMain from "../anotherPage/postBlog"
 import ViewBlogMain from "./viewBlog/viewBlog"
 import { ToastContainer } from "react-toastify";
 import { NavbarRight } from '../../helpers/news/news'

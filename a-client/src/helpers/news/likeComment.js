@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import RequireLogin from './requireLogin';
 
 const LikeComment = (props) => {

@@ -197,9 +197,9 @@
     fill: #eb8b38;
   }
 }
-input[type="checkbox"] {
+/* input[type="checkbox"] {
   display: none;
-}
+} */
 
 .activities_blog label.activities_blog label .activities_blog label {
   list-style: none;

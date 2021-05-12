@@ -7,7 +7,6 @@ import { IconButton } from "@material-ui/core"
 function ShortStatus({ id, socket }) {
     const [data, setData] = useState([])
     const [start, setStart] = useState(0)
-    const [end, setEnd] = useState(5)
     const [image, setImage] = useState(null)
     const [imgBg, setImgBg] = useState(null)
     const [play, setPlay] = useState(true)
@@ -86,7 +85,7 @@ function ShortStatus({ id, socket }) {
     }
 
     useEffect(() => {
-        axios.post("http://localhost:2704/api/news/get/shot", { start, end })
+        axios.post("http://localhost:2704/api/news/get/shot", { start, end: start + 5 })
             .then(data => {
                 for (let x of data.data) {
                     setData(value => [...value, x])
@@ -95,7 +94,7 @@ function ShortStatus({ id, socket }) {
             .catch(err => {
                 console.log(err)
             })
-    }, [start, end])
+    }, [start])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -103,6 +102,7 @@ function ShortStatus({ id, socket }) {
         }, 50)
         return () => clearInterval(interval);
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoRef.current, duration, play])
 
     return (

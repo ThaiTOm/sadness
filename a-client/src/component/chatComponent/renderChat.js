@@ -9,7 +9,6 @@ function RenderChat(props) {
     let { id, userId, socket } = props
     const [msg, setMsg] = useState([]);
     const [load, setLoad] = useState(false);
-    const [start, setStart] = useState(0);
     const [end, setEnd] = useState(15);
     const [render, setRender] = useState(null)
     const myRef = useRef(null);
@@ -17,18 +16,19 @@ function RenderChat(props) {
     const handleClickLoad = () => {
         setLoad(true);
         setTimeout(() => {
+
             setEnd(end + 10)
         }, 1000)
     }
     useEffect(() => {
-        axios.get("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + start + "&end=" + end)
+        axios.get("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + end - 15 + "&end=" + end)
             .then(res => {
                 setMsg(res.data.data)
                 setLoad(false)
             }).catch(err => {
                 return <div>Oops, bạn hãy thử lại sau</div>
             })
-    }, [id, start, end])
+    }, [id, end])
     let func = (msg) => {
         if (msg.image) setMsg(img => [...img, msg.image])
         else setMsg(msgs => [...msgs, msg.data])

@@ -1,13 +1,14 @@
 .audioChat {
-  background-color: #21242b;
+  background-color: #181818;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 .audioChat .container {
-  width: 80%;
-  margin-left: auto;
+  width: 100%;
   height: 100%;
   display: block;
+  position: absolute;
 }
 .audioChat .modal {
   position: fixed;
@@ -23,7 +24,7 @@
   background-color: #21242b;
   padding: 20px;
   position: relative;
-  width: 80%;
+  width: 60%;
   height: 80%;
   top: 50%;
   left: 50%;
@@ -36,4 +37,242 @@
   margin-left: auto;
   font-size: 2rem;
   width: max-content;
+}
+.audioChat .modal-container .top input {
+  height: 50px;
+}
+.audioChat .modal-container p {
+  font-size: 1.1rem;
+  color: white;
+  margin: 10px 0;
+}
+#form_post_blog_div {
+  width: 100%;
+  position: relative;
+  display: block;
+  height: max-content;
+  margin-bottom: 10px;
+}
+#form_post_blog_div .extension {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#form_post_blog_div textarea {
+  height: 100px;
+}
+.modal button[type="submit"] {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 0;
+}
+.modal svg {
+  width: 40pt;
+  height: 40pt;
+}
+.modal svg .y {
+  fill: rgb(15, 14, 14);
+}
+.modal svg .x {
+  fill: orange;
+}
+.audioChat .modal-container .bottom .select-user {
+  display: flex;
+  width: max-content;
+}
+
+.audioChat
+  .modal-container
+  .bottom
+  .select-user
+  input::-webkit-outer-spin-button,
+.audioChat
+  .modal-container
+  .bottom
+  .select-user
+  input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.audioChat .modal-container .bottom .select-user .type_text_div {
+  width: 40px !important;
+  height: 30px;
+  padding: 0;
+  margin: 0 10px 0 0;
+}
+.audioChat .modal-container .bottom .select-user div input[type="checkbox"] {
+  height: 25px;
+  width: 25px;
+  background-color: inherit;
+}
+.audioChat .modal-container .bottom .select-user div {
+  font-size: 1.2rem;
+  color: white;
+}
+
+#podcast-create-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(245, 245, 245, 0.884);
+  border-radius: 10px;
+}
+#podcast-create-button svg {
+  width: 25pt;
+  height: 25pt;
+  padding: 0;
+}
+#podcast-create-button svg path {
+  fill: #ff6370;
+  stroke-width: 10;
+  stroke-dasharray: 1350;
+  stroke-dashoffset: 0;
+  stroke: #ff6370;
+}
+#podcast-create-button svg:hover path {
+  animation: animate 1s linear forwards;
+}
+@keyframes animate {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1350;
+  }
+  80% {
+    stroke-dashoffset: 2700;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 2700;
+    fill: #ff6370;
+  }
+}
+.podcast-render {
+  font-family: Ubuntu;
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  overflow-y: auto;
+  background-color: #181818;
+}
+.podcast-div {
+  background-color: #1f2022;
+  height: max-content;
+  width: 30%;
+  margin: auto;
+  padding: 30px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  position: relative;
+  color: white;
+  display: flex;
+}
+.podcast-div a {
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.podcast-div .in {
+  width: 80%;
+}
+.podcast-div .in section {
+  margin: 10px 0;
+}
+.podcast-div .in section p {
+  font-size: 1rem;
+}
+.podcast-div .tooltiptext {
+  top: 120%;
+  bottom: initial;
+}
+.podcast-div .tooltiptext::after {
+  left: 50%;
+  bottom: 100%;
+}
+.podcast-join-button {
+  display: flex;
+  cursor: pointer;
+  margin-left: auto;
+  transition: 0.2s;
+  background-color: inherit;
+  height: max-content;
+}
+.podcast-many {
+  width: 22pt;
+  height: 22pt;
+  background-color: teal;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.podcast-join-button svg {
+  width: 25pt;
+  height: 25pt;
+  padding: 0;
+}
+.podcast-join-button svg path {
+  stroke-width: 25;
+  stroke-dasharray: 1350;
+  stroke-dashoffset: 0;
+  stroke: #e06f24;
+  fill: transparent;
+}
+.podcast-join-button svg:hover path {
+  animation: animate-join 1s linear forwards;
+}
+@keyframes animate-join {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  40% {
+    stroke-dashoffset: 1350;
+  }
+  80% {
+    stroke-dashoffset: 2700;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 2700;
+    fill: #e06f24;
+  }
+}
+.podcast-req {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.801);
+  top: 0;
+  z-index: 2;
+}
+.podcast-req .container-req {
+  width: 60%;
+  height: max-content;
+  margin: auto;
+  background-color: #1f2022;
+  border-radius: 10px;
+  padding: 30px;
+  position: relative;
+  color: white;
+}
+.podcast-req .container-req .header {
+  width: max-content;
+  margin-left: auto;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+}
+.podcast-req .container-req button {
+  padding: 10px 30px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+.podcast-req .container-req input {
+  height: 50px;
+  margin: 10px 0;
 }

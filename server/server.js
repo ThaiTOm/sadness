@@ -3,12 +3,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const http = require("http");
-const authRoute = require("./routes/indexAuth.route");
-const messageRoute = require("./routes/message.route")
+const path = require("path")
+
 const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
+const authRoute = require("./routes/indexAuth.route");
+const messageRoute = require("./routes/message.route")
+const audioRoute = require("./routes/audio.route")
+
 const responseTime = require("response-time");
-const path = require("path")
 
 const app = express();
 var ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -49,6 +52,8 @@ io.on('connection', (socket) => realTimeD.index(io, socket));
 app.use("/api/", authRoute);
 app.use("/api/msgC/", messageRoute);
 app.use("/api/news/", newsRoute);
+app.use("/api/audio/", audioRoute);
+
 // app.get("/", (req, res) => {
 //     var task = cron.schedule('1 * * * *', () => {
 //         console.log('stopped task');

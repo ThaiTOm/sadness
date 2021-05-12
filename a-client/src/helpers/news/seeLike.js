@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import RequireLogin from './requireLogin';
 
 const SeeLike = (cb) => {

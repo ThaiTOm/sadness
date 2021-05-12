@@ -94,7 +94,7 @@ function ChatCouple(props) {
                     setTalk(false)
                 });
                 try {
-                    return <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull
+                    <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull
                     } autoPlay />
                 } catch (error) {
                     createNullStream()

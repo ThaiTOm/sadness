@@ -49,7 +49,9 @@ module.exports = {
             seenMessage({ id, userId })
         })
         socket.on("join", ({ id }) => {
-            cm.set(id, "online")
+            try {
+                // cm.set(id, "online")
+            } catch (error) { }
             socket.join(id)
         })
         socket.on("comment", async ({ idRecieve, idSent, value }, callback) => {

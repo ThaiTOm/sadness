@@ -70,6 +70,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
     // else validate this
     useEffect(() => {
         message && message.idRoom === idRoom && validateImage(message)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [idRoom, message])
 
     useEffect(() => {

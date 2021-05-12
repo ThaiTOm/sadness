@@ -54,7 +54,7 @@ function Comment(props) {
         }
     </div>
     useEffect(() => {
-        axios.get("http://localhost:2704/api/news/comment?start=" + start + "&end=" + end + "&id=" + id + "&blog=" + value.idBlog)
+        axios.get(`http://localhost:2704/api/news/comment?start=${end - 10} &end=${end}&id=${id}&blog=${value.idBlog}`)
             .then(async res => {
                 let a = res.data.data
                 if (a.length >= 4) {
@@ -73,7 +73,7 @@ function Comment(props) {
                     </div>
                 )
             })
-    }, [end, id])
+    }, [end, id, value.idBlog])
     return (
         <div className="comment_a_blog">
             {login ? <RequireLogin onClick={(value) => setLogin(value)} /> : console.log()}

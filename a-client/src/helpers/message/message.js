@@ -152,9 +152,6 @@ export const MessageContainer = () => {
         setRoom(id[0])
     }
 
-    const handleCreateRoom = (e) => {
-        e.preventDefault()
-    }
     return (
         <div className="accordion_div" style={open === true ? { height: "450px" } : { height: "initial" }}>
             <div className="accordion_header">
@@ -205,27 +202,30 @@ export const getTime = (time) => {
     if (timing >= 31556952000) {
         let years = Math.ceil(timing / 31556952000)
         timing = Math.ceil(timing % 31556952000)
-        ans += `${years} năm`
+        ans += `${years} năm `
+        return ans
     }
     // get months
     if (timing >= 2629800000) {
         let months = Math.ceil(timing / 2629800000)
         timing = Math.ceil(timing % 2629800000)
-        ans += `${months} tháng`
-
+        ans += `${months} tháng `
+        return ans
     }
     // get days
     if (timing >= 86400000) {
         let days = Math.ceil(timing / 86400000)
         timing = Math.ceil(timing % 86400000)
-        ans += `${days} ngày`
+        ans += `${days} ngày `
+        return ans
 
     }
     // get hours
     if (timing >= 3600000) {
         let hours = Math.ceil(timing / 3600000)
         timing = Math.ceil(timing % 3600000)
-        ans += `${hours} giờ`
+        ans += `${hours} giờ `
+        return ans
 
     }
     // get minutes

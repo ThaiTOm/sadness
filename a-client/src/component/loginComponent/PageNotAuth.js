@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "../../assets/style/homepage.css"
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -21,17 +21,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 function PageNotAuth() {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [openSignIn, setOpenSignIn] = React.useState(false);
-    const [openSignUp, setOpenSignUp] = React.useState(false);
+    // const [anchorEl, setAnchorEl] = React.useState(null);
+    const [openSignIn, setOpenSignIn] = useState(false);
+    const [openSignUp, setOpenSignUp] = useState(false);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
     const handleOpenSignIn = () => {
         setOpenSignIn(true);
     };

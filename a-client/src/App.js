@@ -28,60 +28,38 @@ function App() {
   const [listMessage, setListMessage] = useState(null)
   const notifications = useMemo(() => ({ value, setValue }), [value, setValue]);
   const messageList = useMemo(() => ({ listMessage, setListMessage }), [listMessage, setListMessage])
-  const [start, setStart] = useState(0);
   const [end, setEnd] = useState(10);
   const history = useHistory()
 
-  let changeTitle = (idMessage, arr) => {
-    if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
-    return setListMessage(arr)
-  }
 
-  let forLoop = (arr, msgs) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].idRoom === msgs.idRoom && i !== 0) {
-        arr.splice(i, 1)
-        arr.unshift(msgs)
-        return changeTitle(msgs.data.id, arr)
-      }
-      else if (arr[i].idRoom === msgs.idRoom && i === 0) {
-        arr[0] = msgs
-        return changeTitle(msgs.data.id, arr)
-      }
-    }
-  }
 
-  let fnc = () => {
-    let arr = [...listMessage]
-    socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
-  }
 
-  let fncNotification = (arrNoti) => {
-    // if user has notifications now 
-    socket.once("activities", async (msg) => {
-      // value is link to post 
-      toast.info(msg.number + msg.value)
-      let arr = { type: msg.type, value: msg.value, number: msg.number }
-      let i = 0
-      for await (let data of arrNoti) {
-        // type (post,like,comment), value(link to that post)
-        if (data.type === arr.type && data.value === arr.value) {
-          let old = [...value]
-          old.splice(i, 1)
-          old.unshift(data)
-          return setValue(old)
-        }
-        i++
-      }
-      setValue(a => [...a, arr])
-    })
-  }
 
   // do not match two these useEffect 
   // This useEffect is use for recieve data from server
   useEffect(() => {
+    let fncNotification = (arrNoti) => {
+      // if user has notifications now 
+      socket.once("activities", async (msg) => {
+        // value is link to post 
+        toast.info(msg.number + msg.value)
+        let arr = { type: msg.type, value: msg.value, number: msg.number }
+        let i = 0
+        for await (let data of arrNoti) {
+          // type (post,like,comment), value(link to that post)
+          if (data.type === arr.type && data.value === arr.value) {
+            let old = [...value]
+            old.splice(i, 1)
+            old.unshift(data)
+            return setValue(old)
+          }
+          i++
+        }
+        setValue(a => [...a, arr])
+      })
+    }
     fncNotification(value)
-  }, [value])
+  }, [value, socket])
 
 
   // fetch data
@@ -103,21 +81,46 @@ function App() {
       }).catch(err => { })
 
     // get message list
-    axios.post("http://localhost:2704/api/msgC/contactL?start=" + start + "&end=" + end, { id })
+    axios.post(`http://localhost:2704/api/msgC/contactL?start=${end - 10}&end=${end}`, { id })
       .then(res => {
         if (res.data.message) history.push("/report")
         else setListMessage(res.data)
       }).catch(err => { })
 
-  }, [id, end])
+  }, [id, end, history])
 
   useEffect(() => {
+    let changeTitle = (idMessage, arr) => {
+      if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
+      return setListMessage(arr)
+    }
+
+    // check same value 
+    let forLoop = (arr, msgs) => {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].idRoom === msgs.idRoom && i !== 0) {
+          arr.splice(i, 1)
+          arr.unshift(msgs)
+          return changeTitle(msgs.data.id, arr)
+        }
+        else if (arr[i].idRoom === msgs.idRoom && i === 0) {
+          arr[0] = msgs
+          return changeTitle(msgs.data.id, arr)
+        }
+      }
+    }
+    // recieve message once
+    let fnc = () => {
+      let arr = [...listMessage]
+      socket.once("message", msgs => msgs.type === "message" && forLoop(arr, msgs))
+    }
+
     socket.on("reqShot", msg => {
       let arr = listMessage ? [...listMessage] : []
       arr.push(msg.mess)
       setListMessage(arr)
     }) && listMessage && listMessage.length > 0 && fnc()
-  }, [listMessage])
+  }, [listMessage, socket, id])
 
   useEffect(() => {
     // document.title = title
@@ -126,6 +129,7 @@ function App() {
   useEffect(() => {
     id && socket.emit("join", { id })
   }, [socket, id])
+
   return (
     <BrowserRouter >
       <Switch>
@@ -154,10 +158,10 @@ function App() {
             <Route
               path="/chat"
               component={Chat} />
-              <Route
+            <Route
               path="/audio"
               component={AudioChatCom}
-              />
+            />
             <Route
               path="/news"
               component={NewsMain} />

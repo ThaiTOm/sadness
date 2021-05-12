@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios"
-import "./suggest.css"
+import "../../assets/style/suggest.css"
+
 function SuggestPage() {
     const [data, setData] = useState([])
     useEffect(() => {
