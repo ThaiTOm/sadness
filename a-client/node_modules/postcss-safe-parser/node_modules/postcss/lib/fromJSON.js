@@ -8,7 +8,9 @@ let Input = require('./input')
 let Root = require('./root')
 let Rule = require('./rule')
 
-function fromJSON (json, inputs) {
+function fromJSON(json, inputs) {
+  if (Array.isArray(json)) return json.map(n => fromJSON(n))
+
   let { inputs: ownInputs, ...defaults } = json
   if (ownInputs) {
     inputs = []
