@@ -10,7 +10,7 @@ function Main_block() {
         signOut()
     }
     return (
-        <div className="block_page">
+        <div className="block_page cA">
             <div className="paper">
                 <div className="header">
                 </div>

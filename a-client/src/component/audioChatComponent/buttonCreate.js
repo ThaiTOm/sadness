@@ -43,8 +43,8 @@ function ButtonCreate({ id, socket }) {
                         </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
                 </svg>
             </IconButton>
-            <div className="container" style={open === true ? { display: "block" } : { display: "none" }}>
-                <form onSubmit={e => handleSubmit(e)} style={open === true ? { display: "block" } : { display: "none" }} className="modal">
+            <div className="modal_container" style={open === true ? { display: "flex" } : { display: "none" }}>
+                <form onSubmit={e => handleSubmit(e)} style={open === true ? { display: "block" } : { display: "none" }} className="div">
                     <div className="modal-container">
                         <div onClick={e => setOpen(false)} className="header">
                             x

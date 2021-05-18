@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { getCookie } from '../../helpers/auth';
+import React, { useState, useContext } from 'react'
+import { PeerJS } from '../../userContext'
 // This function is use for send and view message
 import ChatCouple from "./miniChatCom/chatCouple"
 import ChatGroup from './miniChatCom/chatGroup'
-import Peer from "peerjs"
+
 
 function SendContact(props) {
-    const [peer, setPeer] = useState(null)
-    const userId = getCookie().token;
-    let newNull = () => {
-        peer.destroy()
-    }
-    let createPeer = () => {
-        var peerJS = new Peer(userId, {
-            host: "/",
-            port: 2704,
-            path: "/peerjs"
-        })
-        return peerJS
-    }
-    useEffect(() => {
-        peer && newNull()
-        let peerJS = createPeer()
-        setPeer(peerJS)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
+    const value = useContext(PeerJS)
     return (
         <>
-            {peer ?
+            {value ?
                 props.id[props.id.length - 1] === "g" ?
-                    <ChatGroup onClick={(value) => props.onClick(value)} peerJS={peer} id={props.id} socket={props.socket} /> :
-                    <ChatCouple onClick={(value) => props.onClick(value)} peerJS={peer} id={props.id} socket={props.socket} />
+                    <ChatGroup onClick={(value) => props.onClick(value)} peerJS={value} id={props.id} socket={props.socket} /> :
+                    <ChatCouple onClick={(value) => props.onClick(value)} peerJS={value} id={props.id} socket={props.socket} />
                 :
                 console.log()
             }

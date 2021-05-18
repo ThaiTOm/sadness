@@ -14,29 +14,29 @@ function ChatAudioCom() {
     const id = getCookie().token
     let socket = socketApp.getSocket();
 
-    let newNull = () => {
-        peer.destroy()
-    }
-    let createPeer = () => {
-        var peerJS = new Peer(id, {
-            host: "/",
-            port: 2704,
-            path: "/peerjs"
-        })
-        return peerJS
-    }
-    useEffect(() => {
-        // peer die then reconnect
-        peer && newNull()
-        let peerJS = createPeer()
-        setPeer(peerJS)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // let newNull = () => {
+    //     peer.destroy()
+    // }
+    // let createPeer = () => {
+    //     var peerJS = new Peer(id, {
+    //         host: "/",
+    //         port: 2704,
+    //         path: "/peerjs"
+    //     })
+    //     return peerJS
+    // }
+    // useEffect(() => {
+    //     // peer die then reconnect
+    //     peer && newNull()
+    //     let peerJS = createPeer()
+    //     setPeer(peerJS)
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
     return (
-        <div className="audioChat">
+        <div className="audioChat percent">
             <NavbarRight />
             <ButtonCreate id={id} socket={socket} />
-            <RenderRooms peer={peer} />
+            <RenderRooms />
         </div>
     )
 }

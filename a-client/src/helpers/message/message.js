@@ -91,7 +91,7 @@ export const FormSend = (props) => {
     };
 
     return (
-        <form className="formMessage"
+        <form className="formMessage cA"
             onSubmit={handleSubmit}>
             <div className="formMessage_div">
                 <>

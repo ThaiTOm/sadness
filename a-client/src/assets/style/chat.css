@@ -61,7 +61,7 @@
   width: 350px;
   height: 400px;
   transition: 0.2s ease-out;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .accordion_message button {
@@ -148,7 +148,7 @@
   margin-top: 10px;
   display: flex;
   border-bottom: 2px solid rgba(221, 213, 213, 0.137);
-  height: 6%;
+  height: max-content;
   width: 90%;
   margin-left: auto;
 }
@@ -160,6 +160,10 @@
   border-radius: 5px;
   cursor: pointer;
   color: white;
+}
+.contact_extension .contact_extension_div span {
+  display: inline-block;
+  width: 100%;
 }
 .shot {
   margin-top: 1%;
@@ -175,7 +179,6 @@
 .shot .shot_div {
   width: 96%;
   height: max-content;
-  display: flex;
   overflow-x: auto;
 }
 .shot video {
@@ -228,8 +231,6 @@ svg {
 }
 #modal-shot {
   position: fixed;
-  width: 100%;
-  height: 100%;
   background-color: rgb(20, 20, 20);
   z-index: 1;
   top: 50%;
@@ -259,12 +260,8 @@ svg {
 
 #modal-shot .modal-shot-body .modal-shot-container {
   position: relative;
-  width: 100%;
-  height: 100%;
 }
 #modal-shot .modal-shot-body .modal-shot-container video {
-  height: 100%;
-  width: 100%;
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 10px 1px 45px -5px rgba(235, 235, 235, 0.75);

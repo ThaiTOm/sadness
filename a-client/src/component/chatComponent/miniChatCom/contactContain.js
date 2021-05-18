@@ -121,7 +121,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                         }
                     </p>
                     <p className="timing">
-                        {getTime(message.date)}
+                        {message && getTime(message.date)}
                     </p>
                 </section>
                 <div className="setting_chat">
@@ -150,7 +150,7 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                                     <div className="head">
                                         <button onClick={handleCloseOut}>&#10005;</button>
                                     </div>
-                                    <div className="middle">
+                                    <div className="middle cA">
                                         <p> Bạn sẽ không thể nhận và trả lời tin nhắn của người này và đoạn tin nhắn này sẽ bị xóa đi ở cả 2 phía </p>
                                     </div>
                                     <div className="bottom">

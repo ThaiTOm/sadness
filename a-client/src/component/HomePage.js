@@ -7,7 +7,7 @@ import HomepageNotAuth from "./loginComponent/PageNotAuth"
 
 function HomePage() {
     return (
-        <div className="main_page">
+        <div className="main_page percent">
             { isAuth() ? < Mainpage /> :
                 <HomepageNotAuth />
             }

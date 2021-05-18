@@ -10,7 +10,7 @@ import { NavbarRight } from '../../helpers/news/news'
 function NewsMain() {
     // const id = getCookie().token || ""
     return (
-        <div className="news_page">
+        <div className="news_page percent">
             <ToastContainer />
             <div className="container" id="news" style={{ height: "max-content" }}>
                 <NavbarRight />

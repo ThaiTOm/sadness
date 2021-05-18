@@ -165,7 +165,7 @@ function CreateShots() {
     };
 
     return (
-        <div className="story">
+        <div className="story percent">
             <ToastContainer />
             <div className="story-header">
                 <Link style={{ marginLeft: "10px", marginRight: "10px" }} to="/">
@@ -204,7 +204,7 @@ function CreateShots() {
                             })}
                         </div>
                     </div> : video ? <div className="story_content_div">
-                        <video ref={videoSrcRef} autoPlay muted={audio ? true : false}>
+                        <video className="percent" ref={videoSrcRef} autoPlay muted={audio ? true : false}>
                             <source src={videoSrc + `#t=${value[0]},${value[1]}`} type="video/mp4" />
                         </video>
                     </div> : console.log()}

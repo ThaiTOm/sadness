@@ -2,16 +2,9 @@
 
 body,
 #root,
-.App,
-.homepage,
-.post_viewing,
-.viewBlog,
-.forget_container,
 .MuiList-root,
 .container,
-.drag_file .icon,
-.header_notAuth,
-.story {
+.activities_blog label li {
   width: 100%;
   height: 100%;
 }
@@ -106,25 +99,12 @@ post_viewing,
 }
 
 .content_comment_a_blog .activities .list,
-.extension_blog .ex,
-.post_viewing_div,
-.modal_post_blog,
 .form_post_blog p,
-.drag_file .icon,
 div.loaderBalls,
-.contain_block .middle,
-.block_page,
-.extension_auth,
-.like,
 .inner .list,
 #share-menu .MuiMenu-list li,
 .share .list,
-.formMessage,
-.part_1,
-.part_2,
 .activities_blog .inner,
-#button_find_partner,
-.search_div,
 .navbar_right ul li a div,
 .navbar_modal,
 .navbar_modal_header,
@@ -141,7 +121,11 @@ div.loaderBalls,
 .contact_contain_text .count,
 .audioChat .modal-container .bottom .select-user,
 .audioChat .modal-container .bottom .select-user div,
-.podcast-many {
+.podcast-many,
+.inputField,
+.button_login,
+.col-sm-6,
+.shot .shot_div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -183,19 +167,18 @@ div.loaderBalls,
   width: 100%;
   justify-content: space-between;
   box-sizing: border-box;
+  color: white;
 }
 
 .navbar a {
   margin-left: 50px;
   text-decoration: none;
-  color: white;
   font-size: 2rem;
   font-weight: 700;
 }
 
 .navbar span {
   margin-top: 20px;
-  color: white;
   font-size: 1.7rem;
   margin-right: 50px;
   font-weight: 600;
@@ -244,40 +227,10 @@ div.loaderBalls,
 .treat-button {
   margin-right: 20px;
   font-size: 2.6vmin;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#ffffff),
-    to(#ffffff)
-  );
-  background: linear-gradient(to bottom, #fdfdfd, #faf9f9);
   border: none;
   color: black;
   border-radius: 2rem;
   padding: 0.6em 1.5em;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  z-index: 1;
-  box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
-  -webkit-transition: box-shadow 0.2s,
-    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
-  transition: box-shadow 0.2s,
-    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
-  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s;
-  transition: transform 0.1s cubic-bezier(0.5, 0, 0.5, 1), box-shadow 0.2s,
-    -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
-  outline: none;
-}
-
-.treat-button:hover {
-  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3);
 }
 
 .treat-button:active {
@@ -291,44 +244,23 @@ button {
   border-style: none;
 }
 
-/************* Menu Navbar ***********/
-
-.MuiMenu-list li a:hover {
-  color: #00aefd;
-}
-.MuiMenu-list li a {
-  padding: 2px 10px;
-  text-decoration: none;
-  color: black;
-  font-weight: 600;
-}
-
 /******************** Sign in button *************/
-
+.navbar a {
+  color: white;
+}
 .inputField {
   width: 100%;
 }
+
 .inputField .MuiInputBase-input {
-  width: 60%;
-}
-.inputField fieldset {
-  width: 60%;
+  width: 100%;
 }
 .inputField .MuiTextField-root {
   margin-top: 20px;
-  transform: translate(15%, 0%);
+  width: 90%;
 }
-.form_signIn {
-  width: 100%;
-  height: 100%;
-}
-
-.paper_login {
-  background-color: #333333;
-  width: 50%;
-  height: 70%;
-  padding: 30px 20px 0px 60px;
-  border-radius: 10px;
+.inputField {
+  flex-direction: column;
 }
 .MuiFormControl-root {
   width: 100%;
@@ -341,7 +273,6 @@ button {
   display: flex;
 }
 .sign_in_title p {
-  margin-left: 100px;
   width: max-content;
 }
 .sign_in_title span {
@@ -349,17 +280,14 @@ button {
   margin-left: auto;
   margin-right: 20px;
 }
-.button_login {
-  transform: translate(25%, 0%);
-  width: 70%;
-}
-
-.google_login {
-  text-align: center;
+.button_login,
+.col-sm-6 {
+  width: 100%;
+  flex-direction: column;
   margin-top: 30px;
-  width: 80%;
-  height: 50px;
-  margin-left: 20px;
+}
+.google_login,
+.treat-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -386,12 +314,19 @@ button {
     -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
   outline: none;
 }
+.google_login {
+  width: 60%;
+  height: 100%;
+}
 
-.google_login:hover {
+.google_login:hover,
+.treat-button:hover,
+.facebook_login:hover {
   box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important;
 }
 
 .facebook_login {
+  margin-top: 10px;
   box-shadow: 0 0 1em rgba(255, 255, 255, 0.2);
   -webkit-transition: box-shadow 0.2s,
     -webkit-transform 0.1s cubic-bezier(0.5, 0, 0.5, 1);
@@ -405,42 +340,44 @@ button {
   color: white;
   font-size: 1rem;
   text-align: center;
-  margin-top: 10px;
   border-radius: 10px !important;
-  width: 80%;
-  height: 50px;
-  margin-left: 20px;
   background-color: rgb(96, 135, 221);
-}
-
-.facebook_login:hover {
-  box-shadow: 0 0 2em rgba(255, 255, 255, 0.3) !important;
+  width: 100%;
+  height: 55px;
 }
 
 .facebook_login i {
   font-size: 1rem;
-  margin-left: -40px;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 /* button and forget link */
-
-.button-sign {
-  width: 65%;
-  margin-top: 10px;
-  justify-content: space-between;
-  transform: translate(25%, 0%);
+.form_signIn {
+  height: max-content;
+  display: flex;
+}
+.form_signIn .svg-login svg {
+  width: 400px;
+  height: 100%;
+}
+.form_signIn .div-login {
+  width: inherit;
 }
 
+.button-sign {
+  width: 100%;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.button_login span,
+.col-sm-6 span {
+  width: 60%;
+}
 .button-sign a {
   margin-top: 30px;
   height: 100%;
   color: white;
   padding: 0;
-}
-
-.button-sign a:hover {
-  color: rgba(238, 174, 202, 100);
 }
 
 .container_register {
@@ -450,19 +387,14 @@ button {
 .MuiInputBase-input {
   color: white !important;
 }
-
-.forget_container {
-  padding: 70px 0;
-}
-
 .forget_container > form {
   position: relative;
-  background-color: #131343;
-  width: 40%;
-  height: 100%;
+  background-color: #25282e;
+  width: 80%;
+  padding: 50px;
+  border-radius: 10px;
+  height: 80%;
   margin: auto;
-  padding: 5%;
-  padding-top: 5%;
 }
 
 .forget_container p {
@@ -475,8 +407,6 @@ button {
 
 #forget_button {
   margin-top: 10%;
-  position: absolute;
-  right: 50px;
 }
 
 .MuiFormLabel-root {
@@ -572,7 +502,9 @@ button {
   right: 0;
   background: #b1d4e0;
 }
-
+.MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
 .main_page_auth {
   height: 100%;
   overflow-y: hidden;
@@ -581,29 +513,26 @@ button {
 .navbar_right {
   z-index: 1;
   height: 100%;
-  background-color: #181818;
-  width: 18%;
+  background-color: #21242b;
+  width: 4%;
   position: fixed;
 }
-.navbar_right .header p {
-  color: white;
-  font-size: 2.4rem;
-  margin-left: 5px;
-  margin-top: 5px;
-}
+
 .navbar_right ul {
   margin: 0;
   padding: 0;
-  height: max-content;
   width: 100%;
   background-color: inherit;
-  height: 80%;
+  height: 65%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .navbar_right ul li {
   list-style: none;
-  padding: 15px 0px 15px 10px;
-  margin-bottom: 10px;
 }
 
 .navbar_right ul li a {
@@ -612,28 +541,29 @@ button {
   font-size: 16px;
   line-height: 20px;
   text-decoration: none;
+  display: inline-block;
 }
-.navbar_right ul li a div {
-  position: relative;
-}
-.navbar_right ul li a div svg {
-  position: absolute;
+
+.navbar_right ul li svg {
   left: 0;
+  width: 17pt;
+  height: 17pt;
+  background-color: rgba(224, 224, 224, 0.26);
 }
-.navbar_right ul li a div svg path {
+.navbar_right ul li svg:hover path {
+  fill: white;
+}
+.navbar_right ul li svg path {
   fill: rgba(255, 255, 255, 0.404);
 }
-.navbar_right ul li a div span {
-  width: 80%;
-  margin-left: auto;
-}
-.navbar_right ul li a .MuiSvgIcon-root {
+
+.navbar_right ul li .MuiSvgIcon-root {
   font-size: 2em;
 }
-.navbar_right ul .active_title a div svg {
+.navbar_right ul .active_title svg {
   background-color: #15c981;
 }
-.navbar_right ul .active_title a div svg path {
+.navbar_right ul .active_title svg path {
   fill: white;
 }
 .MuiSvgIcon-root {
@@ -646,11 +576,17 @@ button {
   margin-top: auto;
   height: 100%;
   position: relative;
-  width: 62%;
-  left: 18%;
+  width: 76%;
+  left: 4%;
   background-color: #181818;
-  border-right: 1px solid rgba(255, 255, 255, 0.377);
+  border-right: 1px solid rgba(255, 255, 255, 0.205);
   display: flex;
+  overflow-y: auto;
+}
+.message_container #chat-svg {
+  width: 200px;
+  height: 100px;
+  margin-left: auto;
 }
 .container_button {
   background-color: #537ee2;
@@ -678,7 +614,7 @@ button {
 .container_button_div {
   display: flex;
   width: 100%;
-  height: 80%;
+  height: 50%;
 }
 
 #button_find_partner {
@@ -995,7 +931,7 @@ html::-webkit-scrollbar,
   margin-left: auto;
   overflow-y: auto;
   width: 20%;
-  background-color: #21242b;
+  background-color: #181818;
 }
 
 .contact_container {
@@ -1353,4 +1289,8 @@ div.loaderBalls > div {
 }
 .logout_icon svg path {
   fill: white;
+}
+.navbar_right .tooltip .tooltiptext {
+  bottom: initial;
+  left: 350%;
 }

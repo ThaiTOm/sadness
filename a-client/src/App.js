@@ -10,7 +10,7 @@ import Chat from './component/chatComponent/findChat';
 import NewsMain from './component/newsComponents/newsMain';
 import Main_block from './component/main.block';
 import ViewOneBlog from './component/newsComponents/viewBlog/viewOneBlog';
-import { Notifications, MessageList } from './userContext';
+import { Notifications, MessageList, PeerJS } from './userContext';
 import axios from "axios"
 import { getCookie } from './helpers/auth';
 import socketApp from './socket';
@@ -19,6 +19,8 @@ import Policy from './component/anotherPage/policy';
 import SuggestPage from './component/anotherPage/suggestPage';
 import CreateShots from './component/anotherPage/createShot';
 import AudioChatCom from './component/audioChatComponent/index';
+import Peer from "peerjs"
+import InRoom from "./component/audioChatComponent/inRoom"
 
 function App() {
   let socket = socketApp.getSocket()
@@ -30,10 +32,25 @@ function App() {
   const messageList = useMemo(() => ({ listMessage, setListMessage }), [listMessage, setListMessage])
   const [end, setEnd] = useState(10);
   const history = useHistory()
+  const [peer, setPeer] = useState(null)
 
-
-
-
+  let newNull = () => {
+    peer.destroy()
+  }
+  let createPeer = () => {
+    var peerJS = new Peer(id, {
+      host: "/",
+      port: 2704,
+      path: "/peerjs"
+    })
+    return peerJS
+  }
+  useEffect(() => {
+    peer && newNull()
+    let peerJS = createPeer()
+    peerJS && setPeer(peerJS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // do not match two these useEffect 
   // This useEffect is use for recieve data from server
@@ -60,7 +77,6 @@ function App() {
     }
     fncNotification(value)
   }, [value, socket])
-
 
   // fetch data
   useEffect(() => {
@@ -135,11 +151,17 @@ function App() {
       <Switch>
         <MessageList.Provider value={messageList}>
           <Notifications.Provider value={notifications}>
-            {
-              listMessage ? <Route exact path="/" >
-                <HomePage />
-              </Route> : console.log()
-            }
+            <PeerJS.Provider value={peer}>
+              {
+                listMessage ? <Route exact path="/" >
+                  <HomePage />
+                </Route> : console.log()
+              }
+              <Route path="/podcast"
+                component={InRoom}
+              />
+            </PeerJS.Provider>
+
             <Route
               path="/users/active/:token"
               exact

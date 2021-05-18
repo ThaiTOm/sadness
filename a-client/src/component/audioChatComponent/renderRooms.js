@@ -3,6 +3,8 @@ import axios from "axios"
 import { Link } from "react-router-dom"
 import Cookies from 'js-cookie'
 import CryptoJs from "crypto-js"
+import { useHistory } from "react-router-dom";
+
 
 function RenderRooms({ peer }) {
     const [data, setData] = useState([])
@@ -10,6 +12,8 @@ function RenderRooms({ peer }) {
     const [end, setEnd] = useState(5)
     const [open, setOpen] = useState(false)
     const [text, setText] = useState("")
+    let history = useHistory();
+
 
     let handleSubmit = (e) => {
         e.preventDefault()
@@ -18,6 +22,7 @@ function RenderRooms({ peer }) {
             Cookies.set("user-name", value, {
                 expires: 7
             })
+            history.push(`/podcast/?name=${value}&id=${open}`)
         }
 
     }
@@ -45,7 +50,7 @@ function RenderRooms({ peer }) {
             })
     }, [end, start])
     return (
-        <div className="podcast-render">
+        <div className="podcast-render percent">
             <div className="podcast-container">
                 {data.length && data.map(function (value) {
                     return <div key={value.id} className="podcast-div">
@@ -66,7 +71,7 @@ function RenderRooms({ peer }) {
                                     Số người trong phòng
                                 </span>
                             </div>
-                            <button onClick={e => setOpen(true)} className="podcast-join-button tooltip">
+                            <button onClick={e => setOpen(value.id)} className="podcast-join-button tooltip">
                                 <span className="tooltiptext">
                                     Tham gia
                                 </span>
@@ -83,7 +88,7 @@ function RenderRooms({ peer }) {
                     </div>
                 })}
             </div>
-            <div style={open === true ? { display: "flex" } : { display: "none" }} className="podcast-req">
+            <div style={open ? { display: "flex" } : { display: "none" }} className="podcast-req percent">
                 <form onSubmit={e => handleSubmit(e)} className="container-req">
                     <div className="header" onClick={e => setOpen(false)}>
                         <span>X</span>

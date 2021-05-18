@@ -51,7 +51,7 @@ function ViewOneBlog(props) {
     }
 
     return (
-        <div className="post_viewing">
+        <div className="post_viewing percent">
             <Link className="go_to_previous" to="/news">
                 <ArrowBackIosOutlinedIcon />
                 <span>
@@ -59,7 +59,7 @@ function ViewOneBlog(props) {
                 </span>
             </Link>
             {
-                data !== null ? <div className="post_viewing_div">
+                data !== null ? <div className="post_viewing_div cA">
                     {
                         data.img !== undefined ? <Slideshow />
                             : <div className="slide-container flex">
@@ -81,8 +81,8 @@ function ViewOneBlog(props) {
                             }
                         </div>
                         <div className="extension_blog">
-                            <LikePost props={{ value: data, i: "1", className: "ex night", socket, id }} />
-                            <div className="ex night">
+                            <LikePost props={{ value: data, i: "1", className: "ex night cA", socket, id }} />
+                            <div className="ex night cA">
                                 <ShareBlog />
                             </div>
                         </div>

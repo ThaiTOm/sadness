@@ -139,7 +139,7 @@ function ShortStatus({ id, socket }) {
                         return <video onClick={e => handleClick(i)} key={i} alt={value.path} src={value.path}></video>
                     })}
                 </div>
-                <svg id="arrow" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.008 512.008" xmlxspace="preserve">
+                <svg style={data.length > 0 ? { display: "flex" } : { display: "none" }} id="arrow" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.008 512.008" xmlxspace="preserve">
                     <path d="M306.219,45.796c-21.838-21.838-57.245-21.838-79.083,0s-21.838,57.245,0,79.083l77.781,77.803
 	H53.333C23.878,202.682,0,226.56,0,256.015c0,29.455,23.878,53.333,53.333,53.333h251.584l-77.781,77.781
 	c-21.838,21.838-21.838,57.245,0,79.083c21.838,21.838,57.245,21.838,79.083,0l202.667-202.667c4.164-4.165,4.164-10.917,0-15.083
@@ -148,7 +148,7 @@ function ShortStatus({ id, socket }) {
             </div>
             {/* Viewing shots */}
             {
-                image && <div id="modal-shot" style={image ? { display: "block" } : { display: "none" }}>
+                image && <div id="modal-shot" className="percent" style={image ? { display: "block" } : { display: "none" }}>
                     <img className="modal-shot-image" alt={imgBg.slice(0, 12)} src={imgBg} />
                     <div className="modal-shot-header">
                         <span onClick={e => setImage(null)}>
@@ -166,7 +166,7 @@ function ShortStatus({ id, socket }) {
                 L313.749,347.584z"/>
                                 </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
                         </svg>
-                        <div className="modal-shot-container" >
+                        <div className="modal-shot-container percent">
                             <div className="header">
                                 <section className="progress-video">
                                     <section style={duration ? { width: `${(duration / videoRef.current.duration) * 100}%` } : { width: "0" }}></section>
@@ -224,7 +224,7 @@ function ShortStatus({ id, socket }) {
                                     </section>
                                 </section>
                             </div>
-                            <video muted={mute} autoPlay ref={videoRef} src={image.path} onLoadedData={e => setLoad(true)} />
+                            <video className="percent" muted={mute} autoPlay ref={videoRef} src={image.path} onLoadedData={e => setLoad(true)} />
                             {
                                 targetInput === true ? <div className="bottom">
                                     <form onSubmit={e => handleSubmit(e)}>

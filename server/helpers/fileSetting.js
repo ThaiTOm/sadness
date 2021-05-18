@@ -11,7 +11,6 @@ const { Shot } = require("../models/shot.models");
 let generatePath = async (req, originalname, file) => {
     let fileArrOri = await originalname.replace(/\s/g, '').split(".")
     let mix = fileArrOri[0]
-    console.log(file)
     let type = file ? file.split("/") : []
     switch (type[0]) {
         case "image":

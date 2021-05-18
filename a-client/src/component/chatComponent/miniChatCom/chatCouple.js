@@ -94,7 +94,7 @@ function ChatCouple(props) {
                     setTalk(false)
                 });
                 try {
-                    <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull
+                    return <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull
                     } autoPlay />
                 } catch (error) {
                     createNullStream()
@@ -115,7 +115,6 @@ function ChatCouple(props) {
             })
             socket.on("user-connect", value => {
                 if (value.idRoom === id) {
-                    console.log(id)
                     const call = peer.call(value.id, stream)
                     setUser(value.id)
                     createCall(call)
@@ -130,11 +129,10 @@ function ChatCouple(props) {
 
     useEffect(() => {
         let fnc = () => {
-            peerJS.on("open", () => {
-                socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
-                    setUser(callback)
-                })
+            socket.emit("chatVideo", { idRoom: id, id: userId, g: null }, (callback) => {
+                setUser(callback)
             })
+            peerJS.on("open", () => { })
             // get user media
             navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
                 plus(peerJS, stream)
@@ -148,7 +146,6 @@ function ChatCouple(props) {
         fnc();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
     return (
         <div className="message_container">
             <div className="call_div_container">

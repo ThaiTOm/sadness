@@ -13,7 +13,7 @@ function SuggestPage() {
             })
     }, [])
     return (
-        <div className="suggest_user">
+        <div className="suggest_user ">
             <section>
                 {data.map(function (value) {
                     return <div >
@@ -24,11 +24,10 @@ function SuggestPage() {
                         {
                             value.file && <>
                                 {value.file.map(function (img) {
-                                    return <img alt="suggest_img" src={img}></img>
+                                    return <img className="percent" alt="suggest_img" src={img}></img>
                                 })}
                             </>
                         }
-
                     </div>
                 })}
             </section>

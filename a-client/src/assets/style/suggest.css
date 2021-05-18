@@ -1,21 +1,17 @@
-.suggest_user div{
-    width: 1000px;
-    color: white;
-    height: max-content;
-    /* transform: translate(30%, 0%); */
-    background-color:#62666a;
-    margin-bottom: 30px;
-    padding: 2% 4% 4% 4%;
-    border-radius: 10px;
+.suggest_user div {
+  width: 1000px;
+  color: white;
+  height: max-content;
+  /* transform: translate(30%, 0%); */
+  background-color: #62666a;
+  margin-bottom: 30px;
+  padding: 2% 4% 4% 4%;
+  border-radius: 10px;
 }
-.suggest_user img{
-    width: 100%;
-    height:100%
-}
-.suggest_user section{
-    width: 100%;
-    padding-top: 50px;
-    height: max-content;
-    margin-bottom: 60px;
-    background-color:#242526
+.suggest_user section {
+  width: 100%;
+  padding-top: 50px;
+  height: max-content;
+  margin-bottom: 60px;
+  background-color: #242526;
 }

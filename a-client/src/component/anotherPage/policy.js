@@ -4,7 +4,7 @@ import "../../assets/style/policy.css"
 
 function Policy() {
     return (
-        <div className="policy_div">
+        <div className="policy_div percent">
             <div className="policy">
                 <NavbarRight />
                 <div className="content">

@@ -21,7 +21,7 @@ function RenderChat(props) {
         }, 1000)
     }
     useEffect(() => {
-        axios.get("http://localhost:2704/api/msgC/sendContact?id=" + id + "&start=" + end - 15 + "&end=" + end)
+        axios.get(`http://localhost:2704/api/msgC/sendContact?id=${id}&start=${end - 15}&end=${end}`)
             .then(res => {
                 setMsg(res.data.data)
                 setLoad(false)

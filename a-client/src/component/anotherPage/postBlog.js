@@ -64,7 +64,7 @@ function Index() {
                     Biểu tượng
                 </span>
             </button>
-            <div style={open === true ? { display: "flex" } : { display: "none" }} className="modal_post_blog">
+            <div style={open === true ? { display: "flex" } : { display: "none" }} className="modal_post_blog percent cA">
                 <form action="#" onSubmit={handleSubmit} className="form_post_blog" >
                     <div className="close_form_button">
                         <IconButton onClick={e => setOpen(false)}>
@@ -79,20 +79,19 @@ function Index() {
                         onDrop={acceptedFiles => dragFile(acceptedFiles)}>
                         {({ getRootProps, getInputProps }) => (
                             <section className="inner_title" >
-                                <div className="drag_file" {...getRootProps()}>
+                                <div className="drag_file cA" {...getRootProps()}>
                                     <input type="file" accept="image/*"  {...getInputProps()} />
-                                    <div className="icon">
+                                    <div className="icon ">
                                         <CloudUploadIcon />
                                     </div>
                                 </div>
                             </section>
-
                         )}
                     </Dropzone>
                     <div>
                         <div className="image_post_news">
                             {
-                                typeof url !== 'undefined' ? url.map(function (value, index) {
+                                url && typeof url !== 'undefined' ? url.map(function (value, index) {
                                     return <li key={index}>
                                         <img alt="image_upload" src={value}></img>
                                         <span onClick={() => handleDeleteImamge(index)}>&#10005;</span>

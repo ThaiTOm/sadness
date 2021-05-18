@@ -270,8 +270,8 @@ exports.postShot = async (req, res) => {
     // check if dir is exists else create 
     await checkPath(dir)
 
-    let photoFfmpeg = () => {
-        let photoName = generatePath(req.body, photo.originalname, photo.mimetype)
+    let photoFfmpeg = async () => {
+        let photoName = await generatePath(req.body, photo.originalname, photo.mimetype)
         // file in first case
         // uploads/id/shots/asdasd.mp3 //
         let fileName = `${dir}/${photoName.split(".")[0] + n}`
@@ -297,14 +297,14 @@ exports.postShot = async (req, res) => {
                     return process.on('close', function (error) {
                         if (error !== 0) return res.json({ err: "up" })
                         deletePath([path, `designShot/${id}/${photoName}`, `${fileName + n}.jpeg`])
-                        let { error, ok } = saveRedis({
+                        let { err, ok } = saveRedis({
                             cmd,
                             _id: id + n,
                             idUser: id,
                             path: `${fileName + n}.mp4`,
                             time
                         })
-                        if (error) return res.json({ err: "p" })
+                        if (err) return res.json({ err: "p" })
                         else return res.json({ data: "ok" })
                     })
                 } else {

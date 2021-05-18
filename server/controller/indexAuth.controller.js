@@ -25,46 +25,45 @@ exports.registerController = (req, res) => {
             error: firstError
         })
     } else {
-        User.findOne({
-            email
-        }).exec((err, user) => {
+        User.findOne({ email }).exec((err, user) => {
             if (user) {
                 return res.status(400).json({
                     error: email + " already have"
                 })
-            }
-        })
-        const token = jwt.sign(
-            {
-                name,
-                password,
-                email
-            }, process.env.JWT_ACCOUNT_ACTIVATION,
-            {
-                expiresIn: "5m"
-            }
-        )
+            } else {
+                const token = jwt.sign(
+                    {
+                        name,
+                        password,
+                        email
+                    }, process.env.JWT_ACCOUNT_ACTIVATION,
+                    {
+                        expiresIn: "5m"
+                    }
+                )
 
-        const emailData = {
-            from: process.env.EMAIL_FROM,
-            to: email,
-            subject: "Account activision link",
-            html: `
-               <h1>Please click to the link below</h1>
-               <p>${process.env.CLIENT_URL}/users/active/${token}</p>
-               <hr/>
-               <p>This email contain sensetive info</p>
-               <p> ${process.env.CLIENT_URL} </p>
-            `
-        }
-        sgEmail.send(emailData).then((sent) => {
-            return res.json({
-                message: `Email has been sent to ${email}`
-            })
-        }).catch(err => {
-            return res.status(400).json({
-                error: errorHandler(err)
-            })
+                const emailData = {
+                    from: process.env.EMAIL_FROM,
+                    to: email,
+                    subject: "Account activision link",
+                    html: `
+                       <h1>Please click to the link below</h1>
+                       <p>${process.env.CLIENT_URL}/users/active/${token}</p>
+                       <hr/>
+                       <p>This email contain sensetive info</p>
+                       <p> ${process.env.CLIENT_URL} </p>
+                    `
+                }
+                sgEmail.send(emailData).then((sent) => {
+                    return res.json({
+                        message: `Email has been sent to ${email}`
+                    })
+                }).catch(err => {
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    })
+                })
+            }
         })
     }
 }

@@ -15,7 +15,7 @@ exports.createRoom = (req, res) => {
     d = d.getTime()
     const passphrase = '123nguyenduythaise1';
     id = CryptoJS.AES.encrypt(id, passphrase).toString();
-    tag = tag.split("@").slice(1, tag.length)
+    tag = tag ? tag.split("@").slice(1, tag.length) : null
     text = text.split(/\r\n|\r|\n/)
     let obj = { text, tag, howL, users: [id] }
 

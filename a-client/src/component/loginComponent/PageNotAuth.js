@@ -7,37 +7,19 @@ import Fade from '@material-ui/core/Fade';
 import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
 
-const useStyles = makeStyles((theme) => ({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: "rgb(36, 37, 38)",
-        border: '1px solid #000',
-        padding: theme.spacing(1, 10, 10),
-    }
-}));
+
 function PageNotAuth() {
-    const classes = useStyles();
     // const [anchorEl, setAnchorEl] = React.useState(null);
     const [openSignIn, setOpenSignIn] = useState(false);
     const [openSignUp, setOpenSignUp] = useState(false);
-
-    // const handleClick = (event) => {
-    //     setAnchorEl(event.currentTarget);
-    // };
-
-    // const handleClose = () => {
-    //     setAnchorEl(null);
-    // };
     const handleOpenSignIn = () => {
+        console.log("cun")
         setOpenSignIn(true);
     };
 
     const handleCloseSignIn = () => {
         setOpenSignIn(false);
+
     };
     const handleOpenSignUp = () => {
         setOpenSignUp(true);
@@ -46,9 +28,25 @@ function PageNotAuth() {
     const handleCloseSignUp = () => {
         setOpenSignUp(false);
     };
+    const handleClick = (e) => {
+        if (e.target === e.currentTarget) {
+            setOpenSignIn(false)
+        }
+    }
     return (
-        < div className="homepage">
-            <header className="header_notAuth" >
+        < div className="homepage percent">
+            <header className="header_notAuth percent">
+                <div className="modal_container" onClick={e => handleClick(e)} style={openSignIn === true ? { display: "flex" } : { display: "none" }}>
+                    <div className="div">
+                        <LoginForm onClick={value => handleCloseSignIn()} />
+                    </div>
+                </div>
+                <div className="modal_container" onClick={e => handleClick(e)} style={openSignUp === true ? { display: "flex" } : { display: "none" }}>
+                    <div className="div">
+                        <RegisterForm onClick={e => handleCloseSignUp()} />
+                    </div>
+
+                </div>
                 <div className="navbar">
                     <p>
                         <a href="/"> Sadnessly </a>
@@ -63,48 +61,8 @@ function PageNotAuth() {
                     </p>
                 </div>
                 <div className="button-navbar treat-wrapper">
-                    <button className="signIn-navbar treat-button " type="button" onClick={handleOpenSignIn}>Đăng nhập</button>
-                    {/* **************************** Modal to Login ****************************************/}
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={openSignIn}
-                        onClose={handleCloseSignIn}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={openSignIn}>
-                            <div className="paper_login">
-                                <LoginForm onClick={value => handleCloseSignIn()} />
-                            </div>
-                        </Fade>
-                    </Modal>
-
-                    {/* ************** * * * **   Button to SignUp                  *   ************* */}
-
-                    <button className="signUp-navbar treat-button" type="button" onClick={handleOpenSignUp}>Đăng ký</button>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={openSignUp}
-                        onClose={handleCloseSignUp}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={openSignUp}>
-                            <div className="paper_res">
-                                <RegisterForm onClick={e => handleCloseSignUp()} />
-                            </div>
-                        </Fade>
-                    </Modal>
+                    <button className="signIn-navbar treat-button" type="button" onClick={e => handleOpenSignIn()}>Đăng nhập</button>
+                    <button className="signUp-navbar treat-button" type="button" onClick={e => handleOpenSignUp()}>Đăng ký</button>
 
                     {/* ************************************ End of the Modal   *********** */}
 
