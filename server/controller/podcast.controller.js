@@ -1,10 +1,6 @@
 const CryptoJS = require("crypto-js")
-const MemcachePlus = require('memcache-plus')
 const helperAudio = require("../helpers/audioRoom")
-
-const client = new MemcachePlus()
-
-
+const { cm } = require("../nodeCache")
 
 exports.createRoom = (req, res) => {
     // id: User's id
@@ -14,17 +10,18 @@ exports.createRoom = (req, res) => {
     let d = new Date()
     d = d.getTime()
     const passphrase = '123nguyenduythaise1';
-    id = CryptoJS.AES.encrypt(id, passphrase).toString();
+    // create id and replace all special char
+    id = CryptoJS.AES.encrypt(id, passphrase).toString().replace(/[^\w\s]/gi, '')
     tag = tag ? tag.split("@").slice(1, tag.length) : null
     text = text.split(/\r\n|\r|\n/)
     let obj = { text, tag, howL, users: [id] }
 
-    return client.get("rooms")
+    return cm.get("rooms")
         .then(async (value) => {
             if (!value) helperAudio.createDB(id + d)
             else helperAudio.pushData(id + d, value)
             try {
-                await client.set(id + d, obj)
+                await cm.set(id + d, obj)
                 return res.json({
                     _id: id + d
                 })
@@ -40,9 +37,11 @@ exports.createRoom = (req, res) => {
 }
 exports.getRooms = (req, res) => {
     let { start, end } = req.query
-    client.get("rooms")
+    // get id all rooms 
+    cm.get("rooms")
         .then(async (value) => {
             if (value) {
+                // push to array 
                 let data = await helperAudio.getAllRooms(value)
                 return res.json(data)
             } else {

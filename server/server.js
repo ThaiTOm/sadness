@@ -9,7 +9,7 @@ const realTimeD = require("./realtime/index");
 const newsRoute = require("./routes/news.route")
 const authRoute = require("./routes/indexAuth.route");
 const messageRoute = require("./routes/message.route")
-const audioRoute = require("./routes/audio.route")
+const audioRoute = require("./routes/podcast.route")
 
 const responseTime = require("response-time");
 

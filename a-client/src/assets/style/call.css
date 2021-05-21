@@ -1,8 +1,8 @@
 .call_div_container {
   width: 25%;
   height: 100%;
-  border-right: 1px solid rgba(248, 248, 255, 0.322);
   overflow-y: auto;
+  overflow-x: clip;
 }
 
 .main_mic {
@@ -184,10 +184,16 @@
   font-size: 17px;
   transition: 0.4s;
   background-color: #333333;
-  padding: 10px 0;
+  padding: 10px 5px;
   border-radius: 10px;
+  justify-content: space-between;
+  width: 90%;
 }
-
+.accordion svg {
+  width: 20pt;
+  height: 20pt;
+  fill: white;
+}
 .accordion:after {
   content: "\002B";
   color: white;

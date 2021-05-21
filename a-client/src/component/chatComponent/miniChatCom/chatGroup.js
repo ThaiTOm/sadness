@@ -3,7 +3,6 @@ import { getCookie } from '../../../helpers/auth';
 import socketApp from '../../../socket';
 import IconButton from '@material-ui/core/IconButton';
 import "../../../assets/style/call.css"
-
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
@@ -13,6 +12,7 @@ import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import hark from "hark"
 import RenderChat from '../renderChat';
+import { setMicOwn, setVolumnOther, setVolumnOwn, setMicOther } from '../../../helpers/main/PeerMany';
 
 // This function is use for send and view message
 function ChatGroup(props) {
@@ -22,7 +22,6 @@ function ChatGroup(props) {
     const [audio, setAudio] = useState([]);
     const [mic, setMic] = useState(false)
     const [volumn, setVolumn] = useState(false)
-    const [oldPeer, setOldPeer] = useState(null)
     const [talk, setTalk] = useState(false)
     const [accor, setAccor] = useState(false)
 
@@ -34,107 +33,24 @@ function ChatGroup(props) {
         // does any another user in the room
         if (audio.length !== 0) {
             setVolumn(!volumn)
-            let arr = []
-            for await (let data of audio) {
-                // copy old object
-                let value = Object.assign({}, data.stream.props, { seleted: false, writeable: true })
-                let old = Object.assign({}, data.stream, { writeable: true, seleted: false })
-                value.muted = !volumn
-                // delete specific key
-                delete value["seleted"]
-                delete value["writeable"]
-                old.props = value
-                delete old["seleted"]
-                delete old["writeable"]
-                // create new object
-                // to handle new data
-                let obj = {
-                    stream: old,
-                    audio: data.audio,
-                    mic: false
-                }
-                arr.push(obj)
-            }
+            let arr = await setVolumnOwn({ audio, volumn })
             setAudio(arr)
         }
     }
     // Turn on or turn off the own mic
     const handleSetMic = () => {
         setMic(!mic)
-        if (mic === true) {
-            const audioTrack = createEmptyAudioTrack();
-            let data = oldPeer.connections
-            for (let i = 0; i < audio.length; i++) {
-                let userMic = Object.keys(data)[i]
-                let sender = data[userMic][0].peerConnection.getSenders()[0] || []
-                sender.replaceTrack(audioTrack)
-            }
-        }
-        // else reconnect peer to peer 
-        else {
-            navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-                let data = oldPeer.connections
-                for (let i = 0; i < audio.length; i++) {
-                    let userMic = Object.keys(data)[i]
-                    let sender = data[userMic][0].peerConnection.getSenders()[0]
-                    sender.replaceTrack(stream.getAudioTracks()[0])
-                }
-            }).catch(err => {
-            })
-        }
+        return setMicOwn({ mic, oldPeer: peerJS, audio })
     }
+
     const handleSetVolumnOther = (value, i) => {
         // get id the user want to muted
-        let idMuted = Object.keys(oldPeer.connections)[i]
-        let sender = oldPeer.connections[idMuted][0].peerConnection.getSenders()[0] || []
-        const returnAudio = (stream, streamNull) => {
-            let a = (
-                <audio ref={audio => audio ? audio.srcObject = stream : streamNull} playsInline autoPlay />
-            )
-            let obj = {
-                stream: a,
-                audio: false,
-                mic: true
-            }
-            let arr = [...audio]
-            arr[i] = obj
-            setAudio(arr)
-        }
-        if (value.audio === true) {
-            let audioTrack = createEmptyAudioTrack()
-            sender.replaceTrack(audioTrack)
-            const streamNull = new MediaStream([audioTrack]);
-            returnAudio(streamNull, streamNull)
-        } else {
-            navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-                sender.replaceTrack(stream.getAudioTracks()[0])
-                returnAudio(stream, createNullStream())
-            })
-        }
+        let arr = setVolumnOther({ oldPeer: peerJS, i, audio, value })
+        setAudio(arr)
     }
     const handleSetMicOther = (data, i) => {
-        if (audio.length !== 0) {
-            // copy old object
-            let value = Object.assign({}, data.stream.props, { seleted: false, writeable: true })
-            let old = Object.assign({}, data.stream, { writeable: true, seleted: false })
-            value.muted = !volumn
-            // delete specific key
-            delete value["seleted"]
-            delete value["writeable"]
-            old.props = value
-            delete old["seleted"]
-            delete old["writeable"]
-            // create new object
-            // to handle new data
-            let arr = [...audio]
-            let obj = {
-                stream: old,
-                audio: data.audio,
-                mic: false
-            }
-            arr[i] = obj
-            setAudio(arr)
-        }
+        let arr = setMicOther({ audio, data, volumn, i })
+        setAudio(arr)
     }
     // create null stream to handle error 
     let createNullStream = () => {
@@ -154,6 +70,7 @@ function ChatGroup(props) {
     // new user go to the room
     const createCall = (call) => {
         call.on("stream", async (userVideoStream) => {
+            console.log("stream")
             let audioStream = async () => {
                 const audioTrack = createEmptyAudioTrack();
                 const streamNull = new MediaStream([audioTrack]);
@@ -185,12 +102,13 @@ function ChatGroup(props) {
             setAudio(value => [...value, obj])
         })
     }
-    // fisrt route of connect peer to peer 
+    // fisrt  connect peer to peer 
     const plus = (peer, stream) => {
         // check if that peer is destroyed or not destroy that mean that was created before
         if (peer.destroyed === false) {
             // run normally
             peer.on("call", call => {
+                console.log("call")
                 call.answer(stream)
                 createCall(call)
             })
@@ -203,10 +121,10 @@ function ChatGroup(props) {
             })
         }
     }
-
     useEffect(() => {
         const fn = () => {
-            setOldPeer(peerJS)
+            socket.emit("chatVideo", { idRoom: id, id: userId, g: "a" }, (callback) => { })
+
             peerJS.on("open", () => {
                 socket.emit("chatVideo", { idRoom: id, id: userId, g: "a" }, (callback) => { })
             })
@@ -225,11 +143,10 @@ function ChatGroup(props) {
     }, [])
     return (
         <div className="message_container">
-            <RenderChat id={props.id} userId={userId} socket={socket} />
             <div className="call_div_container">
                 <SimpleMenu onClick={(value) => props.onClick(value)} />
                 <div className="main_user">
-                    <p>Thành viên</p>
+                    <strong style={{ color: "white" }}>Thành viên</strong>
                     <div className="user_device">
 
                     </div>
@@ -249,7 +166,39 @@ function ChatGroup(props) {
                             </IconButton>
                         </div>
                     </div>
-                    <p onClick={handleOpenAccor} className={accor === true ? "accordion active" : "accordion"}>Voice Chat</p>
+                    <div onClick={handleOpenAccor} className={accor === true ? "cA accordion active" : "accordion cA"}>
+                        <section className="cA">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                viewBox="0 0 512 512" xmlSpace="preserve">
+                                <g>
+                                    <g>
+                                        <path d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
+			C248.782,101.592,206.859,57.142,155.327,57.142z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
+			c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
+			c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
+			C447.702,108.972,411.747,71.321,367.798,71.321z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
+			c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
+			C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z"/>
+                                    </g>
+                                </g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+                            <p >Voice Chat</p>
+                        </section>
+                    </div>
                     <div style={accor === true ? { maxHeight: "200px" } : { maxHeight: null }} className="panel">
                         {
                             audio.length > 0 ? audio.map(function (value, i) {
@@ -273,6 +222,9 @@ function ChatGroup(props) {
                         }
                     </div>
                 </div>
+            </div>
+            <div className="message_container_div">
+                <RenderChat id={props.id} userId={userId} socket={socket} />
             </div>
         </div >
     )

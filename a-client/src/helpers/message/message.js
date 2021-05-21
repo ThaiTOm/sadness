@@ -54,11 +54,13 @@ export const executeScroll = (myRef) => {
     } catch (error) {
     }
 }
+
 export const Spinning = () => {
     return (
         <div className="spinner"></div>
     )
 }
+
 export const FormSend = (props) => {
     let { id, userId } = props
     const fileRef = useRef(null);

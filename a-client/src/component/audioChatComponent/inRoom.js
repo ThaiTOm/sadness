@@ -1,10 +1,101 @@
-import React from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import queryString from 'query-string';
 import { Link } from "react-router-dom"
+import { PeerJS } from '../../userContext';
+import socketApp from '../../socket';
+import { toast } from "react-toastify"
+import { createEmptyAudioTrack, createNullStream } from '../../helpers/message/audio';
+import hark from "hark"
+import { getCookie } from '../../helpers/auth';
+
 
 function IndexRoom(props) {
     let { id, name } = queryString.parse(props.location.search)
+    const { peer, setPeer } = useContext(PeerJS)
+    let socket = socketApp.getSocket()
+    let cookie = getCookie().token
 
+    const [talk, setTalk] = useState(false)
+    const [audio, setAudio] = useState([])
+    const [mic, setMic] = useState(false)
+
+    // new user go to the room
+    const createCall = (call, name) => {
+        call.on("stream", async (userVideoStream) => {
+            let audioStream = async () => {
+                const audioTrack = createEmptyAudioTrack();
+                const streamNull = new MediaStream([audioTrack]);
+                try {
+                    let speechEvents = hark(userVideoStream, {})
+                    speechEvents.on('speaking', function () {
+                        setTalk(true)
+                    });
+                    speechEvents.on('stopped_speaking', function () {
+                        setTalk(false)
+                    });
+                    return <audio playsInline muted={false} ref={audio => audio ? audio.srcObject = userVideoStream : streamNull} autoPlay />
+                } catch (error) {
+                    let a = createNullStream()
+                    let obj = {
+                        stream: a,
+                        audio: false,
+                        mic: false
+                    }
+                    setAudio(value => [...value, obj])
+                }
+            }
+            let a = await audioStream()
+            let obj = {
+                stream: a,
+                audio: true,
+                mic: true,
+                name
+            }
+            console.log("run")
+            setAudio(value => [...value, obj])
+        })
+    }
+    // fisrt route of connect peer to peer 
+    const plus = (peerJS, stream) => {
+        // check if that peer is destroyed or not destroy that mean that was created before (our connectin still alive)
+        if (peerJS.destroyed === false) {
+            // run normally
+            // if has someone is stream
+            peerJS.on("call", call => {
+                call.answer(stream)
+                createCall(call)
+            })
+            // recieve from server
+            // someone try to connect
+            socket.on("newConnect", value => {
+                if (value.id === id) {
+                    const call = peerJS.call(value.peerId, stream)
+                    createCall(call, value.name)
+                }
+            })
+        }
+    }
+    useEffect(() => {
+        let fnc = () => {
+            peer.on("open", () => { })
+            socket.emit("podcast-req", { id, name, peerId: cookie }, (callback) => {
+                if (callback) return toast.erroor("Có lỗi xảy ra vui lòng thử lại sau")
+                else {
+                    navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
+                        plus(peer, stream)
+                    }).catch(err => {
+                        // if user does not accept to stream then create new null stream
+                        const audioTrack = createEmptyAudioTrack();
+                        const stream = new MediaStream([audioTrack]);
+                        plus(peer, stream)
+                    })
+                }
+
+            })
+        }
+        fnc()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <div className="podcast-room percent">
             <div className="body percent">
@@ -57,9 +148,18 @@ function IndexRoom(props) {
                     </div>
                 </div>
                 <div className="container">
-                    <div className="div">
-                        <img alt="asd" src="../some.webp" />
-                    </div>
+                    <section>
+                        {console.log(audio)}
+                        {
+                            audio && audio.map(function (value) {
+                                return <div className="div">
+                                    <p>
+                                        {value.name}
+                                    </p>
+                                </div>
+                            })
+                        }
+                    </section>
                 </div>
             </div>
         </div>

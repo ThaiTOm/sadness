@@ -16,3 +16,13 @@ export const createEmptyVideoTrack = ({ width, height }) => {
 
     return Object.assign(track, { enabled: false });
 };
+export const createNullStream = () => {
+    try {
+        const audioTrack = createEmptyAudioTrack();
+        const streamNull = new MediaStream([audioTrack]);
+        return <audio muted={true} ref={audio => audio.srcObject = streamNull} playsInline autoPlay />
+
+    } catch (error) {
+        return
+    }
+}

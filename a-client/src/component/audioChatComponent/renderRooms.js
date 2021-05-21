@@ -18,19 +18,17 @@ function RenderRooms({ peer }) {
     let handleSubmit = (e) => {
         e.preventDefault()
         if (text) {
-            let value = CryptoJs.AES.encrypt(text, "do'aibie^tduoc!").toString()
-            Cookies.set("user-name", value, {
+            Cookies.set("user-name", text, {
                 expires: 7
             })
-            history.push(`/podcast/?name=${value}&id=${open}`)
+            history.push(`/podcast/?name=${text}&id=${open}`)
         }
 
     }
     useEffect(() => {
         let fnc = () => {
             let value = Cookies.get("user-name")
-            value ? value = CryptoJs.AES.decrypt(value, "do'aibie^tduoc!").toString(CryptoJs.enc.Utf8) : value = null
-            setText(value)
+            value && setText(value)
         }
         window !== undefined && fnc()
     }, [])

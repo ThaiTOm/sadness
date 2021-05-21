@@ -185,8 +185,7 @@ div.loaderBalls,
 }
 
 .active_contact {
-  background-color: #181818 !important;
-  border: 1px solid #673ab7;
+  background-color: #9c959583 !important;
 }
 
 .not_read_contact {
@@ -576,12 +575,13 @@ button {
   margin-top: auto;
   height: 100%;
   position: relative;
-  width: 76%;
+  width: 74%;
   left: 4%;
   background-color: #181818;
   border-right: 1px solid rgba(255, 255, 255, 0.205);
   display: flex;
   overflow-y: auto;
+  padding: 0 0 0 1%;
 }
 .message_container #chat-svg {
   width: 200px;
@@ -898,8 +898,6 @@ html::-webkit-scrollbar,
 }
 .menuMessage {
   padding-top: 10px;
-  margin-left: auto;
-  margin-right: 10px;
   height: 50%;
   display: flex;
   justify-content: space-between;

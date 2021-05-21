@@ -1,6 +1,6 @@
 const { arrOfRegion, regionGroup } = require("../../helpers/region");
 
-const { cutSpaceInString } = require("../../../a-client/src/algorithm/algorithm");
+const { cutSpaceInString } = require("../../../a-client/src/helpers/main/algorithm");
 const { cm } = require("../../nodeCache");
 const { Message } = require("../../models/message.model");
 const { User } = require("../../models/user.models");
@@ -171,7 +171,7 @@ const chatGorup = ({ id, len, ipOfUser }) => {
     }
     const createRoom = async (a, pos) => {
         // if we splice already have 5 user the splice it out
-        a.length < 5 ? {} : a.length >= 5 ? spliceUser(0, a.length, pos) : {}
+        a.length >= 5 ? spliceUser(0, a.length, pos) : {}
         let roomId = a[0].room
         // let roomCurrent = await cm.get(roomId) || []
         let users = []
@@ -179,10 +179,20 @@ const chatGorup = ({ id, len, ipOfUser }) => {
         if (!roomCurrent) {
             let obj = new Message({
                 _id: roomId,
+                user: a.map((x) => x.id)
             })
-            obj.save((err, succes) => {
+            obj.save(async (err, succes) => {
                 if (err) console.log(err)
+                else {
+                    for await (value of a) {
+                        users.push(value.id)
+                        User.findByIdAndUpdate({ "_id": value.id }, { $push: { "messageList": roomId } }).exec((err, succes) => {
+                            if (err) console.log(err)
+                        })
+                    }
+                }
             })
+            return { idRoom: roomId, have: null }
         }
         for await (value of a) {
             if (roomCurrent && roomCurrent.user.indexOf(value.id) === -1) {

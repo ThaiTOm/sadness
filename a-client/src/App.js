@@ -34,23 +34,24 @@ function App() {
   const history = useHistory()
   const [peer, setPeer] = useState(null)
 
-  let newNull = () => {
-    peer.destroy()
-  }
-  let createPeer = () => {
-    var peerJS = new Peer(id, {
-      host: "/",
-      port: 2704,
-      path: "/peerjs"
-    })
-    return peerJS
-  }
+
   useEffect(() => {
+    let newNull = () => {
+      peer.destroy()
+    }
+    let createPeer = () => {
+      var peerJS = new Peer(id, {
+        host: "/",
+        port: 2704,
+        path: "/peerjs"
+      })
+      return peerJS
+    }
     peer && newNull()
     let peerJS = createPeer()
     peerJS && setPeer(peerJS)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   // do not match two these useEffect 
   // This useEffect is use for recieve data from server
@@ -106,6 +107,7 @@ function App() {
   }, [id, end, history])
 
   useEffect(() => {
+
     let changeTitle = (idMessage, arr) => {
       if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
       return setListMessage(arr)
@@ -151,17 +153,14 @@ function App() {
       <Switch>
         <MessageList.Provider value={messageList}>
           <Notifications.Provider value={notifications}>
-            <PeerJS.Provider value={peer}>
+            <PeerJS.Provider value={{ peer, setPeer }}>
               {
                 listMessage ? <Route exact path="/" >
                   <HomePage />
                 </Route> : console.log()
               }
-              <Route path="/podcast"
-                component={InRoom}
-              />
+              {peer && <Route exact path="/podcast" render={props => <InRoom {...props} />} />}
             </PeerJS.Provider>
-
             <Route
               path="/users/active/:token"
               exact

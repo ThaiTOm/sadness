@@ -1,5 +1,5 @@
 import cookie from "js-cookie";
-import { replaceTelex } from "../algorithm/algorithm";
+import { replaceTelex } from "./main/algorithm";
 import CryptoJS from 'crypto-js';
 
 //Set cookie

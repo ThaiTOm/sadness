@@ -3,6 +3,7 @@ const { comment, likeBlog, likeCmt } = require("./controlleRealTime/newsControll
 const { Message } = require("../models/message.model");
 const { cm } = require("../nodeCache");
 const date = require("date-and-time");
+const { joinPodcast } = require("./controlleRealTime/podcastControll");
 
 module.exports = {
     index: function (io, socket) {
@@ -20,7 +21,7 @@ module.exports = {
         socket.on("joinChatGroup", async ({ id, len, ipOfUser }, callback) => {
             const { have, idRoom, yet } = await chatGorup({ id, len, ipOfUser })
             if (yet) callback("error")
-            else if (have) return callback("error")
+            else if (have || have === undefined) return callback("error")
             else {
                 callback(idRoom)
                 socket.broadcast.to(idRoom).emit('message', { group: 'admin', roomId: idRoom });
@@ -113,6 +114,14 @@ module.exports = {
             if (succes === false) return
             await socket.join(idRoom)
             socket.broadcast.to(idUserPost).emit('reqShot', { mess });
+        })
+        socket.on("podcast-req", async ({ id, name, peerId }, callback) => {
+            let { arr, err } = await joinPodcast({ id, name })
+            if (err) return callback(err)
+            else {
+                callback(null)
+                socket.broadcast.emit("newConnect", { peerId, id, name })
+            }
         })
     }
 }

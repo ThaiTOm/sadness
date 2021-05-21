@@ -64,7 +64,7 @@ exports.sendContactRoom = async (req, res) => {
     Message.findById({ "_id": id }).exec(async (err, value) => {
         if (value) {
             let data = value.data
-            data = data.length > 10 ? data.slice(data.length - end, data.length - start) : data
+            data = data.length > end ? data.slice(data.length - end, data.length - start) : data
             let users = []
             for await (value of value.user) {
                 let state = await cm.get(value)
