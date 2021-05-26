@@ -35,7 +35,7 @@ function Main_page() {
                     room ?
                         <SendContact
                             socket={socket}
-                            onClick={(value) => hanldeSetRoom(value)}
+                            onClick={(value) => setRoom(null)}
                             id={room}
                         // name={(value) => setName(value)}
                         /> : <Chat handleRoom={value => setFind(value)} />

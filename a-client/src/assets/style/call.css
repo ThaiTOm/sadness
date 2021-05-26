@@ -17,12 +17,12 @@
   color: whitesmoke;
 }
 
-.user_device img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
+.user_device #account {
+  width: 20pt;
+  height: 20pt;
   margin-right: 20px;
   margin-left: 10px;
+  fill: white;
 }
 
 .user_device {
@@ -30,6 +30,10 @@
   display: flex;
   justify-items: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.322);
+  width: 90%;
+  padding: 0px 5px;
+  border-radius: 10px;
 }
 
 .user_device .icon_device svg {
@@ -166,7 +170,6 @@
   position: relative;
   margin-bottom: 10px;
   cursor: pointer;
-  /* border-radius: 10px */
 }
 .comment_blog {
   border-left: 2px solid magenta;
@@ -183,7 +186,6 @@
   text-align: left;
   font-size: 17px;
   transition: 0.4s;
-  background-color: #333333;
   padding: 10px 5px;
   border-radius: 10px;
   justify-content: space-between;
@@ -208,5 +210,5 @@
 }
 .menuMessage .back_button {
   margin-right: auto;
-  padding: 0 0 0 10px;
+  padding: 0;
 }

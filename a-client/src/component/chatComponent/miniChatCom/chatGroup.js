@@ -24,7 +24,20 @@ function ChatGroup(props) {
     const [volumn, setVolumn] = useState(false)
     const [talk, setTalk] = useState(false)
     const [accor, setAccor] = useState(false)
+    const [detail, setDetail] = useState(false)
 
+    const handleClickChild = (value) => {
+        switch (value) {
+            case "BACK":
+                props.onClick("BACK")
+                break
+            case "CLOSE":
+                setDetail(false)
+                break
+            default:
+                break;
+        }
+    }
     const handleOpenAccor = () => {
         setAccor(!accor)
     }
@@ -70,7 +83,6 @@ function ChatGroup(props) {
     // new user go to the room
     const createCall = (call) => {
         call.on("stream", async (userVideoStream) => {
-            console.log("stream")
             let audioStream = async () => {
                 const audioTrack = createEmptyAudioTrack();
                 const streamNull = new MediaStream([audioTrack]);
@@ -108,7 +120,6 @@ function ChatGroup(props) {
         if (peer.destroyed === false) {
             // run normally
             peer.on("call", call => {
-                console.log("call")
                 call.answer(stream)
                 createCall(call)
             })
@@ -142,21 +153,26 @@ function ChatGroup(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
-        <div className="message_container">
-            <div className="call_div_container">
-                <SimpleMenu onClick={(value) => props.onClick(value)} />
+        <div className="message_container" >
+            <div style={detail === true ? { display: "block" } : { display: "none" }} className="call_div_container">
+                <SimpleMenu onClick={(value) => handleClickChild(value)} />
                 <div className="main_user">
-                    <strong style={{ color: "white" }}>Thành viên</strong>
                     <div className="user_device">
 
                     </div>
                 </div>
                 <div className="main_mic">
                     <div className="user_device">
-                        <img
-                            alt="demom"
-                            style={talk === true ? { border: "2px solid rgba(46, 229, 157, 0.4)" } : {}}
-                            src="../demo.jpeg"></img>
+                        <svg id="account" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            viewBox="0 0 512 512">
+                            <g>	<g>		<path d="M437.02,330.98c-27.883-27.882-61.071-48.523-97.281-61.018C378.521,243.251,404,198.548,404,148
+			C404,66.393,337.607,0,256,0S108,66.393,108,148c0,50.548,25.479,95.251,64.262,121.962
+			c-36.21,12.495-69.398,33.136-97.281,61.018C26.629,379.333,0,443.62,0,512h40c0-119.103,96.897-216,216-216s216,96.897,216,216
+			h40C512,443.62,485.371,379.333,437.02,330.98z M256,256c-59.551,0-108-48.448-108-108S196.449,40,256,40
+			c59.551,0,108,48.448,108,108S315.551,256,256,256z"/>
+                            </g>
+                            </g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                        </svg>
                         <div className="icon_device">
                             <IconButton onClick={(e) => handleSetMic()}>
                                 {mic === true ? <MicIcon /> : <MicOffIcon />}
@@ -223,8 +239,8 @@ function ChatGroup(props) {
                     </div>
                 </div>
             </div>
-            <div className="message_container_div">
-                <RenderChat id={props.id} userId={userId} socket={socket} />
+            <div style={detail === true ? { width: "75%" } : { width: "100%" }} className="message_container_div">
+                <RenderChat detail={detail} id={id} userId={userId} socket={socket} onClick={e => setDetail(true)} />
             </div>
         </div >
     )

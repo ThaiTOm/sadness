@@ -51,7 +51,6 @@ function IndexRoom(props) {
                 mic: true,
                 name
             }
-            console.log("run")
             setAudio(value => [...value, obj])
         })
     }

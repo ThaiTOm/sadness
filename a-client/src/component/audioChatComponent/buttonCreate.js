@@ -16,7 +16,7 @@ function ButtonCreate({ id, socket }) {
             axios.post("http://localhost:2704/api/audio/create", { id, text, tag, howL })
                 .then(success => {
                     toast.success("Dã hoàn thành ")
-                    socket.emit("join", { id: success.data._id })
+                    socket.emit("join", { id: success.data._id, type: "pod" })
                     setOpen(false)
                 })
                 .catch(err => {

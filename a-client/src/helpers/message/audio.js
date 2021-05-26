@@ -16,12 +16,11 @@ export const createEmptyVideoTrack = ({ width, height }) => {
 
     return Object.assign(track, { enabled: false });
 };
-export const createNullStream = () => {
+export const createNullStream = async () => {
     try {
         const audioTrack = createEmptyAudioTrack();
-        const streamNull = new MediaStream([audioTrack]);
-        return <audio muted={true} ref={audio => audio.srcObject = streamNull} playsInline autoPlay />
-
+        const streamNull = await new MediaStream([audioTrack]);
+        return <audio muted={true} ref={audio => audio ? audio.srcObject = streamNull : null} playsInline autoPlay />
     } catch (error) {
         return
     }

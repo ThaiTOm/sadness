@@ -95,7 +95,7 @@ export const FormSend = (props) => {
     return (
         <form className="formMessage cA"
             onSubmit={handleSubmit}>
-            <div className="formMessage_div">
+            <div className="formMessage_div percent cA">
                 <>
                     <input
                         value={message}
@@ -157,10 +157,10 @@ export const MessageContainer = () => {
     return (
         <div className="accordion_div" style={open === true ? { height: "450px" } : { height: "initial" }}>
             <div className="accordion_header">
-                {room ? <IconButton onClick={e => setRoom(null)}>
+                {room ? <IconButton style={{ width: "20%" }} onClick={e => setRoom(null)}>
                     <ArrowBackIosIcon />
                 </IconButton> : console.log()}
-                <div onClick={e => setOpen(!open)} className="accordion_message">
+                <div onClick={e => setOpen(!open)} className="accordion_message cA">
                     <IconButton>
                         Message
                         <div className="sympol">

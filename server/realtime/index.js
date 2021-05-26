@@ -49,10 +49,16 @@ module.exports = {
         socket.on("seenMessage", ({ id, userId }) => {
             seenMessage({ id, userId })
         })
-        socket.on("join", ({ id }) => {
-            try {
-                // cm.set(id, "online")
-            } catch (error) { }
+        socket.on("join", ({ id, type }) => {
+            switch (type) {
+                case "pod":
+                    break;
+                default:
+                    try {
+                        cm.set(id, "online")
+                    } catch (error) { }
+                    break;
+            }
             socket.join(id)
         })
         socket.on("comment", async ({ idRecieve, idSent, value }, callback) => {
@@ -88,7 +94,8 @@ module.exports = {
         socket.on("chatVideo", async ({ id, idRoom, g }, callback) => {
             let fc = async () => {
                 let value = await Message.findById({ "_id": idRoom }).exec()
-                return value.user
+                if (value) return value.user
+                else return null
             }
             let value = await fc()
             callback(value)

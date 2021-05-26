@@ -21,6 +21,8 @@ html {
   align-items: center;
   justify-content: center;
   z-index: 2;
+  top: 0;
+  left: 0;
 }
 .modal_container .div {
   height: max-content;
@@ -40,4 +42,7 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.MuiIconButton-root {
+  padding: 0 !important;
 }

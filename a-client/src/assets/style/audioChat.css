@@ -96,7 +96,7 @@
 #podcast-create-button svg {
   width: 25pt;
   height: 25pt;
-  padding: 0;
+  padding: 10px;
 }
 #podcast-create-button svg path {
   fill: #ff6370;

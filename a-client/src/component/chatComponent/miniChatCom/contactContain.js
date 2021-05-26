@@ -26,8 +26,6 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
         setAnchorEl(event.currentTarget);
     };
 
-
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -111,8 +109,8 @@ function ContactContain({ onClick, message, users, idRoom, target, nread, socket
                         {
                             value.slice(0, 4) === "Bạn:" ? <span className="content">
                                 <span style={{ fontWeight: "800", fontSize: "18px" }}>{value.slice(0, 4)}</span>
-                                <span dangerouslySetInnerHTML={{ __html: value.slice(4, value.length) }} /></span>
-                                : <span dangerouslySetInnerHTML={{ __html: value }} />
+                                <span style={{ color: "#9ea0ac", fontWeight: "550" }} dangerouslySetInnerHTML={{ __html: value.slice(4, value.length) }} /></span>
+                                : <span style={{ color: "#9ea0ac", fontWeight: "550" }} dangerouslySetInnerHTML={{ __html: value }} />
                         }
                         {
                             message && message.type === "shot" ? <p className="shot-span">

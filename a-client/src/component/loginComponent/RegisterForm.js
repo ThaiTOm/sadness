@@ -3,7 +3,6 @@ import "../../assets/style/homepage.css"
 import TextField from '@material-ui/core/TextField';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-import { makeStyles } from '@material-ui/core/styles';
 import { ToastContainer, toast } from "react-toastify";
 import { authenicate } from "../../helpers/auth";
 import axios from "axios";
@@ -127,8 +126,7 @@ function RegisterForm({ onClick }) {
                         </div>
                     </div>
 
-                    <div className="col-sm-6">
-
+                    <div className="col-sm-6 cA">
                         <GoogleLogin
                             className="google_login"
                             clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"

@@ -1,31 +1,13 @@
 import React, { useState } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Modal from '@material-ui/core/Modal';
 import { getCookie } from '../../../helpers/auth';
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import BlockIcon from '@material-ui/icons/Block';
-import ReportIcon from '@material-ui/icons/Report';
 import { IconButton } from '@material-ui/core';
 
 
 export default function SimpleMenu({ id, onClick }) {
-    const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleClickBlock = () => {
-        setOpen(true)
-    }
     // handleAB = handle Agree block
     const handleAB = () => {
         const idSend = getCookie().token
@@ -33,7 +15,6 @@ export default function SimpleMenu({ id, onClick }) {
             .then(res => {
                 toast.success("Yêu cầu của bạn đã được thực hiện")
                 setOpen(false)
-                setAnchorEl(null)
             }).catch(err => {
                 console.log(err)
             })
@@ -45,66 +26,76 @@ export default function SimpleMenu({ id, onClick }) {
     return (
         <div className="menuMessage">
             <ToastContainer />
-            <IconButton className="back_button" onClick={() => onClick("")}>
-                <img alt="img back" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAABmJLR0QA/wD/AP+gvaeTAAAFLUlEQVRYhcWYT0wUdxTHv+83s5EaUIFi0oFGYyQmpURgSW1se9DUnqjW2rXcYXaX4AGTejQxaU81aaLUuLuD4eSBbkqLGhKaRg5rjdQoF40pf4Kh9mCFdcWAgd2Z14O7ywKzs8zsuP3efu/3e+/3yS9v3vx+j+Ciuru7q5PJ5C4iqjQMQxZCpIgoLknS7KVLl+bd2oeKce7o6NgrSdIxZj5MRAcAVFssnwdwB8AogF8jkci0031tQ/t8PqmqquokM58CcNDhvszMtwH8mEgkotFoVLfjbAva7/d/AeA8gL12/ApogpnPaJp2bbMOm4IOBoM7mfkKM7c5Z7MWMw+lUim1v7//WaG1BaE7Ozs/EUIMAHjHFTpr/cPMJzVNu221SFhNqqp6VAgxgtIAA0AtEd0MBAJfWS3Ke9Kqqh4noigAyXW0wkox84l8eW4KnU6J3wCUvVE0a71i5k/NUmUDdDAY3GkYxjgApSRo1noCoDkSiczlGuX1q5j5ClwEFkLgyJEjqK+vx8zMDEZGRpBKpTbrXgdAA3A817jmpNN5POgOLiDLMoLBIBobG7O28fFxhEIhW3GI6Gg4HL6eGWerh8/nk4joezdgAXNgAGhubsb27dttxWLm8z6fL1sQstCVlZVfw6U/XT5gADAMA8lk0m7IfTt27DiRGeTW6VPOENfKChgAhoeHsbS0ZDuuECLLJ4DXtzUAHzrkzEqWZfj9/rzAsVgMN27ccBSbmT/u6uraA6ShJUk6jiKvqRng/fv3m87HYjFcvXoVzOx0C9J1/Riwmh6HnEYCSgKc0SFgFfoDp1FKCAykU5j8fv/bAApeB81UYmAAgK7r1TIR7XYStFCVGB0dxcDAgKvAACBJ0m6h6/o2J85tbW0lBwYAIcQ2IYR4y4lzU1OTqX1sbOyNAQMAM28VhmG8cuKcSCRM7Q0NDaitrS0KzEpEtCQkSVpw4jw4OIiVlZUN9vLycvT09KCurq5oQDMZhrEgZFmeceI8OzuLCxcuYHl5ecNcRUXFGwPXdf2xdPfu3Vder/cUgK12A8TjcUxOTqK1tRWyvPZqvmXLFrS0tODhw4d4+fKlW8z/9vX1fSsAgJn/dBplamoKFy9ezHvip0+fdjPH7wCrf8TRYiKVEHwUSEMT0S8AiqpRJQBnSZKuAen2wL179557vd7PALxbTNR4PI7p6Wm0trZCktZ2HjI5/uDBA0c5TkS3QqHQD0DOI4CZe4sBzmhiYgK9vb2m5bCiogKqqkIIyx6RqXL5st6JRCIKYMIh6xpZgSuKYvuNCOCRoig/ZwZZ6Gg0qjPzGcek65QPfGFhAS9evLAb7sy5c+eMzGBN4t2/f/8vr9fbAmCfU9hczc/PY2pqCg0NDSgrK8Pi4iI0TcPc3Fxh51UNRiKR73ING5o1yWSy0+PxjANwpUZNTk7i7NmzqKmpwdOnT+2+xJ8ACKw3mr4Lg8HgR4Zh/I7/t5e3BOBwJBIZWz9h+hmHQqE/iKgdwKb7Vy4rRUTtZsCARX86HA4PEdGXABxdXYvQMjO357bB1qtg20BV1YNE9BNcyvEC+huAL98JZ1SwymuadjuZTDYz85BraOYa9Hg8zYWAAZsNmkAg8Dkzn4dLJTGtR0T0TTgcHt6sg63/aTgcvq4oynvpj/QWnF+ymIhiAE4qivK+HWCgyFZYV1fXHl3XjxHRYWY+AKDGYvkzvL4P3zQMY6ivr8/RiwkoEnq9Ojo6qjwez65UKlVJRB4iWhFCJIjo8eXLl5+7tc9/b08eYXPvRhsAAAAASUVORK5CYII=" />
-            </IconButton>
-            <button className="tooltip button-option" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                &#9776;
-                <span className="tooltiptext">
-                    Thong tin
-                </span>
-            </button>
-            <Menu
-                id="menuContainerMessage"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={handleClose}>
-                    <span
-                        className="simple_menu_span"
-                        onClick={() => onClick("")}
-                        to="/"
-                    >
-                        <ArrowBackIosOutlinedIcon /> Quay về
-                    </span>
-                </MenuItem>
-                <MenuItem>
-                    <span
-                        className="simple_menu_span"
-                        onClick={handleClickBlock}>
-                        <BlockIcon />    Chặn
-                    </span>
-                    <Modal
-                        open={open}
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description" >
-                        <div className="contain_block">
-                            <div className="head">
-                                <button onClick={handleCloseBlock}>&#10005;</button>
-                            </div>
-                            <div className="middle">
-                                <p>Bạn có chắc muốn chặn người này, nếu người này gây hại cho bạn bạn có thể báo cáo chúng tôi sẽ giúp bạn</p>
-                            </div>
-                            <div className="bottom">
-                                <button onClick={handleAB}>Xác nhận</button>
-                                <button
-                                    onClick={handleCloseBlock}
-                                    className="cancel">Hủy bỏ</button>
-                            </div>
+            <div className="header cA">
+                <IconButton className="back_button" onClick={() => onClick("BACK")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 492 492" xmlSpace="preserve"><g>	<g>		<path d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12
+			C361.476,2.792,354.712,0,347.504,0s-13.964,2.792-19.028,7.864L109.328,227.008c-5.084,5.08-7.868,11.868-7.848,19.084
+			c-0.02,7.248,2.76,14.028,7.848,19.112l218.944,218.932c5.064,5.072,11.82,7.864,19.032,7.864c7.208,0,13.964-2.792,19.032-7.864
+			l16.124-16.12c10.492-10.492,10.492-27.572,0-38.06L198.608,246.104z"/>
+                    </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                    </svg>                </IconButton>
+                <button id="button-option" aria-controls="simple-menu" aria-haspopup="true" onClick={e => onClick("CLOSE")}>
+                    &#9776;
+                </button>
+            </div>
+            <div className="div">
+                <strong>Thành viên</strong>
+                <div className="content">
+                    <div className="inner cA">
+                        <svg className="avt" viewBox="-42 0 512 512.002" xmlns="http://www.w3.org/2000/svg"><path d="m210.351562 246.632812c33.882813 0 63.222657-12.152343 87.195313-36.128906 23.972656-23.972656 36.125-53.304687 36.125-87.191406 0-33.875-12.152344-63.210938-36.128906-87.191406-23.976563-23.96875-53.3125-36.121094-87.191407-36.121094-33.886718 0-63.21875 12.152344-87.191406 36.125s-36.128906 53.308594-36.128906 87.1875c0 33.886719 12.15625 63.222656 36.132812 87.195312 23.976563 23.96875 53.3125 36.125 87.1875 36.125zm0 0" /><path d="m426.128906 393.703125c-.691406-9.976563-2.089844-20.859375-4.148437-32.351563-2.078125-11.578124-4.753907-22.523437-7.957031-32.527343-3.308594-10.339844-7.808594-20.550781-13.371094-30.335938-5.773438-10.15625-12.554688-19-20.164063-26.277343-7.957031-7.613282-17.699219-13.734376-28.964843-18.199219-11.226563-4.441407-23.667969-6.691407-36.976563-6.691407-5.226563 0-10.28125 2.144532-20.042969 8.5-6.007812 3.917969-13.035156 8.449219-20.878906 13.460938-6.707031 4.273438-15.792969 8.277344-27.015625 11.902344-10.949219 3.542968-22.066406 5.339844-33.039063 5.339844-10.972656 0-22.085937-1.796876-33.046874-5.339844-11.210938-3.621094-20.296876-7.625-26.996094-11.898438-7.769532-4.964844-14.800782-9.496094-20.898438-13.46875-9.75-6.355468-14.808594-8.5-20.035156-8.5-13.3125 0-25.75 2.253906-36.972656 6.699219-11.257813 4.457031-21.003906 10.578125-28.96875 18.199219-7.605469 7.28125-14.390625 16.121094-20.15625 26.273437-5.558594 9.785157-10.058594 19.992188-13.371094 30.339844-3.199219 10.003906-5.875 20.945313-7.953125 32.523437-2.058594 11.476563-3.457031 22.363282-4.148437 32.363282-.679688 9.796875-1.023438 19.964844-1.023438 30.234375 0 26.726562 8.496094 48.363281 25.25 64.320312 16.546875 15.746094 38.441406 23.734375 65.066406 23.734375h246.53125c26.625 0 48.511719-7.984375 65.0625-23.734375 16.757813-15.945312 25.253906-37.585937 25.253906-64.324219-.003906-10.316406-.351562-20.492187-1.035156-30.242187zm0 0" /></svg>
+                        <div className="c-name cA percent">
+                            <p>Name</p>
+                            <svg className="hidden" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m499.953125 197.703125-39.351563-8.554687c-3.421874-10.476563-7.660156-20.695313-12.664062-30.539063l21.785156-33.886719c3.890625-6.054687 3.035156-14.003906-2.050781-19.089844l-61.304687-61.304687c-5.085938-5.085937-13.035157-5.941406-19.089844-2.050781l-33.886719 21.785156c-9.84375-5.003906-20.0625-9.242188-30.539063-12.664062l-8.554687-39.351563c-1.527344-7.03125-7.753906-12.046875-14.949219-12.046875h-86.695312c-7.195313 0-13.421875 5.015625-14.949219 12.046875l-8.554687 39.351563c-10.476563 3.421874-20.695313 7.660156-30.539063 12.664062l-33.886719-21.785156c-6.054687-3.890625-14.003906-3.035156-19.089844 2.050781l-61.304687 61.304687c-5.085937 5.085938-5.941406 13.035157-2.050781 19.089844l21.785156 33.886719c-5.003906 9.84375-9.242188 20.0625-12.664062 30.539063l-39.351563 8.554687c-7.03125 1.53125-12.046875 7.753906-12.046875 14.949219v86.695312c0 7.195313 5.015625 13.417969 12.046875 14.949219l39.351563 8.554687c3.421874 10.476563 7.660156 20.695313 12.664062 30.539063l-21.785156 33.886719c-3.890625 6.054687-3.035156 14.003906 2.050781 19.089844l61.304687 61.304687c5.085938 5.085937 13.035157 5.941406 19.089844 2.050781l33.886719-21.785156c9.84375 5.003906 20.0625 9.242188 30.539063 12.664062l8.554687 39.351563c1.527344 7.03125 7.753906 12.046875 14.949219 12.046875h86.695312c7.195313 0 13.421875-5.015625 14.949219-12.046875l8.554687-39.351563c10.476563-3.421874 20.695313-7.660156 30.539063-12.664062l33.886719 21.785156c6.054687 3.890625 14.003906 3.039063 19.089844-2.050781l61.304687-61.304687c5.085937-5.085938 5.941406-13.035157 2.050781-19.089844l-21.785156-33.886719c5.003906-9.84375 9.242188-20.0625 12.664062-30.539063l39.351563-8.554687c7.03125-1.53125 12.046875-7.753906 12.046875-14.949219v-86.695312c0-7.195313-5.015625-13.417969-12.046875-14.949219zm-152.160156 58.296875c0 50.613281-41.179688 91.792969-91.792969 91.792969s-91.792969-41.179688-91.792969-91.792969 41.179688-91.792969 91.792969-91.792969 91.792969 41.179688 91.792969 91.792969zm0 0" /></svg>
                         </div>
-                    </Modal>
-                </MenuItem>
-                <MenuItem >
-                    <span
-                        className="simple_menu_span"
-                    >
-                        <ReportIcon />   Báo cáo
-                    </span>
-                </MenuItem>
-                {/* <MenuItem onClick={}>Logout</MenuItem> */}
-            </Menu>
+                    </div>
+                </div>
+            </div>
+            <div className="setting">
+                <strong style={{ color: "rgba(255, 255, 255, 0.322)" }}>Tùy chỉnh</strong>
+                <div className="content">
+                    <div className="inner cA percent" onClick={e => setOpen(true)}>
+                        <section className='cA'>
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                viewBox="0 0 512 512" xmlSpace="preserve">
+                                <g>
+                                    <g>
+                                        <path d="M436.3,75.7C388,27.401,324.101,0,256,0C115.343,0,0,115.116,0,256c0,140.958,115.075,256,256,256
+			c140.306,0,256-114.589,256-256C512,187.899,484.6,123.999,436.3,75.7z M256,451c-107.786,0-195-86.985-195-195
+			c0-42.001,13.2-81.901,37.5-114.901l272.401,272.1C337.899,437.8,298.001,451,256,451z M413.2,370.899L141.099,98.5
+			C174.101,74.2,213.999,61,256,61c107.789,0,195,86.985,195,195C451,297.999,437.8,337.899,413.2,370.899z"/>
+                                    </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                            </svg>
+                        </section>
+                        <div className="">
+                            <p>Chặn</p>
+                        </div>
+                    </div>
+                    <div className="inner cA percent">
+                        <section className='cA'>
+                            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><g><path d="m128.636 362.74-.908-.055c-7.128-.432-14.002-1.741-20.53-3.796l-45.624 78.997c-4.18 7.237-1.637 16.493 5.653 20.582l44.91 25.187c7.164 4.018 16.229 1.53 20.336-5.582l66.61-115.333z" /><g><path d="m381.991 28.656-135.527 82.972v238.94l135.698 80.615c10.002 5.942 22.671-1.264 22.671-12.895v-376.84c0-11.721-12.844-18.913-22.842-12.792z" /><g><path d="m48.53 280.042v-100.761c0-5.774.625-11.399 1.782-16.826h-21.816c-15.738 0-28.496 12.754-28.496 28.487v77.439c0 15.733 12.758 28.487 28.496 28.487h21.808c-1.153-5.442-1.774-11.067-1.774-16.826z" /><path d="m216.454 332.74h-86.908c-28.17-1.708-51.006-24.537-51.006-52.698v-100.76c0-28.161 22.836-50.989 51.006-49.28h86.908z" /></g></g></g><g><path d="m470.72 352.291c-3.84 0-7.68-1.465-10.61-4.394l-30.269-30.259c-5.86-5.857-5.86-15.355 0-21.213 5.859-5.857 15.361-5.857 21.22 0l30.269 30.259c5.86 5.857 5.86 15.355 0 21.213-2.93 2.929-6.77 4.394-10.61 4.394z" /><path d="m440.45 172.291c-3.841 0-7.68-1.464-10.61-4.394-5.86-5.857-5.86-15.355 0-21.213l30.269-30.259c5.86-5.858 15.36-5.858 21.22 0 5.859 5.857 5.859 15.355 0 21.213l-30.269 30.259c-2.929 2.929-6.77 4.394-10.61 4.394z" /><path d="m496.995 247.161h-42.807c-8.287 0-15.005-6.716-15.005-15s6.718-15 15.005-15h42.807c8.287 0 15.005 6.716 15.005 15s-6.718 15-15.005 15z" /></g></g></svg>
+                        </section>
+                        <div className="">
+                            <p> Báo cáo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style={open === true ? { display: "flex" } : { display: "none" }} className="modal_container">
+                <div className="contain_block div">
+                    <div className="head">
+                        <button onClick={handleCloseBlock}>&#10005;</button>
+                    </div>
+                    <div className="middle">
+                        <p>Bạn có chắc muốn chặn người này, nếu người này gây hại cho bạn bạn có thể báo cáo chúng tôi sẽ giúp bạn</p>
+                    </div>
+                    <div className="bottom">
+                        <button onClick={handleAB}>Xác nhận</button>
+                        <button
+                            onClick={handleCloseBlock}
+                            className="cancel">Hủy bỏ</button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

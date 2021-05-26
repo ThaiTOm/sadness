@@ -66,12 +66,16 @@ function ShortStatus({ id, socket }) {
         }
     }
 
+    let handleNextSto = (e) => {
+        document.getElementById("shot_div").scrollLeft += 350
+        setStart(start + 7)
+    }
+
     let handleSubmit = (e) => {
         e.preventDefault()
         if (text) {
             let value = encryptTo(id)
             let text1 = encryptTo(text)
-
             socket.emit("shotReq", { id: value, idPost: image.id, value: text1, idUser: image["id-user"] });
         }
     }
@@ -85,7 +89,7 @@ function ShortStatus({ id, socket }) {
     }
 
     useEffect(() => {
-        axios.post("http://localhost:2704/api/news/get/shot", { start, end: start + 5 })
+        axios.post("http://localhost:2704/api/news/get/shot", { start, end: start + 7 })
             .then(data => {
                 for (let x of data.data) {
                     setData(value => [...value, x])
@@ -108,43 +112,36 @@ function ShortStatus({ id, socket }) {
     return (
         <>
             <div className="shot">
-                <div className="shot_header">
+                <div className="shot_header cA">
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg"><path d="m8.75 17.612v4.638c0 .324.208.611.516.713.077.025.156.037.234.037.234 0 .46-.11.604-.306l2.713-3.692z" /><path d="m23.685.139c-.23-.163-.532-.185-.782-.054l-22.5 11.75c-.266.139-.423.423-.401.722.023.3.222.556.505.653l6.255 2.138 13.321-11.39-10.308 12.419 10.483 3.583c.078.026.16.04.242.04.136 0 .271-.037.39-.109.19-.116.319-.311.352-.53l2.75-18.5c.041-.28-.077-.558-.307-.722z" /></svg>
-                        <span>Shots</span>
+                        <span>Stories</span>
                     </div>
-                    <Link className="tooltip" to="/create/shots">
-                        <svg id="add-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                            viewBox="0 0 477.867 477.867" xmlxspace="preserve">
-                            <g>
-                                <g>
-                                    <path d="M392.533,0h-307.2C38.228,0.056,0.056,38.228,0,85.333v307.2c0.056,47.105,38.228,85.277,85.333,85.333h307.2
-			c47.105-0.056,85.277-38.228,85.333-85.333v-307.2C477.81,38.228,439.638,0.056,392.533,0z M443.733,392.533
-			c0,28.277-22.923,51.2-51.2,51.2h-307.2c-28.277,0-51.2-22.923-51.2-51.2v-307.2c0-28.277,22.923-51.2,51.2-51.2h307.2
-			c28.277,0,51.2,22.923,51.2,51.2V392.533z"/>
-                                </g>
-                            </g>
-                            <g>
-                                <g>
-                                    <path d="M324.267,221.867H256V153.6c0-9.426-7.641-17.067-17.067-17.067s-17.067,7.641-17.067,17.067v68.267H153.6
-			c-9.426,0-17.067,7.641-17.067,17.067S144.174,256,153.6,256h68.267v68.267c0,9.426,7.641,17.067,17.067,17.067
-			S256,333.692,256,324.267V256h68.267c9.426,0,17.067-7.641,17.067-17.067S333.692,221.867,324.267,221.867z"/>
-                                </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
-                        </svg>
-                        <span className="tooltiptext">Tao tin</span>
+                    <Link to="/create/shots">
+                        <span>Tạo tin</span>
                     </Link>
                 </div>
-                <div className="shot_div">
+                <div className="shot_div" id="shot_div">
+                    <svg onClick={e => document.getElementById("shot_div").scrollLeft -= 350} style={data.length > 0 ? { display: "flex" } : { display: "none" }} id="pre" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 492 492" xmlSpace="preserve"><g>	<g>		<path d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12
+			C361.476,2.792,354.712,0,347.504,0s-13.964,2.792-19.028,7.864L109.328,227.008c-5.084,5.08-7.868,11.868-7.848,19.084
+			c-0.02,7.248,2.76,14.028,7.848,19.112l218.944,218.932c5.064,5.072,11.82,7.864,19.032,7.864c7.208,0,13.964-2.792,19.032-7.864
+			l16.124-16.12c10.492-10.492,10.492-27.572,0-38.06L198.608,246.104z"/>
+                    </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                    </svg>
                     {data.length > 0 && data.map(function (value, i) {
-                        return <video onClick={e => handleClick(i)} key={i} alt={value.path} src={value.path}></video>
+                        return <div>
+                            <video className="percent" onClick={e => handleClick(i)} key={i} alt={value.path} src={value.path}></video>
+                        </div>
                     })}
+                    <svg onClick={e => handleNextSto(e)} style={data.length > 0 ? { display: "flex" } : { display: "none" }} id="next" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 492.004 492.004" xmlSpace="preserve"><g>	<g>
+                        <path d="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
+			c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
+			c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
+			c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"/>
+                    </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+                    </svg>
                 </div>
-                <svg style={data.length > 0 ? { display: "flex" } : { display: "none" }} id="arrow" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.008 512.008" xmlxspace="preserve">
-                    <path d="M306.219,45.796c-21.838-21.838-57.245-21.838-79.083,0s-21.838,57.245,0,79.083l77.781,77.803
-	H53.333C23.878,202.682,0,226.56,0,256.015c0,29.455,23.878,53.333,53.333,53.333h251.584l-77.781,77.781
-	c-21.838,21.838-21.838,57.245,0,79.083c21.838,21.838,57.245,21.838,79.083,0l202.667-202.667c4.164-4.165,4.164-10.917,0-15.083
-	L306.219,45.796z"/>
-                    <g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+
             </div>
             {/* Viewing shots */}
             {

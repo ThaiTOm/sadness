@@ -107,7 +107,6 @@ function App() {
   }, [id, end, history])
 
   useEffect(() => {
-
     let changeTitle = (idMessage, arr) => {
       if (idMessage !== id) setTitle("Bạn có 1 tin nhắn mới")
       return setListMessage(arr)
@@ -145,7 +144,7 @@ function App() {
   }, [title])
 
   useEffect(() => {
-    id && socket.emit("join", { id })
+    id && socket.emit("join", { id, type: "onl" })
   }, [socket, id])
 
   return (

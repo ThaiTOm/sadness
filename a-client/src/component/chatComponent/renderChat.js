@@ -6,7 +6,7 @@ import { executeScroll } from "../../helpers/message/message"
 
 
 function RenderChat(props) {
-    let { id, userId, socket } = props
+    let { id, userId, socket, detail, onClick } = props
     const [msg, setMsg] = useState([]);
     const [load, setLoad] = useState(false);
     const [end, setEnd] = useState(15);
@@ -16,7 +16,6 @@ function RenderChat(props) {
     const handleClickLoad = () => {
         setLoad(true);
         setTimeout(() => {
-
             setEnd(end + 10)
         }, 1000)
     }
@@ -29,6 +28,7 @@ function RenderChat(props) {
                 return <div>Oops, bạn hãy thử lại sau</div>
             })
     }, [id, end])
+
     let func = (msg) => {
         if (msg.image) setMsg(img => [...img, msg.image])
         else setMsg(msgs => [...msgs, msg.data])
@@ -44,8 +44,25 @@ function RenderChat(props) {
         }
         fnc(id)
     }, [id, socket, render])
+
     return (
         <>
+            <div className="dm-public">
+                <div className="div">
+                    {
+                        detail === false ? <button type="button" id="button-option" onClick={e => onClick(e)}>
+                            &#9776;
+                    </button> : console.log()
+                    }
+
+                    <button type="button" className="active">
+                        <span>Tin nhắn </span>
+                    </button>
+                    <button type="button" className="">
+                        <span>File</span>
+                    </button>
+                </div>
+            </div>
             <ul>
                 <div className="button_load_more">
                     {load === false ? <button onClick={handleClickLoad}>Tải thêm</button>

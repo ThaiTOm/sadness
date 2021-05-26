@@ -1,3 +1,25 @@
+.dm-public {
+  background-color: #181818;
+  height: 30px;
+  padding: 5px 10px 15px 10px;
+  border-bottom: 2px solid rgba(221, 213, 213, 0.137);
+}
+.dm-public .div {
+  width: max-content;
+}
+.dm-public .div .active {
+  background-color: #01d1fb;
+  border-radius: 5px;
+  color: white;
+}
+.dm-public button {
+  background-color: inherit;
+  color: rgba(255, 255, 255, 0.507);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+}
 #simple_menu_emoji .MuiPaper-root {
   max-height: 300px;
   max-width: 1000px;
@@ -8,11 +30,12 @@
   overflow-y: clip;
 }
 #simple_menu_emoji .MuiList-root {
-  width: 100% !important;
-  padding: 0;
+  width: 250px;
+  padding: 20px 0 10px 20px;
+  overflow-y: auto;
 }
 #simple_menu_emoji .MuiList-root span {
-  padding-right: 5px;
+  padding-right: 9px;
   cursor: pointer;
 }
 #group_icon {
@@ -37,6 +60,8 @@
   border-radius: 15px 15px 0 0;
   display: flex;
   background-color: #252936;
+  height: 10%;
+  padding: 5px 0;
 }
 .accordion_div button span {
   color: white;
@@ -59,10 +84,14 @@
 .accordion_div .accordion_data {
   display: none;
   width: 350px;
-  height: 400px;
+  height: 90%;
   transition: 0.2s ease-out;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.accordion_div .accordion_data .dm-public {
+  display: none;
 }
 .accordion_message button {
   width: 100%;
@@ -74,11 +103,12 @@
   margin-left: auto;
 }
 .accordion_data ul {
-  height: 81%;
+  height: 78%;
   overflow-y: scroll;
 }
 .accordion_data .formMessage {
   width: 95%;
+  height: 10%;
 }
 .tooltip {
   position: relative;
@@ -108,6 +138,54 @@
   opacity: 0;
   transition: opacity 0.3s;
   font-size: 1rem;
+}
+.menuMessage {
+  color: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.menuMessage strong {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.menuMessage .div .content {
+  padding: 10px 10px;
+}
+.menuMessage .div .content .inner {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.322);
+}
+.menuMessage .div .content .inner .cA .hidden {
+  visibility: hidden;
+}
+.menuMessage .div .content .inner:hover .hidden {
+  visibility: visible;
+}
+.menuMessage .setting {
+  width: 85%;
+  padding: 10px;
+}
+.menuMessage .setting .content {
+  width: 90%;
+  padding: 10px 5%;
+}
+.menuMessage .setting .content .inner {
+  justify-content: inherit;
+  padding: 5px 0;
+  transition: 0.2s;
+  border-radius: 5px;
+}
+.menuMessage .setting .content .inner:hover {
+  background-color: rgba(255, 255, 255, 0.342);
+}
+.menuMessage .setting .content .inner section {
+  width: 25%;
+}
+.menuMessage svg {
+  width: 15pt;
+  height: 15pt;
+  fill: white;
 }
 .menuMessage .tooltip .tooltiptext,
 .shot_header .tooltip .tooltiptext {
@@ -145,12 +223,11 @@
   opacity: 1;
 }
 .contact_extension {
-  margin-top: 10px;
   display: flex;
   border-bottom: 2px solid rgba(221, 213, 213, 0.137);
   height: max-content;
-  width: 90%;
   margin-left: auto;
+  padding: 10px 0 10px 10px;
 }
 .contact_extension .contact_extension_div {
   height: 20px;
@@ -173,17 +250,19 @@
   font-size: 1.8rem;
   border-radius: 10px;
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
 }
 .shot .shot_div {
-  width: 96%;
+  width: 100%;
   height: max-content;
-  overflow-x: auto;
+  overflow-x: hidden;
+  display: flex;
+  padding: 0 0 10px 0;
+  scroll-behavior: smooth;
 }
 .shot video {
-  width: 125px;
-  height: 180px;
+  width: 150px;
+  height: 200px;
   border-radius: 10px;
   cursor: pointer;
   object-fit: cover;
@@ -194,18 +273,35 @@ svg {
   padding: 5px;
   border-radius: 10px;
 }
-.shot #arrow {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  right: 0;
-  top: 55%;
+.shot #pre {
+  left: 0;
 }
-.shot #arrow path {
-  fill: #44f3fc;
+.shot #next {
+  right: 5px;
+}
+.shot #next,
+.shot #pre {
+  width: 40px;
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+}
+.shot svg:hover {
+  background-color: rgba(212, 204, 204, 0.781);
+}
+.shot svg path {
+  fill: rgba(56, 54, 54, 1);
 }
 .shot_header {
   justify-content: space-between;
+  padding-bottom: 10px;
+}
+.shot_header a {
+  color: #5c5e6a;
+  font-size: 1.3rem;
+  font-weight: 550;
+  text-decoration: none;
 }
 .shot_header svg {
   width: 17pt;
@@ -214,21 +310,11 @@ svg {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.shot_header #add-svg {
-  width: 25pt;
-  height: 25pt;
-  background-color: initial;
-}
-.shot_header #add-svg path {
-  fill: orange;
-}
+
 .shot_header svg path {
   fill: white;
 }
-.shot_header .tooltip .tooltiptext {
-  background-color: ivory;
-  color: black;
-}
+
 #modal-shot {
   position: fixed;
   background-color: rgb(20, 20, 20);
